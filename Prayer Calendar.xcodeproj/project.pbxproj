@@ -1,0 +1,626 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		7A4F25F92AD0D23900FB086C /* Prayer_CalendarApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4F25F82AD0D23900FB086C /* Prayer_CalendarApp.swift */; };
+		7A4F25FB2AD0D23900FB086C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4F25FA2AD0D23900FB086C /* ContentView.swift */; };
+		7A4F25FD2AD0D23900FB086C /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4F25FC2AD0D23900FB086C /* Item.swift */; };
+		7A4F25FF2AD0D23B00FB086C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7A4F25FE2AD0D23B00FB086C /* Assets.xcassets */; };
+		7A4F26032AD0D23B00FB086C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7A4F26022AD0D23B00FB086C /* Preview Assets.xcassets */; };
+		7A4F260D2AD0D23B00FB086C /* Prayer_CalendarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4F260C2AD0D23B00FB086C /* Prayer_CalendarTests.swift */; };
+		7A4F26172AD0D23B00FB086C /* Prayer_CalendarUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4F26162AD0D23B00FB086C /* Prayer_CalendarUITests.swift */; };
+		7A4F26192AD0D23B00FB086C /* Prayer_CalendarUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4F26182AD0D23B00FB086C /* Prayer_CalendarUITestsLaunchTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		7A4F26092AD0D23B00FB086C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7A4F25ED2AD0D23900FB086C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7A4F25F42AD0D23900FB086C;
+			remoteInfo = "Prayer Calendar";
+		};
+		7A4F26132AD0D23B00FB086C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7A4F25ED2AD0D23900FB086C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7A4F25F42AD0D23900FB086C;
+			remoteInfo = "Prayer Calendar";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		7A4F25F52AD0D23900FB086C /* Prayer Calendar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Prayer Calendar.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7A4F25F82AD0D23900FB086C /* Prayer_CalendarApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prayer_CalendarApp.swift; sourceTree = "<group>"; };
+		7A4F25FA2AD0D23900FB086C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		7A4F25FC2AD0D23900FB086C /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		7A4F25FE2AD0D23B00FB086C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		7A4F26002AD0D23B00FB086C /* Prayer_Calendar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Prayer_Calendar.entitlements; sourceTree = "<group>"; };
+		7A4F26022AD0D23B00FB086C /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		7A4F26082AD0D23B00FB086C /* Prayer CalendarTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Prayer CalendarTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7A4F260C2AD0D23B00FB086C /* Prayer_CalendarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prayer_CalendarTests.swift; sourceTree = "<group>"; };
+		7A4F26122AD0D23B00FB086C /* Prayer CalendarUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Prayer CalendarUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7A4F26162AD0D23B00FB086C /* Prayer_CalendarUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prayer_CalendarUITests.swift; sourceTree = "<group>"; };
+		7A4F26182AD0D23B00FB086C /* Prayer_CalendarUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prayer_CalendarUITestsLaunchTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7A4F25F22AD0D23900FB086C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7A4F26052AD0D23B00FB086C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7A4F260F2AD0D23B00FB086C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		7A4F25EC2AD0D23900FB086C = {
+			isa = PBXGroup;
+			children = (
+				7A4F25F72AD0D23900FB086C /* Prayer Calendar */,
+				7A4F260B2AD0D23B00FB086C /* Prayer CalendarTests */,
+				7A4F26152AD0D23B00FB086C /* Prayer CalendarUITests */,
+				7A4F25F62AD0D23900FB086C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		7A4F25F62AD0D23900FB086C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7A4F25F52AD0D23900FB086C /* Prayer Calendar.app */,
+				7A4F26082AD0D23B00FB086C /* Prayer CalendarTests.xctest */,
+				7A4F26122AD0D23B00FB086C /* Prayer CalendarUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7A4F25F72AD0D23900FB086C /* Prayer Calendar */ = {
+			isa = PBXGroup;
+			children = (
+				7A4F25F82AD0D23900FB086C /* Prayer_CalendarApp.swift */,
+				7A4F25FA2AD0D23900FB086C /* ContentView.swift */,
+				7A4F25FC2AD0D23900FB086C /* Item.swift */,
+				7A4F25FE2AD0D23B00FB086C /* Assets.xcassets */,
+				7A4F26002AD0D23B00FB086C /* Prayer_Calendar.entitlements */,
+				7A4F26012AD0D23B00FB086C /* Preview Content */,
+			);
+			path = "Prayer Calendar";
+			sourceTree = "<group>";
+		};
+		7A4F26012AD0D23B00FB086C /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				7A4F26022AD0D23B00FB086C /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		7A4F260B2AD0D23B00FB086C /* Prayer CalendarTests */ = {
+			isa = PBXGroup;
+			children = (
+				7A4F260C2AD0D23B00FB086C /* Prayer_CalendarTests.swift */,
+			);
+			path = "Prayer CalendarTests";
+			sourceTree = "<group>";
+		};
+		7A4F26152AD0D23B00FB086C /* Prayer CalendarUITests */ = {
+			isa = PBXGroup;
+			children = (
+				7A4F26162AD0D23B00FB086C /* Prayer_CalendarUITests.swift */,
+				7A4F26182AD0D23B00FB086C /* Prayer_CalendarUITestsLaunchTests.swift */,
+			);
+			path = "Prayer CalendarUITests";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		7A4F25F42AD0D23900FB086C /* Prayer Calendar */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7A4F261C2AD0D23B00FB086C /* Build configuration list for PBXNativeTarget "Prayer Calendar" */;
+			buildPhases = (
+				7A4F25F12AD0D23900FB086C /* Sources */,
+				7A4F25F22AD0D23900FB086C /* Frameworks */,
+				7A4F25F32AD0D23900FB086C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Prayer Calendar";
+			productName = "Prayer Calendar";
+			productReference = 7A4F25F52AD0D23900FB086C /* Prayer Calendar.app */;
+			productType = "com.apple.product-type.application";
+		};
+		7A4F26072AD0D23B00FB086C /* Prayer CalendarTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7A4F261F2AD0D23B00FB086C /* Build configuration list for PBXNativeTarget "Prayer CalendarTests" */;
+			buildPhases = (
+				7A4F26042AD0D23B00FB086C /* Sources */,
+				7A4F26052AD0D23B00FB086C /* Frameworks */,
+				7A4F26062AD0D23B00FB086C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7A4F260A2AD0D23B00FB086C /* PBXTargetDependency */,
+			);
+			name = "Prayer CalendarTests";
+			productName = "Prayer CalendarTests";
+			productReference = 7A4F26082AD0D23B00FB086C /* Prayer CalendarTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		7A4F26112AD0D23B00FB086C /* Prayer CalendarUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7A4F26222AD0D23B00FB086C /* Build configuration list for PBXNativeTarget "Prayer CalendarUITests" */;
+			buildPhases = (
+				7A4F260E2AD0D23B00FB086C /* Sources */,
+				7A4F260F2AD0D23B00FB086C /* Frameworks */,
+				7A4F26102AD0D23B00FB086C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7A4F26142AD0D23B00FB086C /* PBXTargetDependency */,
+			);
+			name = "Prayer CalendarUITests";
+			productName = "Prayer CalendarUITests";
+			productReference = 7A4F26122AD0D23B00FB086C /* Prayer CalendarUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		7A4F25ED2AD0D23900FB086C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					7A4F25F42AD0D23900FB086C = {
+						CreatedOnToolsVersion = 15.0;
+					};
+					7A4F26072AD0D23B00FB086C = {
+						CreatedOnToolsVersion = 15.0;
+						TestTargetID = 7A4F25F42AD0D23900FB086C;
+					};
+					7A4F26112AD0D23B00FB086C = {
+						CreatedOnToolsVersion = 15.0;
+						TestTargetID = 7A4F25F42AD0D23900FB086C;
+					};
+				};
+			};
+			buildConfigurationList = 7A4F25F02AD0D23900FB086C /* Build configuration list for PBXProject "Prayer Calendar" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 7A4F25EC2AD0D23900FB086C;
+			productRefGroup = 7A4F25F62AD0D23900FB086C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				7A4F25F42AD0D23900FB086C /* Prayer Calendar */,
+				7A4F26072AD0D23B00FB086C /* Prayer CalendarTests */,
+				7A4F26112AD0D23B00FB086C /* Prayer CalendarUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7A4F25F32AD0D23900FB086C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7A4F26032AD0D23B00FB086C /* Preview Assets.xcassets in Resources */,
+				7A4F25FF2AD0D23B00FB086C /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7A4F26062AD0D23B00FB086C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7A4F26102AD0D23B00FB086C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7A4F25F12AD0D23900FB086C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7A4F25FB2AD0D23900FB086C /* ContentView.swift in Sources */,
+				7A4F25FD2AD0D23900FB086C /* Item.swift in Sources */,
+				7A4F25F92AD0D23900FB086C /* Prayer_CalendarApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7A4F26042AD0D23B00FB086C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7A4F260D2AD0D23B00FB086C /* Prayer_CalendarTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7A4F260E2AD0D23B00FB086C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7A4F26172AD0D23B00FB086C /* Prayer_CalendarUITests.swift in Sources */,
+				7A4F26192AD0D23B00FB086C /* Prayer_CalendarUITestsLaunchTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		7A4F260A2AD0D23B00FB086C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7A4F25F42AD0D23900FB086C /* Prayer Calendar */;
+			targetProxy = 7A4F26092AD0D23B00FB086C /* PBXContainerItemProxy */;
+		};
+		7A4F26142AD0D23B00FB086C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7A4F25F42AD0D23900FB086C /* Prayer Calendar */;
+			targetProxy = 7A4F26132AD0D23B00FB086C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		7A4F261A2AD0D23B00FB086C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		7A4F261B2AD0D23B00FB086C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		7A4F261D2AD0D23B00FB086C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Prayer Calendar/Prayer_Calendar.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Prayer Calendar/Preview Content\"";
+				DEVELOPMENT_TEAM = 2L362X7NU4;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "lammylol.Prayer-Calendar";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		7A4F261E2AD0D23B00FB086C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Prayer Calendar/Prayer_Calendar.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Prayer Calendar/Preview Content\"";
+				DEVELOPMENT_TEAM = 2L362X7NU4;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "lammylol.Prayer-Calendar";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		7A4F26202AD0D23B00FB086C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2L362X7NU4;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "lammylol.Prayer-CalendarTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Prayer Calendar.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Prayer Calendar";
+			};
+			name = Debug;
+		};
+		7A4F26212AD0D23B00FB086C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2L362X7NU4;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "lammylol.Prayer-CalendarTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Prayer Calendar.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Prayer Calendar";
+			};
+			name = Release;
+		};
+		7A4F26232AD0D23B00FB086C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2L362X7NU4;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "lammylol.Prayer-CalendarUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Prayer Calendar";
+			};
+			name = Debug;
+		};
+		7A4F26242AD0D23B00FB086C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2L362X7NU4;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "lammylol.Prayer-CalendarUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Prayer Calendar";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		7A4F25F02AD0D23900FB086C /* Build configuration list for PBXProject "Prayer Calendar" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7A4F261A2AD0D23B00FB086C /* Debug */,
+				7A4F261B2AD0D23B00FB086C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7A4F261C2AD0D23B00FB086C /* Build configuration list for PBXNativeTarget "Prayer Calendar" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7A4F261D2AD0D23B00FB086C /* Debug */,
+				7A4F261E2AD0D23B00FB086C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7A4F261F2AD0D23B00FB086C /* Build configuration list for PBXNativeTarget "Prayer CalendarTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7A4F26202AD0D23B00FB086C /* Debug */,
+				7A4F26212AD0D23B00FB086C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7A4F26222AD0D23B00FB086C /* Build configuration list for PBXNativeTarget "Prayer CalendarUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7A4F26232AD0D23B00FB086C /* Debug */,
+				7A4F26242AD0D23B00FB086C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 7A4F25ED2AD0D23900FB086C /* Project object */;
+}
