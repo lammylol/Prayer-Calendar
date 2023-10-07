@@ -32,7 +32,7 @@ struct CalendarCell: View {
             Spacer()
         }
             .frame(maxWidth: .infinity)
-            .frame(height: 100)
+            .frame(height: 95)
     }
     
     func textColor(type: MonthType) -> Color {
