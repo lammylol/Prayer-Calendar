@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7A4F25FD2AD0D23900FB086C /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4F25FC2AD0D23900FB086C /* Item.swift */; };
 		7A4F25FF2AD0D23B00FB086C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7A4F25FE2AD0D23B00FB086C /* Assets.xcassets */; };
 		7A4F26032AD0D23B00FB086C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7A4F26022AD0D23B00FB086C /* Preview Assets.xcassets */; };
 		7A4F260D2AD0D23B00FB086C /* Prayer_CalendarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4F260C2AD0D23B00FB086C /* Prayer_CalendarTests.swift */; };
@@ -45,7 +44,6 @@
 
 /* Begin PBXFileReference section */
 		7A4F25F52AD0D23900FB086C /* Prayer Calendar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Prayer Calendar.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		7A4F25FC2AD0D23900FB086C /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		7A4F25FE2AD0D23B00FB086C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7A4F26002AD0D23B00FB086C /* Prayer_Calendar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Prayer_Calendar.entitlements; sourceTree = "<group>"; };
 		7A4F26022AD0D23B00FB086C /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -115,18 +113,17 @@
 		7A4F25F72AD0D23900FB086C /* Prayer Calendar */ = {
 			isa = PBXGroup;
 			children = (
+				7A4F262D2AD0D2B400FB086C /* PrayerCalendarSwiftApp.swift */,
+				7A4F26272AD0D2AE00FB086C /* ContentView.swift */,
+				7A4F262C2AD0D2B300FB086C /* PrayerCalendarView.swift */,
+				7A4F26292AD0D2B000FB086C /* PrayerNameInputView.swift */,
+				7A4F262A2AD0D2B100FB086C /* ProfileView.swift */,
 				7A4F262B2AD0D2B200FB086C /* CalendarCell.swift */,
 				7A4F262E2AD0D2B500FB086C /* CalendarHelper.swift */,
-				7A4F26272AD0D2AE00FB086C /* ContentView.swift */,
 				7A4F26262AD0D2AE00FB086C /* DataHolder.swift */,
 				7A4F26252AD0D2AD00FB086C /* DateScroller.swift */,
 				7A4F262F2AD0D2B600FB086C /* MonthStruct.swift */,
 				7A4F26282AD0D2AF00FB086C /* NavigationBar.swift */,
-				7A4F262D2AD0D2B400FB086C /* PrayerCalendarSwiftApp.swift */,
-				7A4F262C2AD0D2B300FB086C /* PrayerCalendarView.swift */,
-				7A4F26292AD0D2B000FB086C /* PrayerNameInputView.swift */,
-				7A4F262A2AD0D2B100FB086C /* ProfileView.swift */,
-				7A4F25FC2AD0D23900FB086C /* Item.swift */,
 				7A4F25FE2AD0D23B00FB086C /* Assets.xcassets */,
 				7A4F26002AD0D23B00FB086C /* Prayer_Calendar.entitlements */,
 				7A4F26012AD0D23B00FB086C /* Preview Content */,
@@ -298,7 +295,6 @@
 				7A4F26392AD0D2B600FB086C /* CalendarHelper.swift in Sources */,
 				7A4F26332AD0D2B600FB086C /* NavigationBar.swift in Sources */,
 				7A4F263A2AD0D2B600FB086C /* MonthStruct.swift in Sources */,
-				7A4F25FD2AD0D23900FB086C /* Item.swift in Sources */,
 				7A4F26382AD0D2B600FB086C /* PrayerCalendarSwiftApp.swift in Sources */,
 				7A4F26362AD0D2B600FB086C /* CalendarCell.swift in Sources */,
 			);
