@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct PrayerCalendarSwiftApp: App {
@@ -16,5 +17,13 @@ struct PrayerCalendarSwiftApp: App {
             ContentView()
                 .environmentObject(dataHolder)
         }
+        .modelContainer(for: [UserPrayerProfile.self])
+    }
+}
+
+
+struct Previews_PrayerCalendarSwiftApp_Previews: PreviewProvider {
+    static var previews: some View {
+        /*@START_MENU_TOKEN@*/Text("Hello, World!")/*@END_MENU_TOKEN@*/
     }
 }

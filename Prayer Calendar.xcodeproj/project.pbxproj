@@ -15,7 +15,6 @@
 		7A4F26302AD0D2B600FB086C /* DateScroller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4F26252AD0D2AD00FB086C /* DateScroller.swift */; };
 		7A4F26312AD0D2B600FB086C /* DataHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4F26262AD0D2AE00FB086C /* DataHolder.swift */; };
 		7A4F26322AD0D2B600FB086C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4F26272AD0D2AE00FB086C /* ContentView.swift */; };
-		7A4F26332AD0D2B600FB086C /* NavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4F26282AD0D2AF00FB086C /* NavigationBar.swift */; };
 		7A4F26342AD0D2B600FB086C /* PrayerNameInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4F26292AD0D2B000FB086C /* PrayerNameInputView.swift */; };
 		7A4F26352AD0D2B600FB086C /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4F262A2AD0D2B100FB086C /* ProfileView.swift */; };
 		7A4F26362AD0D2B600FB086C /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4F262B2AD0D2B200FB086C /* CalendarCell.swift */; };
@@ -23,6 +22,7 @@
 		7A4F26382AD0D2B600FB086C /* PrayerCalendarSwiftApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4F262D2AD0D2B400FB086C /* PrayerCalendarSwiftApp.swift */; };
 		7A4F26392AD0D2B600FB086C /* CalendarHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4F262E2AD0D2B500FB086C /* CalendarHelper.swift */; };
 		7A4F263A2AD0D2B600FB086C /* MonthStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4F262F2AD0D2B600FB086C /* MonthStruct.swift */; };
+		7ACF00A32AD34431004459E3 /* DataStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ACF00A22AD34430004459E3 /* DataStorage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,7 +55,6 @@
 		7A4F26252AD0D2AD00FB086C /* DateScroller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateScroller.swift; sourceTree = "<group>"; };
 		7A4F26262AD0D2AE00FB086C /* DataHolder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataHolder.swift; sourceTree = "<group>"; };
 		7A4F26272AD0D2AE00FB086C /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ContentView.swift; path = "../../../../../../Documents/Business/Coding Apps/Archive/PrayerCalendarSwiftOld/PrayerCalendarSwift/ContentView.swift"; sourceTree = "<group>"; };
-		7A4F26282AD0D2AF00FB086C /* NavigationBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationBar.swift; sourceTree = "<group>"; };
 		7A4F26292AD0D2B000FB086C /* PrayerNameInputView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrayerNameInputView.swift; sourceTree = "<group>"; };
 		7A4F262A2AD0D2B100FB086C /* ProfileView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		7A4F262B2AD0D2B200FB086C /* CalendarCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
@@ -63,6 +62,7 @@
 		7A4F262D2AD0D2B400FB086C /* PrayerCalendarSwiftApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrayerCalendarSwiftApp.swift; sourceTree = "<group>"; };
 		7A4F262E2AD0D2B500FB086C /* CalendarHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarHelper.swift; sourceTree = "<group>"; };
 		7A4F262F2AD0D2B600FB086C /* MonthStruct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonthStruct.swift; sourceTree = "<group>"; };
+		7ACF00A22AD34430004459E3 /* DataStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataStorage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,10 +120,10 @@
 				7A4F262A2AD0D2B100FB086C /* ProfileView.swift */,
 				7A4F262B2AD0D2B200FB086C /* CalendarCell.swift */,
 				7A4F262E2AD0D2B500FB086C /* CalendarHelper.swift */,
+				7ACF00A22AD34430004459E3 /* DataStorage.swift */,
 				7A4F26262AD0D2AE00FB086C /* DataHolder.swift */,
 				7A4F26252AD0D2AD00FB086C /* DateScroller.swift */,
 				7A4F262F2AD0D2B600FB086C /* MonthStruct.swift */,
-				7A4F26282AD0D2AF00FB086C /* NavigationBar.swift */,
 				7A4F25FE2AD0D23B00FB086C /* Assets.xcassets */,
 				7A4F26002AD0D23B00FB086C /* Prayer_Calendar.entitlements */,
 				7A4F26012AD0D23B00FB086C /* Preview Content */,
@@ -288,12 +288,12 @@
 			files = (
 				7A4F26352AD0D2B600FB086C /* ProfileView.swift in Sources */,
 				7A4F26312AD0D2B600FB086C /* DataHolder.swift in Sources */,
+				7ACF00A32AD34431004459E3 /* DataStorage.swift in Sources */,
 				7A4F26322AD0D2B600FB086C /* ContentView.swift in Sources */,
 				7A4F26342AD0D2B600FB086C /* PrayerNameInputView.swift in Sources */,
 				7A4F26302AD0D2B600FB086C /* DateScroller.swift in Sources */,
 				7A4F26372AD0D2B600FB086C /* PrayerCalendarView.swift in Sources */,
 				7A4F26392AD0D2B600FB086C /* CalendarHelper.swift in Sources */,
-				7A4F26332AD0D2B600FB086C /* NavigationBar.swift in Sources */,
 				7A4F263A2AD0D2B600FB086C /* MonthStruct.swift in Sources */,
 				7A4F26382AD0D2B600FB086C /* PrayerCalendarSwiftApp.swift in Sources */,
 				7A4F26362AD0D2B600FB086C /* CalendarCell.swift in Sources */,

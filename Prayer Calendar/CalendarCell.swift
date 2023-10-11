@@ -1,6 +1,6 @@
 //
 //  CalendarCell.swift
-//  PrayerCalendarSwift
+//  PrayerCalendar
 //
 //  Created by Matt Lam on 9/26/23.
 //
