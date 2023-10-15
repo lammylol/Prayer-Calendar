@@ -16,8 +16,20 @@ struct CalendarCell: View {
     let daysInPrevMonth: Int
     
     let prayerStartingSpaces: Int
-    let prayerList: [String]
+    let prayerList: String
+    let prayerListArray: [String]
     let prayerRange: Int
+    
+    init(count: Int, startingSpaces: Int, daysInMonth: Int, daysInPrevMonth: Int, prayerStartingSpaces: Int, prayerList: String, prayerRange: Int) {
+        self.count = count
+        self.startingSpaces = startingSpaces
+        self.daysInMonth = daysInMonth
+        self.daysInPrevMonth = daysInPrevMonth
+        self.prayerStartingSpaces = prayerStartingSpaces
+        self.prayerList = prayerList
+        self.prayerListArray = prayerList.split(separator: "\n").map(String.init)
+        self.prayerRange = prayerRange
+    }
     
     var body: some View {
         VStack {
@@ -45,31 +57,31 @@ struct CalendarCell: View {
         
         if (count <= start) {
             let day = daysInPrevMonth - (startingSpaces - count)
-            let name = prayerNameFunc(count: count, prayerRange: prayerRange, prayerList: prayerList)
+            let name = prayerNameFunc(count: count, prayerRange: prayerRange, prayerListArray: prayerListArray)
             return MonthStruct(monthType: MonthType.Previous, dayInt: day, prayerName: name, prayerRange: prayerRange)
         }
         
         else if ((count - startingSpaces) > daysInMonth) {
             let day = count - startingSpaces - daysInMonth
-            let name = prayerNameFunc(count: count, prayerRange: prayerRange, prayerList: prayerList)
+            let name = prayerNameFunc(count: count, prayerRange: prayerRange, prayerListArray: prayerListArray)
             return MonthStruct(monthType: MonthType.Next, dayInt: day, prayerName: name, prayerRange: prayerRange)
         }
         
         let day = count-start
-        let name = prayerNameFunc(count: count, prayerRange: prayerRange, prayerList: prayerList)
+        let name = prayerNameFunc(count: count, prayerRange: prayerRange, prayerListArray: prayerListArray)
         return MonthStruct(monthType: MonthType.Current, dayInt: day, prayerName: name, prayerRange: prayerRange)
     }
     
-    func prayerNameFunc(count: Int, prayerRange: Int, prayerList: [String]) -> String {
-        if prayerRange < 0 || prayerList.isEmpty { //(count - startingSpaces) + prayerRange <= 0) ||
+    func prayerNameFunc(count: Int, prayerRange: Int, prayerListArray: [String]) -> String {
+        if prayerRange < 0 || prayerListArray.isEmpty { //(count - startingSpaces) + prayerRange <= 0) ||
             return ""
         }
-        return prayerList[prayerRange % prayerList.count]
+        return prayerListArray[prayerRange % prayerListArray.count]
     }
 }
 
 struct CalendarCell_Previews: PreviewProvider {
     static var previews: some View {
-       CalendarCell(count: 1, startingSpaces: 1, daysInMonth: 1, daysInPrevMonth: 1, prayerStartingSpaces: 1, prayerList: ["Matt"], prayerRange: 1)
+       CalendarCell(count: 1, startingSpaces: 1, daysInMonth: 1, daysInPrevMonth: 1, prayerStartingSpaces: 1, prayerList: "Matt", prayerRange: 1)
     }
 }

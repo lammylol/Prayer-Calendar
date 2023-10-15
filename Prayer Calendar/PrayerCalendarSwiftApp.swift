@@ -10,20 +10,19 @@ import SwiftData
 
 @main
 struct PrayerCalendarSwiftApp: App {
+    @State private var dataHolder = DataHolder()
+//    let container: ModelContainer = {
+//        let schema = Schema([UserPrayerProfile.self])
+//        let config = ModelConfiguration(allowsSave: true)
+//        let container = try! ModelContainer(for: schema, configurations: config)
+//        return container
+//    }()
     
     var body: some Scene {
         WindowGroup {
-            let dataHolder = DataHolder()
             ContentView()
-                .environmentObject(dataHolder)
+                .environment(dataHolder)
         }
-        .modelContainer(for: [UserPrayerProfile.self])
-    }
-}
-
-
-struct Previews_PrayerCalendarSwiftApp_Previews: PreviewProvider {
-    static var previews: some View {
-        /*@START_MENU_TOKEN@*/Text("Hello, World!")/*@END_MENU_TOKEN@*/
+//        .modelContainer(container)
     }
 }

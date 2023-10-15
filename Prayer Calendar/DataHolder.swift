@@ -8,18 +8,14 @@
 import Foundation
 import SwiftUI
 import SwiftData
+import Observation
 
-class DataHolder: ObservableObject {
-    @Published var date = Date()
-    @Published var prayerList: [String] = []
-    @Published var prayerListString: String = ""
-    @Published var dateDictionary: [Date: [String]] = [:]
-    @Published var prayStartDate = Date()
-    @Published var username: String = ""
-
-//    private static func setDate(prayerStartDate: String) -> Date {
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateFormat = "yyyy-MM-dd"
-//        return dateFormatter.date(from: prayerStartDate)!
-//    }
+@Observable class DataHolder {
+    var date = Date()
+    var username: String = ""
+    
+    var prayerListArray: [String] = []
+    var prayerList: String = ""
+    var dateDictionary: [Date: [String]] = [:]
+    var prayStartDate = Date()
 }

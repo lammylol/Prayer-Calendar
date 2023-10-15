@@ -9,23 +9,20 @@ import SwiftUI
 import SwiftData
 
 struct PrayerNameInputView: View {
-    
-    @EnvironmentObject var dataHolder: DataHolder
+    @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.modelContext) var context
-    
-    @Query private var profiles: [UserPrayerProfile]
-    @Bindable var userProfile: UserPrayerProfile
-    let username: String = ""
+    @Environment(DataHolder.self) var dataHolder
+ 
+//    @Bindable var userProfile: UserPrayerProfile
 
-    @Query(filter: #Predicate<UserPrayerProfile> {$0.username == "Matt"}) var userprofile: [UserPrayerProfile]
-    
-    @State var inputList: String
-    @State var saved = ""
     @State var prayStartDate: Date = Date()
-//    @State var username: String = ""
-
+    @State var username: String = ""
+    @State var date: Date = Date()
+    @State var prayerListString: String = ""
+    @State var saved: String = ""
+    
     var body: some View {
+        @Bindable var dataHolder = dataHolder
         NavigationStack {
             VStack{
                 DatePicker(
@@ -35,7 +32,7 @@ struct PrayerNameInputView: View {
                 )
                 .padding([.leading, .trailing], 90)
                 Divider()
-                TextEditor(text: $userProfile.prayerListString)
+                TextEditor(text: $prayerListString)
                     .padding([.leading, .trailing], 20)
                     .padding([.top], 10)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -54,7 +51,7 @@ struct PrayerNameInputView: View {
                     }
                 }
                 ToolbarItemGroup(placement: .topBarTrailing) {
-                    Button(action: {submitList(inputText: inputList)}) {
+                    Button(action: {submitList(inputText: prayerListString)}) {
                         Text("Save")
                     }
                 }
@@ -63,38 +60,25 @@ struct PrayerNameInputView: View {
     }
     
     func submitList(inputText: String) {
-        let inputList = inputText.split(separator: "\n").map(String.init)
-        dataHolder.prayerList = inputList
-        dataHolder.prayerListString = dataHolder.prayerList.joined(separator: "\n")
+//        let inputList = inputText.split(separator: "\n").map(String.init)
+//        dataHolder.prayerList = inputList.joined(separator: "\n")
+        dataHolder.prayerList = inputText
         dataHolder.prayStartDate = prayStartDate
         print(dataHolder.prayerList)
-        passData(username: dataHolder.username, prayStartDate: prayStartDate, prayerListString: inputList.joined(separator: "\n"))
         saved = "Saved"
         dismiss()
     }
     
-    func submitList2(inputText: String) {
-        let inputList = inputText.split(separator: "\n").map(String.init)
-        dataHolder.prayerList = inputList
-        dataHolder.prayerListString = dataHolder.prayerList.joined(separator: "\n")
-        dataHolder.prayStartDate = prayStartDate
-        print(dataHolder.prayerList)
-        passData(username: dataHolder.username, prayStartDate: prayStartDate, prayerListString: inputList.joined(separator: "\n"))
-        saved = "Saved"
-        dismiss()
-    }
-    
-    func passData(username: String, prayStartDate: Date, prayerListString: String) {
-        let userData = UserPrayerProfile(username: username, prayStartDate: prayStartDate, prayerListString: prayerListString)
-        context.insert(userData)
-        try! context.save()
-    }
+//    func passData(username: String, date: Date, prayStartDate: Date, prayerListString: String) {
+//        let userData = UserPrayerProfile(username: username, date: date, prayStartDate: prayStartDate, prayerListString: prayerListString)
+//        modelContext.insert(userData)
+//        try! modelContext.save()
+//    }
                            
 }
 
 struct PrayerNameInputView_Previews: PreviewProvider {
     static var previews: some View {
-        PrayerNameInputView(inputList: "Matt-Usr\nEsther-Usr", prayStartDate: Date(),, username: "Matt")
-            .environmentObject(DataHolder())
+        PrayerNameInputView()
     }
 }

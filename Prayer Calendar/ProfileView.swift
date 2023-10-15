@@ -6,19 +6,22 @@
 //
 
 import SwiftUI
+import Observation
 
 struct ProfileView: View {
-    @EnvironmentObject var dataHolder: DataHolder
-    @State var username = ""
+    @Environment(DataHolder.self) var dataHolder
+    @State var username: String = ""
     
     var body: some View {
+//        Text("Hello World")
+        @Bindable var dataHolder = dataHolder
         VStack {
-            Text("Hello World")
             HStack () {
                 Spacer()
                 Text("Username: ")
-                TextField(text: $username, prompt: Text("enter username")) {
-                }
+                TextField("Enter Username", text: $username, prompt: Text("enter username"))
+                    .frame(width: 150)
+                Spacer()
             }
             Button(action: { submitUsername()}) {
                 Text("Enter")
@@ -29,10 +32,11 @@ struct ProfileView: View {
     func submitUsername() {
         dataHolder.username = username
     }
-    
 }
 
-#Preview {
-    ProfileView(username: "Matt")
-        .environmentObject(DataHolder())
+struct ProfileView_Previews: PreviewProvider {
+    static var previews: some View {
+        ProfileView()
+            .environment(DataHolder())
+    }
 }

@@ -7,8 +7,13 @@
 
 import Foundation
 import SwiftUI
+import SwiftData
 
 struct ContentView: View {
+    @Environment(DataHolder.self) var dataHolder
+//    @Environment(\.modelContext) private var modelContext
+//    @Query(sort: \UserPrayerProfile.prayStartDate, order: .forward)
+//    var userProfile: [UserPrayerProfile]
     
     var body: some View {
         //Tabs for each view. Adds bottom icons.
@@ -19,7 +24,6 @@ struct ContentView: View {
                         .imageScale(.large)
                     Text("Calendar")
                 }
-//                .environmentObject(dataHolder)
             ProfileView()
                 .tabItem {
                     Image(systemName: "person.circle")
@@ -32,5 +36,5 @@ struct ContentView: View {
 
 #Preview("Content View") {
     ContentView()
-        .environmentObject(DataHolder())
+        .environment(DataHolder())
 }

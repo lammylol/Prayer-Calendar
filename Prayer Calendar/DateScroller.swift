@@ -6,28 +6,31 @@
 //
 
 import SwiftUI
+import Observation
 
 struct DateScroller: View {
     
-    @EnvironmentObject var dateHolder: DataHolder
+//    @EnvironmentObject var dateHolder: DataHolder
+    @Environment(DataHolder.self) var dataHolder
     
     var body: some View {
+        @Bindable var dataHolder = dataHolder
         HStack(alignment: .center) {
             Spacer()
-            Button(action: previousMonth){
+            Button(action: {previousMonth()}){
                 Image(systemName: "arrow.left.circle.fill")
                     .imageScale(.small)
                     .font(Font.title)
                     .padding(.leading, 35)
             }
-            Text(CalendarHelper().monthString(date: dateHolder.date) + " " + CalendarHelper().yearString(date: dateHolder.date))
+            Text(CalendarHelper().monthString(date: dataHolder.date) + " " + CalendarHelper().yearString(date: dataHolder.date))
                 .font(.title2)
                 .fontWeight(.bold)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)
                 .frame(maxWidth: .infinity)
 //            Spacer()
-            Button(action: nextMonth){
+            Button(action: {nextMonth()}){
                 Image(systemName: "arrow.right.circle.fill")
                     .imageScale(.small)
                     .font(Font.title)
@@ -40,17 +43,16 @@ struct DateScroller: View {
     }
     
     func previousMonth(){
-        dateHolder.date = CalendarHelper().minusMonth(date: dateHolder.date)
+        dataHolder.date = CalendarHelper().minusMonth(date: dataHolder.date)
     }
     
     func nextMonth(){
-        dateHolder.date = CalendarHelper().plusMonth(date: dateHolder.date)
+        dataHolder.date = CalendarHelper().plusMonth(date: dataHolder.date)
     }
     
     struct DateScroller_Previews: PreviewProvider {
         static var previews: some View {
             DateScroller()
-                .environmentObject(DataHolder())
         }
     }
 }

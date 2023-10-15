@@ -6,13 +6,16 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct PrayerCalendarView: View {
    
-    @EnvironmentObject var dataHolder: DataHolder
-
-    var dateDictionary: [Date: [String]] = [:]
-    var dayOfMonth = Date()
+//    @Environment(\.modelContext) private var modelContext
+//    @Query(sort: \UserPrayerProfile.prayStartDate, order: .forward)
+//    var userProfile: [UserPrayerProfile]
+//    
+//    var user: UserPrayerProfile? { userProfile.first }
+    @Environment(DataHolder.self) var dataHolder
 
     var body: some View {
         NavigationStack{        //Navigation Stack.
@@ -29,12 +32,11 @@ struct PrayerCalendarView: View {
                         VStack (spacing: 0) {
                             Text("")
                                 .toolbar() {
-                                    NavigationLink(destination: PrayerNameInputView(inputList: dataHolder.prayerListString, prayStartDate: dataHolder.prayStartDate)){
+                                    NavigationLink(destination: PrayerNameInputView()){
                                         Image(systemName: "list.bullet.rectangle")
                                     }
                                 }
                             DateScroller()
-                                .environmentObject(dataHolder)
                                 .padding([.top, .bottom], 0)
                             Spacer()
                             dayOfWeekStack
@@ -74,9 +76,10 @@ struct PrayerCalendarView: View {
         VStack() {
             let firstDayofMonth = CalendarHelper().firstDayOfMonth(date: dataHolder.date) //First Day of the Month
             let startingSpaces = CalendarHelper().weekDay(date: firstDayofMonth)-1 //Number of spaces before month starts in a table of 42 rows.
-            let prayerStartingSpaces = CalendarHelper().weekDay(date: dataHolder.prayStartDate) //Number of spaces before prayer start date begins in a table of 42 rows.
             let daysInMonth = CalendarHelper().daysInMonth(date: dataHolder.date) //Number of days in each month.
             let daysInPrevMonth = CalendarHelper().daysInMonth(date: CalendarHelper().minusMonth(date: dataHolder.date))
+            
+            let prayerStartingSpaces = CalendarHelper().weekDay(date: dataHolder.prayStartDate) //Number of spaces before prayer start date begins in a table of 42 rows.
             
             ForEach(0..<5){ row in
                 HStack(spacing: 1)
@@ -86,7 +89,6 @@ struct PrayerCalendarView: View {
                         let count = column + (row * 7)
                         let prayerRange =  CalendarHelper().rangeOfPrayerStart(startDate: dataHolder.prayStartDate, firstDayOfMonth: firstDayofMonth) + count - startingSpaces - 1
                         CalendarCell(count: count, startingSpaces: startingSpaces, daysInMonth: daysInMonth, daysInPrevMonth: daysInPrevMonth, prayerStartingSpaces: prayerStartingSpaces, prayerList: dataHolder.prayerList, prayerRange: prayerRange)
-                            .environmentObject(dataHolder)
                     }
                 }
             }
@@ -106,6 +108,5 @@ extension Text {
 struct PrayerCalendarView_Previews: PreviewProvider {
     static var previews: some View {
         PrayerCalendarView()
-            .environmentObject(DataHolder())
     }
 }
