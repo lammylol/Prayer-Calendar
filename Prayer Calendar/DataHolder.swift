@@ -14,7 +14,7 @@ import Observation
     var date = Date()
     var username: String = ""
     
-    var prayerListArray: [String] = []
+    var prayerListArray: [String] = [""]
     var prayerList: String = ""
     var dateDictionary: [Date: [String]] = [:]
     var prayStartDate = Date()

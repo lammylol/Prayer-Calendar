@@ -13,24 +13,42 @@ struct ProfileView: View {
     @State var username: String = ""
     
     var body: some View {
-//        Text("Hello World")
         @Bindable var dataHolder = dataHolder
-        VStack {
-            HStack () {
-                Spacer()
-                Text("Username: ")
-                TextField("Enter Username", text: $username, prompt: Text("enter username"))
-                    .frame(width: 150)
-                Spacer()
+        NavigationStack{
+            ScrollView{
+                VStack {
+                    HStack () {
+                        Text("Username: ").padding(.leading, 20)
+                        TextField("Enter Username", text: $username, prompt: Text("enter username"))
+                            .frame(width: 150)
+                        Spacer()
+                    }
+                    HStack () {
+                        Button(action: { submitUsername()}) {
+                            Text("Login")
+                        }
+                        .padding(.leading, 20)
+                        .buttonStyle(.bordered)
+                        Spacer()
+                    }
+                    Text("Prayer Requests")
+                        .font(.title2)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.leading, 20)
+                    Divider()
+                    Form {
+                        
+                    }
+                }
             }
-            Button(action: { submitUsername()}) {
-                Text("Enter")
-            }
+                .navigationTitle(username)
+                .navigationBarTitleDisplayMode(.inline)
         }
     }
     
     func submitUsername() {
         dataHolder.username = username
+        print(dataHolder.username)
     }
 }
 

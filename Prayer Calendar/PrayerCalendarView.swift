@@ -9,12 +9,6 @@ import SwiftUI
 import SwiftData
 
 struct PrayerCalendarView: View {
-   
-//    @Environment(\.modelContext) private var modelContext
-//    @Query(sort: \UserPrayerProfile.prayStartDate, order: .forward)
-//    var userProfile: [UserPrayerProfile]
-//    
-//    var user: UserPrayerProfile? { userProfile.first }
     @Environment(DataHolder.self) var dataHolder
 
     var body: some View {
@@ -32,7 +26,7 @@ struct PrayerCalendarView: View {
                         VStack (spacing: 0) {
                             Text("")
                                 .toolbar() {
-                                    NavigationLink(destination: PrayerNameInputView()){
+                                    NavigationLink(destination: PrayerNameInputView(dataHolder: dataHolder)){
                                         Image(systemName: "list.bullet.rectangle")
                                     }
                                 }
@@ -46,7 +40,7 @@ struct PrayerCalendarView: View {
                         }
                         .padding([.top, .bottom], 10)
                         .background(Color.white)
-                        .navigationTitle("Prayer Calendar")
+                        .navigationTitle("prayer calendar")
                         .navigationBarTitleDisplayMode(.automatic)
                         .navigationBarBackButtonHidden(true)
                         .toolbarBackground(.white, for: .navigationBar)
@@ -108,5 +102,6 @@ extension Text {
 struct PrayerCalendarView_Previews: PreviewProvider {
     static var previews: some View {
         PrayerCalendarView()
+            .environment(DataHolder())
     }
 }

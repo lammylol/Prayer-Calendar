@@ -7,22 +7,27 @@
 
 import SwiftUI
 import SwiftData
+import Observation
 
 struct PrayerNameInputView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
-    @Environment(DataHolder.self) var dataHolder
- 
-//    @Bindable var userProfile: UserPrayerProfile
+    
+    @Bindable var dataHolder: DataHolder
 
     @State var prayStartDate: Date = Date()
+    @State var prayerList: String = ""
     @State var username: String = ""
     @State var date: Date = Date()
-    @State var prayerListString: String = ""
     @State var saved: String = ""
     
+    init(dataHolder: DataHolder) {
+        self.dataHolder = dataHolder
+        _prayerList = State(initialValue: dataHolder.prayerList)
+        _prayStartDate = State(initialValue: dataHolder.prayStartDate)
+    }
+
     var body: some View {
-        @Bindable var dataHolder = dataHolder
         NavigationStack {
             VStack{
                 DatePicker(
@@ -32,7 +37,7 @@ struct PrayerNameInputView: View {
                 )
                 .padding([.leading, .trailing], 90)
                 Divider()
-                TextEditor(text: $prayerListString)
+                TextEditor(text: $prayerList)
                     .padding([.leading, .trailing], 20)
                     .padding([.top], 10)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -51,7 +56,7 @@ struct PrayerNameInputView: View {
                     }
                 }
                 ToolbarItemGroup(placement: .topBarTrailing) {
-                    Button(action: {submitList(inputText: prayerListString)}) {
+                    Button(action: {submitList(inputText: prayerList)}) {
                         Text("Save")
                     }
                 }
@@ -60,10 +65,12 @@ struct PrayerNameInputView: View {
     }
     
     func submitList(inputText: String) {
-//        let inputList = inputText.split(separator: "\n").map(String.init)
-//        dataHolder.prayerList = inputList.joined(separator: "\n")
-        dataHolder.prayerList = inputText
+        let inputList = inputText.split(separator: "\n").map(String.init)
+        dataHolder.prayerList = inputList.joined(separator: "\n")
+//        dataHolder.prayerList = inputText
+//        prayerList = inputText
         dataHolder.prayStartDate = prayStartDate
+//        prayStartDate = prayStartDate
         print(dataHolder.prayerList)
         saved = "Saved"
         dismiss()
@@ -79,6 +86,7 @@ struct PrayerNameInputView: View {
 
 struct PrayerNameInputView_Previews: PreviewProvider {
     static var previews: some View {
-        PrayerNameInputView()
+        PrayerNameInputView(dataHolder: DataHolder())
+            .environment(DataHolder())
     }
 }
