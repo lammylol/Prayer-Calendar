@@ -7,10 +7,12 @@
 
 import SwiftUI
 import SwiftData
+import FirebaseFirestore
+import FirebaseCore
 
 struct PrayerCalendarView: View {
     @Environment(DataHolder.self) var dataHolder
-
+    
     var body: some View {
         NavigationStack{        //Navigation Stack.
             ScrollView {        //ScrollView enables title to shrink.
@@ -20,6 +22,9 @@ struct PrayerCalendarView: View {
                             calendarGrid
                                 .padding(.horizontal, 10)
                                 .padding(.top, 20)
+                                .onAppear(perform: {
+                                    getFirestoreData()
+                                })
                         }
                         .background(Color.gray.opacity(0.05))
                     } header: { //Header that freezes for lazy stack.
@@ -87,7 +92,25 @@ struct PrayerCalendarView: View {
                 }
             }
         }
-        
+    }
+    
+    func getFirestoreData() {
+        Task {
+            let ref = Firestore.firestore()
+                .collection("users")
+                .document(dataHolder.email)
+
+            ref.getDocument{(document, error) in
+                if let document = document, document.exists {
+                    let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
+                    print("Document data: " + dataDescription)
+    //                    prayStartDate = document.get("prayStartDate")
+                    dataHolder.prayerList = document.get("prayerList") as! String
+                } else {
+                    print("Document does not exist")
+                }
+            }
+        }
     }
 }
 

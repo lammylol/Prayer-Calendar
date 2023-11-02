@@ -6,8 +6,8 @@
 //
 
 import SwiftUI
-import SwiftData
 import Observation
+import FirebaseFirestore
 
 struct PrayerNameInputView: View {
     @Environment(\.modelContext) private var modelContext
@@ -17,16 +17,35 @@ struct PrayerNameInputView: View {
 
     @State var prayStartDate: Date = Date()
     @State var prayerList: String = ""
-    @State var username: String = ""
     @State var date: Date = Date()
     @State var saved: String = ""
     
     init(dataHolder: DataHolder) {
         self.dataHolder = dataHolder
-        _prayerList = State(initialValue: dataHolder.prayerList)
-        _prayStartDate = State(initialValue: dataHolder.prayStartDate)
+//        _email = State(initialValue: dataHolder.email)
+//        _prayerList = State(initialValue: dataHolder.prayerList)
+//        _prayStartDate = State(initialValue: dataHolder.prayStartDate)
     }
+    
+    func getFirestoreData() {
+        Task {
+            let ref = Firestore.firestore()
+                .collection("users")
+                .document(dataHolder.email)
 
+            ref.getDocument{(document, error) in
+                if let document = document, document.exists {
+                    let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
+                    print("Document data: " + dataDescription)
+//                    prayStartDate = document.get("prayStartDate")
+                    prayerList = document.get("prayerList") as! String
+                } else {
+                    print("Document does not exist")
+                }
+            }
+        }
+    }
+    
     var body: some View {
         NavigationStack {
             VStack{
@@ -46,6 +65,11 @@ struct PrayerNameInputView: View {
                     .font(Font.system(size: 12))
                 Spacer()
             }
+            .onAppear(perform: {
+                getFirestoreData()
+//                prayStartDate = dataHolder.prayStartDate
+//                prayerList = dataHolder.prayerList
+            })
             .navigationTitle("Input Your Prayer List")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
@@ -67,20 +91,18 @@ struct PrayerNameInputView: View {
     func submitList(inputText: String) {
         let inputList = inputText.split(separator: "\n").map(String.init)
         dataHolder.prayerList = inputList.joined(separator: "\n")
-//        dataHolder.prayerList = inputText
-//        prayerList = inputText
         dataHolder.prayStartDate = prayStartDate
-//        prayStartDate = prayStartDate
-        print(dataHolder.prayerList)
+
+        let db = Firestore.firestore()
+        let ref = db.collection("users").document(dataHolder.email)
+        
+        ref.setData(["email": dataHolder.email, "prayStartDate": prayStartDate, "prayerList": prayerList])
+        
+//        print(ref.collection("users").whereField("email", isEqualTo: dataHolder.email))
+        
         saved = "Saved"
         dismiss()
     }
-    
-//    func passData(username: String, date: Date, prayStartDate: Date, prayerListString: String) {
-//        let userData = UserPrayerProfile(username: username, date: date, prayStartDate: prayStartDate, prayerListString: prayerListString)
-//        modelContext.insert(userData)
-//        try! modelContext.save()
-//    }
                            
 }
 

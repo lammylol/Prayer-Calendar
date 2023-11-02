@@ -7,22 +7,28 @@
 
 import SwiftUI
 import SwiftData
+import FirebaseCore
 
 @main
 struct PrayerCalendarSwiftApp: App {
     @State private var dataHolder = DataHolder()
-//    let container: ModelContainer = {
-//        let schema = Schema([UserPrayerProfile.self])
-//        let config = ModelConfiguration(allowsSave: true)
-//        let container = try! ModelContainer(for: schema, configurations: config)
-//        return container
-//    }()
+    let container: ModelContainer = {
+        let schema = Schema([PrayerRequest.self])
+        let config = ModelConfiguration(allowsSave: true)
+        let container = try! ModelContainer(for: schema, configurations: config)
+        return container
+    }()
+    
+    init(){
+        FirebaseApp.configure()
+        print("Configured Firebase!")
+    }
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            SignInView()
                 .environment(dataHolder)
         }
-//        .modelContainer(container)
+        .modelContainer(container)
     }
 }
