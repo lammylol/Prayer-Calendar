@@ -7,7 +7,7 @@
 
 import Foundation
 import SwiftUI
-import SwiftData
+import Firebase
 import Observation
 
 @Observable class DataHolder {

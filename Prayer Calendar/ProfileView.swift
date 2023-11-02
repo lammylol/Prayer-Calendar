@@ -6,10 +6,13 @@
 //
 
 import SwiftUI
-import Observation
+import SwiftData
 
 struct ProfileView: View {
     @Environment(DataHolder.self) var dataHolder
+    @Environment(\.modelContext) var modelContext
+    @Query var prayerRequests: [PrayerRequest]
+    
     @State var username: String = ""
     
     var body: some View {
@@ -36,9 +39,9 @@ struct ProfileView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.leading, 20)
                     Divider()
-                    Form {
-                        
-                    }
+//                    Form {
+//                        for 
+//                    }
                 }
             }
                 .navigationTitle(username)

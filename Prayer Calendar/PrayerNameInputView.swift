@@ -75,12 +75,6 @@ struct PrayerNameInputView: View {
         saved = "Saved"
         dismiss()
     }
-    
-//    func passData(username: String, date: Date, prayStartDate: Date, prayerListString: String) {
-//        let userData = UserPrayerProfile(username: username, date: date, prayStartDate: prayStartDate, prayerListString: prayerListString)
-//        modelContext.insert(userData)
-//        try! modelContext.save()
-//    }
                            
 }
 
