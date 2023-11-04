@@ -7,11 +7,8 @@
 
 import SwiftUI
 import FirebaseAuth
-import FirebaseFirestore
 
 struct SignInView: View {
-    @Environment(DataHolder.self) var dataHolder
-    
     @State var loggedIn = false
     @State var email = ""
     @State var password = ""
@@ -25,14 +22,22 @@ struct SignInView: View {
                         .bold()
                         .offset(x: -80, y: -20)
                     
-                    TextField("Enter email", text: $email, prompt: Text("enter email"))
-                        .frame(width: 310)
+                    HStack {
+                        Text("Email: ")
+                        TextField("Enter Email", text: $email, prompt: Text("enter email"))
+                            .frame(width: 250)
+                    }
+                        .offset(x: 0)
                     
                     Rectangle()
                         .frame(width: 310, height: 1)
                     
-                    SecureField("Enter password", text: $password, prompt: Text("enter password"))
-                        .frame(width: 310)
+                    HStack {
+                        Text("Password: ")
+                        SecureField("Enter password", text: $password, prompt: Text("enter password"))
+                            .frame(width: 250)
+                    }
+                        .offset(x: 15)
                     
                     Rectangle()
                         .frame(width: 310, height: 1)
@@ -56,6 +61,7 @@ struct SignInView: View {
                     }
                     .padding(.top, 10)
                 }
+                .frame(width: 350)
             }
             else {
                 ContentView()
@@ -64,27 +70,20 @@ struct SignInView: View {
     }
     
     func signIn() {
-        let db = Firestore.firestore()
         Auth.auth().signIn(withEmail: email, password: password) { result, error in
             if error != nil {
-                print("Error: No Account Found.")
-                print("Please create new user or re-enter login details.")
+                print("no account found")
                 self.loggedIn = false
             } else {
-                print("Success: Account Found.")
-                print("You are now logged in as " + email)
-                dataHolder.email = email
                 self.loggedIn = true
             }
         }
     }
     
     func register() {
-        Auth.auth().createUser(withEmail: email, password: password)
-        { result, error in
+        Auth.auth().createUser(withEmail: email, password: password) { result, error in 
             if error != nil {
-                print("Error: Account Already Exists.")
-            } else {
+                print(error!.localizedDescription.localizedLowercase)
             }
         }
 //        let user = Auth.auth().currentUser;

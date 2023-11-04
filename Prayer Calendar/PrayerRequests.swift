@@ -10,26 +10,26 @@ import SwiftUI
 import SwiftData
 
 @Model final class PrayerRequest {
-    var email: String
-    var startDate: Date
+    @Attribute(.unique) var username: String
+    var date: Date
     var prayerRequest: String
     var status: String
     
-    init(email: String, startDate: Date, prayerRequest: String, status: String) {
-        self.email = email
-        self.startDate = startDate
+    init(username: String, date: Date, prayerRequest: String, status: String) {
+        self.username = username
+        self.date = date
         self.prayerRequest = prayerRequest
         self.status = status
     }
 }
 
-//extension PrayerRequest {
-//    static var preview: PrayerRequest {
-//        let item = PrayerRequest(
-//            username: "Matt",
-//            date: Date(),
-//            prayerRequest: "Hello, World",
-//            status: "Still need prayer")
-//        return item
-//    }
-//}
+extension PrayerRequest {
+    static var preview: PrayerRequest {
+        let item = PrayerRequest(
+            username: "Matt",
+            date: Date(),
+            prayerRequest: "Hello, World",
+            status: "Still need prayer")
+        return item
+    }
+}

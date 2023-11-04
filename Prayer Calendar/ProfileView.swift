@@ -13,42 +13,46 @@ struct ProfileView: View {
     @Environment(\.modelContext) var modelContext
     @Query var prayerRequests: [PrayerRequest]
     
+    @State var username: String = ""
+    
     var body: some View {
-//        dataHolder = dataHolder
+        @Bindable var dataHolder = dataHolder
         NavigationStack{
             ScrollView{
                 VStack {
                     HStack () {
-                        Text("You are logged in as:  \(dataHolder.email)").padding(.leading, 20)
-//                        TextField("Enter Username", text: dataHolder.email, prompt: Text("enter username"))
-//                            .frame(width: 150)
+                        Text("Username: ").padding(.leading, 20)
+                        TextField("Enter Username", text: $username, prompt: Text("enter username"))
+                            .frame(width: 150)
                         Spacer()
                     }
                     HStack () {
-//                        Button(action: { submitUsername()}) {
-//                            Text("Login")
-//                        }
-//                        .padding(.leading, 20)
-//                        .buttonStyle(.bordered)
-//                        Spacer()
+                        Button(action: { submitUsername()}) {
+                            Text("Login")
+                        }
+                        .padding(.leading, 20)
+                        .buttonStyle(.bordered)
+                        Spacer()
                     }
-                    Spacer()
                     Text("Prayer Requests")
                         .font(.title2)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.leading, 20)
                     Divider()
+//                    Form {
+//                        for 
+//                    }
                 }
             }
-                .navigationTitle("profile")
-                .navigationBarTitleDisplayMode(.automatic)
+                .navigationTitle(username)
+                .navigationBarTitleDisplayMode(.inline)
         }
     }
     
-//    func submitUsername() {
-//        dataHolder.username = username
-//        print(dataHolder.username)
-//    }
+    func submitUsername() {
+        dataHolder.username = username
+        print(dataHolder.username)
+    }
 }
 
 struct ProfileView_Previews: PreviewProvider {

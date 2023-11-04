@@ -7,14 +7,12 @@
 
 import Foundation
 import SwiftUI
-import FirebaseCore
+import Firebase
 import Observation
-import FirebaseFirestore
-import FirebaseFirestoreSwift
 
 @Observable class DataHolder {
     var date = Date()
-    var email: String = ""
+    var username: String = ""
     
     var prayerListArray: [String] = [""]
     var prayerList: String = ""

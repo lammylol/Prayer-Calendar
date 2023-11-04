@@ -12,7 +12,6 @@
 		7A3158ED2AF357F5009B6E59 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3158EC2AF357F5009B6E59 /* SignInView.swift */; };
 		7A3158EF2AF359B4009B6E59 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 7A3158EE2AF359B4009B6E59 /* FirebaseAuth */; };
 		7A3158F12AF359B4009B6E59 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 7A3158F02AF359B4009B6E59 /* FirebaseFirestore */; };
-		7A3158F32AF6C82F009B6E59 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 7A3158F22AF6C82F009B6E59 /* FirebaseFirestoreSwift */; };
 		7A4F25FF2AD0D23B00FB086C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7A4F25FE2AD0D23B00FB086C /* Assets.xcassets */; };
 		7A4F26032AD0D23B00FB086C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7A4F26022AD0D23B00FB086C /* Preview Assets.xcassets */; };
 		7A4F260D2AD0D23B00FB086C /* Prayer_CalendarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4F260C2AD0D23B00FB086C /* Prayer_CalendarTests.swift */; };
@@ -81,7 +80,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7A3158F32AF6C82F009B6E59 /* FirebaseFirestoreSwift in Frameworks */,
 				7A3158EB2AEF9C0B009B6E59 /* FirebaseAnalyticsSwift in Frameworks */,
 				7A3158F12AF359B4009B6E59 /* FirebaseFirestore in Frameworks */,
 				7A3158EF2AF359B4009B6E59 /* FirebaseAuth in Frameworks */,
@@ -211,7 +209,6 @@
 				7A3158EA2AEF9C0B009B6E59 /* FirebaseAnalyticsSwift */,
 				7A3158EE2AF359B4009B6E59 /* FirebaseAuth */,
 				7A3158F02AF359B4009B6E59 /* FirebaseFirestore */,
-				7A3158F22AF6C82F009B6E59 /* FirebaseFirestoreSwift */,
 			);
 			productName = "Prayer Calendar";
 			productReference = 7A4F25F52AD0D23900FB086C /* Prayer Calendar.app */;
@@ -733,11 +730,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 7A3158E72AEF9C0B009B6E59 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestore;
-		};
-		7A3158F22AF6C82F009B6E59 /* FirebaseFirestoreSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 7A3158E72AEF9C0B009B6E59 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseFirestoreSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
