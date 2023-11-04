@@ -16,24 +16,24 @@ struct ProfileView: View {
     @State var username: String = ""
     
     var body: some View {
-        @Bindable var dataHolder = dataHolder
+//        @Bindable var dataHolder = dataHolder
         NavigationStack{
             ScrollView{
                 VStack {
                     HStack () {
-                        Text("Username: ").padding(.leading, 20)
-                        TextField("Enter Username", text: $username, prompt: Text("enter username"))
-                            .frame(width: 150)
+                        Text("Username: \(dataHolder.email)").padding(.leading, 20)
+//                        TextField("Enter Username", text: $username, prompt: Text("enter username"))
+//                            .frame(width: 150)
                         Spacer()
                     }
-                    HStack () {
-                        Button(action: { submitUsername()}) {
-                            Text("Login")
-                        }
-                        .padding(.leading, 20)
-                        .buttonStyle(.bordered)
-                        Spacer()
-                    }
+//                    HStack () {
+//                        Button(action: { submitUsername()}) {
+//                            Text("Login")
+//                        }
+//                        .padding(.leading, 20)
+//                        .buttonStyle(.bordered)
+//                        Spacer()
+//                    }
                     Text("Prayer Requests")
                         .font(.title2)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -44,15 +44,15 @@ struct ProfileView: View {
 //                    }
                 }
             }
-                .navigationTitle(username)
+            .navigationTitle(dataHolder.email)
                 .navigationBarTitleDisplayMode(.inline)
         }
     }
     
-    func submitUsername() {
-        dataHolder.username = username
-        print(dataHolder.username)
-    }
+//    func submitUsername() {
+//        dataHolder.username = username
+//        print(dataHolder.username)
+//    }
 }
 
 struct ProfileView_Previews: PreviewProvider {

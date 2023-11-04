@@ -12,7 +12,7 @@ import Observation
 
 @Observable class DataHolder {
     var date = Date()
-    var username: String = ""
+    var email: String = ""
     
     var prayerListArray: [String] = [""]
     var prayerList: String = ""
