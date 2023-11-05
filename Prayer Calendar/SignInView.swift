@@ -9,6 +9,7 @@ import SwiftUI
 import FirebaseAuth
 
 struct SignInView: View {
+    @Environment(DataHolder.self) var dataHolder
     @State var loggedIn = false
     @State var email = ""
     @State var password = ""
@@ -76,6 +77,7 @@ struct SignInView: View {
                 self.loggedIn = false
             } else {
                 self.loggedIn = true
+                dataHolder.email = email
             }
         }
     }
