@@ -11,9 +11,6 @@ import SwiftData
 
 struct ContentView: View {
     @Environment(DataHolder.self) var dataHolder
-//    @Environment(\.modelContext) private var modelContext
-//    @Query(sort: \UserPrayerProfile.prayStartDate, order: .forward)
-//    var userProfile: [UserPrayerProfile]
     
     var body: some View {
         //Tabs for each view. Adds bottom icons.

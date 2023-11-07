@@ -16,6 +16,6 @@ import Observation
     
     var prayerListArray: [String] = [""]
     var prayerList: String = ""
-    var dateDictionary: [Date: [String]] = [:]
+    var isLoggedIn: Bool = false
     var prayStartDate = Date()
 }

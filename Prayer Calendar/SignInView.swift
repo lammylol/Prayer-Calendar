@@ -10,13 +10,13 @@ import FirebaseAuth
 
 struct SignInView: View {
     @Environment(DataHolder.self) var dataHolder
-    @State var loggedIn = false
+//    @State var isLoggedIn: Bool
     @State var email = ""
     @State var password = ""
     
     var body: some View {
         Group {
-            if loggedIn == false {
+            if dataHolder.isLoggedIn == false {
                 VStack(spacing: 20) {
                     Text("Welcome")
                         .font(.largeTitle)
@@ -74,10 +74,12 @@ struct SignInView: View {
         Auth.auth().signIn(withEmail: email, password: password) { result, error in
             if error != nil {
                 print("no account found")
-                self.loggedIn = false
+                dataHolder.isLoggedIn = false
             } else {
-                self.loggedIn = true
+                dataHolder.isLoggedIn = true
                 dataHolder.email = email
+                email = ""
+                password = ""
             }
         }
     }
@@ -86,6 +88,9 @@ struct SignInView: View {
         Auth.auth().createUser(withEmail: email, password: password) { result, error in 
             if error != nil {
                 print(error!.localizedDescription.localizedLowercase)
+            } else {
+                email = ""
+                password = ""
             }
         }
     }

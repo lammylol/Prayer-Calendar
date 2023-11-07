@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 import FirebaseAuth
+import FirebaseFirestore
 
 struct ProfileView: View {
     @Environment(DataHolder.self) var dataHolder
@@ -37,54 +38,60 @@ struct ProfileView: View {
                                     ToolbarItem(placement: .topBarTrailing) {
                                         Button(action: {
                                             self.signOut()
-                                        }) {Text("sign out")
+                                        }) {Text("logout")
                                                 .bold()
-                                                .frame(width: 80, height: 25)
+                                                .font(.system(size: 14))
+                                                .frame(width: 60, height: 25)
                                                 .background(
                                                     RoundedRectangle(cornerRadius: 5)
-                                                        .fill(Color.black)
+                                                        .fill(Color.blue)
                                                 )
                                                 .foregroundColor(.white)
                                         }
                                     }
                                 }
-                            Spacer()
-                            HStack () {
+                            HStack {
                                 Text("Logged in as: \(dataHolder.email)").padding(.leading, 20)
+                                    .font(.system(size: 15))
+                                    .italic()
                                 Spacer()
                             }
                             Spacer()
-                            Text("Prayer Requests")
-                                .font(.title2)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(.leading, 20)
+                            HStack {
+                                Text("Prayer Requests")
+                                    .font(.title3)
+                                    .bold()
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .padding(.leading, 20)
+                                Button(action: {
+                                    addPrayerRequest()
+                                }) {
+                                    Image(systemName: "plus")
+                                }
+                                .padding(.trailing, 15)
+                            }
                             Divider()
                         }
                     }
                 }
             }
             .navigationTitle("profile")
-            .navigationBarTitleDisplayMode(.automatic)
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
     
     func signOut() {
-        Auth.auth().signOut() { result, error in
-            if error != nil {
-                print("Error.")
-            } else {
-                SignInView()
-            }
-        }
+        // Sign out from firebase and change loggedIn to return to SignInView.
+        try? Auth.auth().signOut()
+        dataHolder.isLoggedIn = false
     }
-//        do {
-//            try (
-//                Auth.auth().signOut(),
-//                SignInView()
-//            )
-//        } catch {
-//            print("Error: cannot sign out.")
-//        }
+                                       
+    func addPrayerRequest() {
+        let db = Firestore.firestore()
+        let ref = db.collection("users").document("prayerRequests")
+        
+//        ref.setData(["email": dataHolder.email, "prayStartDate": prayStartDate, "prayerList": prayerList])
+    }
 }
 
 struct ProfileView_Previews: PreviewProvider {
