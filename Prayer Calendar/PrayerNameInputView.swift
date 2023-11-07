@@ -23,27 +23,8 @@ struct PrayerNameInputView: View {
     init(dataHolder: DataHolder) {
         self.dataHolder = dataHolder
 //        _email = State(initialValue: dataHolder.email)
-//        _prayerList = State(initialValue: dataHolder.prayerList)
-//        _prayStartDate = State(initialValue: dataHolder.prayStartDate)
-    }
-    
-    func getFirestoreData() {
-        Task {
-            let ref = Firestore.firestore()
-                .collection("users")
-                .document(dataHolder.email)
-
-            ref.getDocument{(document, error) in
-                if let document = document, document.exists {
-                    let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
-                    print("Document data: " + dataDescription)
-//                    prayStartDate = document.get("prayStartDate")
-                    prayerList = document.get("prayerList") as! String
-                } else {
-                    print("Document does not exist")
-                }
-            }
-        }
+        _prayerList = State(initialValue: dataHolder.prayerList)
+        _prayStartDate = State(initialValue: dataHolder.prayStartDate)
     }
     
     var body: some View {
@@ -65,11 +46,6 @@ struct PrayerNameInputView: View {
                     .font(Font.system(size: 12))
                 Spacer()
             }
-            .onAppear(perform: {
-                getFirestoreData()
-//                prayStartDate = dataHolder.prayStartDate
-//                prayerList = dataHolder.prayerList
-            })
             .navigationTitle("Input Your Prayer List")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)

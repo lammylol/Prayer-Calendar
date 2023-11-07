@@ -104,7 +104,8 @@ struct PrayerCalendarView: View {
                 if let document = document, document.exists {
                     let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
                     print("Document data: " + dataDescription)
-    //                    prayStartDate = document.get("prayStartDate")
+                    let startDateTimeStamp = document.get("prayStartDate") as! Timestamp
+                    dataHolder.prayStartDate = startDateTimeStamp.dateValue()
                     dataHolder.prayerList = document.get("prayerList") as! String
                 } else {
                     print("Document does not exist")

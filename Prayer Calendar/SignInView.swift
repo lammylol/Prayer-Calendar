@@ -88,11 +88,6 @@ struct SignInView: View {
                 print(error!.localizedDescription.localizedLowercase)
             }
         }
-//        let user = Auth.auth().currentUser;
-//        if (user == nil) {
-//            // there is no user signed in when user is nil
-//            return false
-//        } else { return true }
     }
 }
 
