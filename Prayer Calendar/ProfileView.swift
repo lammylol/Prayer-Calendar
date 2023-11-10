@@ -11,11 +11,14 @@ import FirebaseAuth
 import FirebaseFirestore
 
 struct ProfileView: View {
-    @Environment(DataHolder.self) var dataHolder
+//    @Environment(DataHolder.self) var dataHolder
 //    @Environment(\.modelContext) var modelContext
 //    @Query var prayerRequests: [PrayerRequest]
+    @Bindable var dataHolder: DataHolder
     
-    @State var username: String = ""
+    init(dataHolder: DataHolder) {
+        self.dataHolder = dataHolder
+    }
     
     var body: some View {
         NavigationStack{
@@ -83,12 +86,18 @@ struct ProfileView: View {
     func signOut() {
         // Sign out from firebase and change loggedIn to return to SignInView.
         try? Auth.auth().signOut()
+        dataHolder.prayerList = ""
         dataHolder.isLoggedIn = false
     }
-                                       
+                    
+    func resetInfo() {
+        dataHolder.prayerList = ""
+        dataHolder.prayStartDate = Date()
+    }
+    
     func addPrayerRequest() {
-        let db = Firestore.firestore()
-        let ref = db.collection("users").document("prayerRequests")
+//        let db = Firestore.firestore()
+//        let ref = db.collection("users").document("prayerRequests")
         
 //        ref.setData(["email": dataHolder.email, "prayStartDate": prayStartDate, "prayerList": prayerList])
     }
@@ -96,7 +105,7 @@ struct ProfileView: View {
 
 struct ProfileView_Previews: PreviewProvider {
     static var previews: some View {
-        ProfileView()
+        ProfileView(dataHolder: DataHolder())
             .environment(DataHolder())
     }
 }

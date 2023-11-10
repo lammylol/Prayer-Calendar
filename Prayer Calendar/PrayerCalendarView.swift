@@ -12,6 +12,15 @@ import FirebaseCore
 
 struct PrayerCalendarView: View {
     @Environment(DataHolder.self) var dataHolder
+    @Environment(\.colorScheme) var colorScheme
+//    @Bindable var dataHolder: DataHolder
+    
+//    init(dataHolder: DataHolder) {
+//        self.dataHolder = dataHolder
+////        _email = State(initialValue: dataHolder.email)
+//        _prayerList = State(initialValue: dataHolder.prayerList)
+//        _prayStartDate = State(initialValue: dataHolder.prayStartDate)
+//    }
     
     var body: some View {
         NavigationStack{        //Navigation Stack.
@@ -22,9 +31,9 @@ struct PrayerCalendarView: View {
                             calendarGrid
                                 .padding(.horizontal, 10)
                                 .padding(.top, 20)
-                                .onAppear(perform: {
+                                .task {
                                     getFirestoreData()
-                                })
+                                }
                         }
                         .background(Color.gray.opacity(0.05))
                     } header: { //Header that freezes for lazy stack.
@@ -44,11 +53,11 @@ struct PrayerCalendarView: View {
                                 .padding([.top], 10)
                         }
                         .padding([.top, .bottom], 10)
-                        .background(Color.white)
+                        .background(UIHelper().backgroundColor(colorScheme: colorScheme))
                         .navigationTitle("prayer calendar")
                         .navigationBarTitleDisplayMode(.automatic)
                         .navigationBarBackButtonHidden(true)
-                        .toolbarBackground(.white, for: .navigationBar)
+                        .toolbarBackground(UIHelper().backgroundColor(colorScheme: colorScheme), for: .navigationBar)
                     }
                 }
         }
@@ -73,6 +82,7 @@ struct PrayerCalendarView: View {
     
     var calendarGrid: some View {
         VStack() {
+//            prayerList = dataHolder.prayerList //Required so that view will reset when prayerList changes.
             let firstDayofMonth = CalendarHelper().firstDayOfMonth(date: dataHolder.date) //First Day of the Month
             let startingSpaces = CalendarHelper().weekDay(date: firstDayofMonth)-1 //Number of spaces before month starts in a table of 42 rows.
             let daysInMonth = CalendarHelper().daysInMonth(date: dataHolder.date) //Number of days in each month.
@@ -94,25 +104,29 @@ struct PrayerCalendarView: View {
         }
     }
     
+    //This function retrieves PrayerList data from Firestore.
     func getFirestoreData() {
-        Task {
             let ref = Firestore.firestore()
                 .collection("users")
                 .document(dataHolder.email)
-
+        
             ref.getDocument{(document, error) in
                 if let document = document, document.exists {
                     let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
                     print("Document data: " + dataDescription)
+                    
+                    //Update Dataholder with PrayStartDate from Firestore
                     let startDateTimeStamp = document.get("prayStartDate") as! Timestamp
                     dataHolder.prayStartDate = startDateTimeStamp.dateValue()
+                    
+                    //Update Dataholder with PrayerList from Firestore
                     dataHolder.prayerList = document.get("prayerList") as! String
                 } else {
                     print("Document does not exist")
+                    dataHolder.prayerList = ""
                 }
             }
         }
-    }
 }
 
 extension Text {

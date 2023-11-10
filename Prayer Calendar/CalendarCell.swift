@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 
 struct CalendarCell: View {
+    @Environment(\.colorScheme) var colorScheme
     
     let count: Int
     let startingSpaces: Int
@@ -40,7 +41,6 @@ struct CalendarCell: View {
             Spacer()
             Text(monthStruct().prayerName)
                 .font(Font.system(size: 12))
-//                .padding(.top, 40)
             Spacer()
         }
             .frame(maxWidth: .infinity)
@@ -48,7 +48,15 @@ struct CalendarCell: View {
     }
     
     func textColor(type: MonthType) -> Color {
-        return type == MonthType.Current ? Color.black: Color.gray
+        if type == MonthType.Current {
+            if colorScheme == .light {
+                return Color.black
+            } else {
+                return Color.white
+            }
+        } else {
+            return Color.gray
+        }
     }
     
     func monthStruct() -> MonthStruct {

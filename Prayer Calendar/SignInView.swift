@@ -10,50 +10,49 @@ import FirebaseAuth
 
 struct SignInView: View {
     @Environment(DataHolder.self) var dataHolder
-//    @State var isLoggedIn: Bool
+    @Environment(\.colorScheme) var colorScheme
     @State var email = ""
     @State var password = ""
     
     var body: some View {
         Group {
             if dataHolder.isLoggedIn == false {
-                VStack(spacing: 20) {
+                VStack(/*spacing: 20*/) {
                     Text("Welcome")
                         .font(.largeTitle)
                         .bold()
-                        .offset(x: -80, y: -20)
+                        .offset(x: -80, y: -25)
                     
                     HStack {
                         Text("Email: ")
-                        TextField("Enter Email", text: $email, prompt: Text("enter email"))
-                            .frame(width: 250)
+                            .padding(.leading, 40)
+                        MyTextView(placeholder: "", text: $email, textPrompt: "enter email", textFieldType: "text")
+                            .keyboardType(.emailAddress)
                     }
-                        .offset(x: 0)
                     
                     Rectangle()
                         .frame(width: 310, height: 1)
                     
                     HStack {
                         Text("Password: ")
-                        SecureField("Enter password", text: $password, prompt: Text("enter password"))
-                            .frame(width: 250)
+                            .padding(.leading, 40)
+                        MyTextView(placeholder: "", text: $password, textPrompt: "enter password", textFieldType: "secure")
                     }
-                        .offset(x: 15)
                     
                     Rectangle()
                         .frame(width: 310, height: 1)
-                    
+                
                     Button(action: {
                         self.signIn()
                     }) {Text("Login")
                             .bold()
-                            .frame(width: 150, height: 30)
-                            .background(
-                                RoundedRectangle(cornerRadius: 5)
-                                    .fill(Color.black)
-                            )
-                            .foregroundColor(.white)
+                            .frame(width: 150, height: 35)
                     }
+                    .background(
+                        RoundedRectangle(cornerRadius: 5)
+                            .fill(.blue)
+                    )
+                    .foregroundStyle(.white)
                     .padding(.top, 15)
                     
                     Button(action: {
@@ -62,7 +61,6 @@ struct SignInView: View {
                     }
                     .padding(.top, 10)
                 }
-                .frame(width: 350)
             }
             else {
                 ContentView()
@@ -76,6 +74,7 @@ struct SignInView: View {
                 print("no account found")
                 dataHolder.isLoggedIn = false
             } else {
+                dataHolder.uid = Auth.auth().currentUser!.uid as String
                 dataHolder.isLoggedIn = true
                 dataHolder.email = email
                 email = ""
@@ -89,13 +88,37 @@ struct SignInView: View {
             if error != nil {
                 print(error!.localizedDescription.localizedLowercase)
             } else {
-                email = ""
-                password = ""
+//                email = ""
+//                password = ""
             }
+        }
+    }
+}
+
+struct MyTextView: View {
+    var placeholder: String = ""
+    @Binding var text: String
+    var textPrompt: String
+    var textFieldType = ""
+    
+    var body: some View {
+        if textFieldType == "text" {
+            TextField(placeholder, text: $text, prompt: Text(textPrompt))
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled(true) // for constraint issue
+                .frame(minHeight: 35, maxHeight: 35)
+                .padding(.trailing, 40)
+        } else if textFieldType == "secure" {
+            SecureField(placeholder, text: $text, prompt: Text(textPrompt))
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled(true) // for constraint issue
+                .frame(minHeight: 35, maxHeight: 35)
+                .padding(.trailing, 40)
         }
     }
 }
 
 #Preview {
     SignInView()
+        .environment(DataHolder())
 }
