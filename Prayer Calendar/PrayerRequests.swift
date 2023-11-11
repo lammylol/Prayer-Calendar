@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import SwiftData
 
-@Model final class PrayerRequest {
+@Model final class PrayerRequestModel {
     @Attribute(.unique) var username: String
     var date: Date
     var prayerRequest: String
@@ -23,9 +23,9 @@ import SwiftData
     }
 }
 
-extension PrayerRequest {
-    static var preview: PrayerRequest {
-        let item = PrayerRequest(
+extension PrayerRequestModel {
+    static var preview: PrayerRequestModel {
+        let item = PrayerRequestModel(
             username: "Matt",
             date: Date(),
             prayerRequest: "Hello, World",

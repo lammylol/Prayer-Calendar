@@ -13,7 +13,7 @@ import FirebaseFirestore
 struct ProfileView: View {
 //    @Environment(DataHolder.self) var dataHolder
 //    @Environment(\.modelContext) var modelContext
-//    @Query var prayerRequests: [PrayerRequest]
+    @State var prayerRequests: [PrayerRequest] = []
     @Bindable var dataHolder: DataHolder
     
     init(dataHolder: DataHolder) {
@@ -21,66 +21,68 @@ struct ProfileView: View {
     }
     
     var body: some View {
-        NavigationStack{
-            ScrollView{
-                LazyVStack(alignment: .leading, spacing: 0, pinnedViews: .sectionHeaders) { // LazyStack to freeze the top header when scrolling down.
-                    Section {
-                        VStack (spacing: 0) {
-                            //To Fill in with Prayer Requests
-                        }
-                        .background(Color.gray.opacity(0.05))
-                    } header: {
-                        VStack {
-                            Text("")
-                                .toolbar {
-                                    ToolbarItem(placement: .topBarLeading) {
-                                        NavigationLink(destination: PrayerNameInputView(dataHolder: dataHolder)){
-                                            Image(systemName: "list.bullet.rectangle")
-                                        }
-                                    }
-                                    ToolbarItem(placement: .topBarTrailing) {
-                                        Button(action: {
-                                            self.signOut()
-                                        }) {Text("logout")
-                                                .bold()
-                                                .font(.system(size: 14))
-                                                .frame(width: 60, height: 25)
-                                                .background(
-                                                    RoundedRectangle(cornerRadius: 5)
-                                                        .fill(Color.blue)
-                                                )
-                                                .foregroundColor(.white)
-                                        }
-                                    }
+        NavigationStack {
+            //                LazyVStack(alignment: .leading, spacing: 0, pinnedViews: .sectionHeaders) { // LazyStack to freeze the top header when scrolling down.
+            ScrollView {
+                VStack {
+                    Text("")
+                        .toolbar {
+                            ToolbarItem(placement: .topBarLeading) {
+                                NavigationLink(destination: PrayerNameInputView(dataHolder: dataHolder)){
+                                    Image(systemName: "list.bullet.rectangle")
                                 }
-                            HStack {
-                                Text("Logged in as: \(dataHolder.email)").padding(.leading, 20)
-                                    .font(.system(size: 15))
-                                    .italic()
-                                Spacer()
                             }
-                            Spacer()
-                            HStack {
-                                Text("Prayer Requests")
-                                    .font(.title3)
-                                    .bold()
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding(.leading, 20)
+                            
+                            ToolbarItem(placement: .topBarTrailing) {
                                 Button(action: {
-                                    addPrayerRequest()
-                                }) {
-                                    Image(systemName: "plus")
+                                    self.signOut()
+                                }) {Text("logout")
+                                        .bold()
+                                        .font(.system(size: 14))
+                                        .frame(width: 60, height: 25)
+                                        .background(
+                                            RoundedRectangle(cornerRadius: 5)
+                                                .fill(Color.blue)
+                                        )
+                                        .foregroundColor(.white)
                                 }
-                                .padding(.trailing, 15)
                             }
-                            Divider()
                         }
+                    
+                HStack {
+                    Text("Logged in as: \(dataHolder.email)").padding(.leading, 20)
+                        .font(.system(size: 15))
+                        .italic()
+                    Spacer()
+                }
+                
+                Spacer()
+                
+                HStack {
+                    Text("Prayer Requests")
+                        .font(.title3)
+                        .bold()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.leading, 20)
+                    Button(action: {
+                        PrayerRequestsView(prayerRequests: prayerRequests).addPrayerRequest()
+                    }) {
+                        Image(systemName: "plus")
                     }
+                    .padding(.trailing, 15)
+                }
+                    
+                Divider()
+                
+                PrayerRequestsView(prayerRequests: prayerRequests)
+                    .frame(maxWidth: .infinity)
+                    .padding([.leading, .trailing], 20)
+                    .padding([.top, .bottom], 20)
                 }
             }
-            .navigationTitle("profile")
-            .navigationBarTitleDisplayMode(.inline)
         }
+        .navigationTitle("profile")
+        .navigationBarTitleDisplayMode(.inline)
     }
     
     func signOut() {
@@ -93,13 +95,6 @@ struct ProfileView: View {
     func resetInfo() {
         dataHolder.prayerList = ""
         dataHolder.prayStartDate = Date()
-    }
-    
-    func addPrayerRequest() {
-//        let db = Firestore.firestore()
-//        let ref = db.collection("users").document("prayerRequests")
-        
-//        ref.setData(["email": dataHolder.email, "prayStartDate": prayStartDate, "prayerList": prayerList])
     }
 }
 

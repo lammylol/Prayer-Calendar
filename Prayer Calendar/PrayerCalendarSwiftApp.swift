@@ -13,7 +13,7 @@ import FirebaseCore
 struct PrayerCalendarSwiftApp: App {
     @State private var dataHolder = DataHolder()
     let container: ModelContainer = {
-        let schema = Schema([PrayerRequest.self])
+        let schema = Schema([PrayerRequestModel.self])
         let config = ModelConfiguration(allowsSave: true)
         let container = try! ModelContainer(for: schema, configurations: config)
         return container
