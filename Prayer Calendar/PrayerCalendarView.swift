@@ -108,7 +108,7 @@ struct PrayerCalendarView: View {
     func getFirestoreData() {
             let ref = Firestore.firestore()
                 .collection("users")
-                .document(dataHolder.email)
+                .document(dataHolder.email).collection("prayerList").document("prayerList1")
         
             ref.getDocument{(document, error) in
                 if let document = document, document.exists {

@@ -17,13 +17,13 @@ struct PrayerRequestRow: View {
             Text(prayerRequest.prayerRequestText)
             Text(prayerRequest.status)
         }
-        .frame(height: 100)
+//        .background(Color.gray.opacity(0.05))
+        .frame(height: 80)
         .frame(maxWidth: .infinity)
         .padding([.leading, .trailing], 20)
-        .background(Color.gray.opacity(0.05))
     }
 }
 
 #Preview {
-    PrayerRequestRow(prayerRequest: PrayerRequest(username: "matt", date: Date(), prayerRequestText: "Hello", status: "Current"))
+    PrayerRequestRow(prayerRequest: PrayerRequest(username: "matt", date: Date(), prayerRequestText: "Hello", status: "Current", firstName: "Matt", lastName: "Lam"))
 }

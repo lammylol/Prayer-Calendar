@@ -76,9 +76,11 @@ struct ProfileView: View {
                 
                 PrayerRequestsView(prayerRequests: prayerRequests)
                     .frame(maxWidth: .infinity)
-                    .padding([.leading, .trailing], 20)
-                    .padding([.top, .bottom], 20)
+//                    .frame(height: 200)
+//                    .padding([.leading, .trailing], 20)
+//                    .padding([.top, .bottom], 20)
                 }
+
             }
         }
         .navigationTitle("profile")
@@ -98,9 +100,6 @@ struct ProfileView: View {
     }
 }
 
-struct ProfileView_Previews: PreviewProvider {
-    static var previews: some View {
-        ProfileView(dataHolder: DataHolder())
-            .environment(DataHolder())
-    }
+#Preview {
+    ProfileView(dataHolder: DataHolder())
 }
