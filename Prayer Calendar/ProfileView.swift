@@ -14,9 +14,10 @@ struct ProfileView: View {
 //    @Environment(DataHolder.self) var dataHolder
 //    @Environment(\.modelContext) var modelContext
     @State var prayerRequests: [PrayerRequest] = []
-    @Bindable var dataHolder: DataHolder
+    @Bindable var dataHolder: PrayerList
+    @State private var showView: Bool = false
     
-    init(dataHolder: DataHolder) {
+    init(dataHolder: PrayerList) {
         self.dataHolder = dataHolder
     }
     
@@ -64,8 +65,7 @@ struct ProfileView: View {
                         .bold()
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.leading, 20)
-                    Button(action: {
-                        PrayerRequestsView(prayerRequests: prayerRequests).addPrayerRequest()
+                    Button(action: { showView.toggle()
                     }) {
                         Image(systemName: "plus")
                     }
@@ -80,7 +80,9 @@ struct ProfileView: View {
 //                    .padding([.leading, .trailing], 20)
 //                    .padding([.top, .bottom], 20)
                 }
-
+                .sheet(isPresented: $showView) {
+                    SubmitPrayerRequestForm()
+                }
             }
         }
         .navigationTitle("profile")
@@ -101,5 +103,5 @@ struct ProfileView: View {
 }
 
 #Preview {
-    ProfileView(dataHolder: DataHolder())
+    ProfileView(dataHolder: PrayerList())
 }

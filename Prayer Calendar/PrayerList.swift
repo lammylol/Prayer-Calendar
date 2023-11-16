@@ -10,7 +10,7 @@ import SwiftUI
 import Firebase
 import Observation
 
-@Observable class DataHolder {
+@Observable class PrayerList {
     var date = Date()
     var email: String = ""
     var uid: String = ""
@@ -19,4 +19,8 @@ import Observation
     var prayerList: String = ""
     var isLoggedIn: Bool = false
     var prayStartDate = Date()
+}
+
+@Observable class PrayerRequestObservable {
+    var status: String = ""
 }

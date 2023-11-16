@@ -9,7 +9,7 @@ import SwiftUI
 import FirebaseAuth
 
 struct SignInView: View {
-    @Environment(DataHolder.self) var dataHolder
+    @Environment(PrayerList.self) var dataHolder
     @Environment(\.colorScheme) var colorScheme
     @State var email = ""
     @State var password = ""
@@ -120,5 +120,5 @@ struct MyTextView: View {
 
 #Preview {
     SignInView()
-        .environment(DataHolder())
+        .environment(PrayerList())
 }

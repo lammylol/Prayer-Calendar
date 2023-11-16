@@ -9,7 +9,6 @@ import Foundation
 
 struct PrayerRequest : Identifiable {
     var id = UUID()
-    
     var username: String
     var date: Date
     var prayerRequestText: String

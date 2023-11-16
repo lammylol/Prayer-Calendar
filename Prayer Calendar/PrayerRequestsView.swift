@@ -11,8 +11,9 @@ import FirebaseFirestore
 struct PrayerRequestsView: View {
     var prayerRequests = PrayerRequestModel.preview
     let db = Firestore.firestore()
+    @State private var showView = false
     
-    @Environment(DataHolder.self) var dataHolder
+    @Environment(PrayerList.self) var dataHolder
     @Environment(PrayerRequestViewModel.self) var viewModel
     
     var body: some View {
@@ -27,7 +28,7 @@ struct PrayerRequestsView: View {
                     } description: {
                         Text("Start adding prayer requests to your list")
                     } actions: {
-                        Button(action: { addPrayerRequest() })
+                        Button(action: { showView.toggle() })
                         {
                             Text("Add Prayer Request")
                         }
@@ -43,13 +44,15 @@ struct PrayerRequestsView: View {
         .frame(height: 250)
     }
     
-    func addPrayerRequest() {
-//        prayerRequestArray.append("TextString")
-        //        let db = Firestore.firestore()
-        //        let ref = db.collection("users").document("prayerRequests")
-        
-        //        ref.setData(["email": dataHolder.email, "prayStartDate": prayStartDate, "prayerList": prayerList])
-    }
+//    func addPrayerRequest() {
+//        showView.toggle()
+////        
+////        if showView {
+//        SubmitPrayerRequestForm()
+////                .transition(.move(edge: .bottom))
+////                .animation(.spring(), value: showView)
+//
+//    }
 }
 
 #Preview {

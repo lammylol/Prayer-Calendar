@@ -19,27 +19,43 @@ import SwiftUI
         
         ref.addSnapshotListener { documentSnapshot, error in
             guard let document = documentSnapshot?.documents else {
-                print("Error fetching document: \(error)")
+                print("Error fetching document: \(String(describing: error))")
                 return
             }
-        
+            
             self.prayerRequests = document.map { (queryDocumentSnapshot) -> PrayerRequest in
                 let data = queryDocumentSnapshot.data()
-                
-                let timestamp = data["DatePosted"] as! Timestamp
-                let datePosted = timestamp.dateValue()
-                
-                let firstName = data["FirstName"]
-                let lastName = data["LastName"]
-                let prayerRequestText = data["prayerRequestText"]
-                let status = data["Status"]
-                let userID = data["userID"]
-                
-                let prayerRequest = PrayerRequest(username: userID as! String, date: datePosted, prayerRequestText: prayerRequestText as! String, status: status as! String, firstName: firstName as! String, lastName: lastName as! String)
-                
-                print(prayerRequest)
-                return prayerRequest
+
+                    let timestamp = data["DatePosted"] as? Timestamp ?? Timestamp()
+                    let datePosted = timestamp.dateValue()
+                    
+                    let firstName = data["FirstName"] as? String ?? ""
+                    let lastName = data["LastName"] as? String ?? ""
+                    let prayerRequestText = data["PrayerRequestText"] as? String ?? ""
+                    let status = data["Status"] as? String ?? ""
+                    let userID = data["userID"] as? String ?? ""
+                    
+                let prayerRequest = PrayerRequest(username: userID, date: datePosted, prayerRequestText: prayerRequestText, status: status, firstName: firstName, lastName: lastName)
+                    
+                    print(prayerRequest)
+                    return prayerRequest
+
             }
         }
     }
+    
+    func addPrayerRequest(username: String, firstName: String, lastName: String, prayerRequestText: String) {
+        let db = Firestore.firestore()
+        let ref = db.collection("users").document(username).collection("prayerRequests").document()
+
+        ref.setData([
+            "DatePosted": Date(),
+            "FirstName": firstName,
+            "LastName": lastName,
+            "Status": "Current",
+            "PrayerRequestText": prayerRequestText,
+            "userID": username
+        ])
+    }
+    
 }

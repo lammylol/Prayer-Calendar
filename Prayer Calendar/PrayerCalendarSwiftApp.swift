@@ -11,7 +11,7 @@ import FirebaseCore
 
 @main
 struct PrayerCalendarSwiftApp: App {
-    @State private var dataHolder = DataHolder()
+    @State private var dataHolder = PrayerList()
 //    let container: ModelContainer = {
 //        let schema = Schema([PrayerRequestViewModel.self])
 //        let config = ModelConfiguration(allowsSave: true)

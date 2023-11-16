@@ -13,14 +13,14 @@ struct PrayerNameInputView: View {
 //    @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     
-    @Bindable var dataHolder: DataHolder
+    @Bindable var dataHolder: PrayerList
 
     @State var prayStartDate: Date = Date()
     @State var prayerList: String = ""
     @State var date: Date = Date()
     @State var saved: String = ""
     
-    init(dataHolder: DataHolder) {
+    init(dataHolder: PrayerList) {
         self.dataHolder = dataHolder
 //        _email = State(initialValue: dataHolder.email)
         _prayerList = State(initialValue: dataHolder.prayerList)
@@ -84,7 +84,7 @@ struct PrayerNameInputView: View {
 
 struct PrayerNameInputView_Previews: PreviewProvider {
     static var previews: some View {
-        PrayerNameInputView(dataHolder: DataHolder())
-            .environment(DataHolder())
+        PrayerNameInputView(dataHolder: PrayerList())
+            .environment(PrayerList())
     }
 }
