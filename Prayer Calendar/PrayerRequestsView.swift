@@ -9,9 +9,10 @@ import SwiftUI
 import FirebaseFirestore
 
 struct PrayerRequestsView: View {
-    var prayerRequests = PrayerRequestModel.preview
+//    var prayerRequests: [PrayerRequest]
     let db = Firestore.firestore()
-    @State private var showView = false
+    @State private var showView: Bool = false
+    @State var username: String
     
     @Environment(PrayerList.self) var dataHolder
     @Environment(PrayerRequestViewModel.self) var viewModel
@@ -38,29 +39,22 @@ struct PrayerRequestsView: View {
                 }
             }
             .onAppear() {
-                self.viewModel.retrievePrayerRequest(username: dataHolder.email)
+                self.viewModel.retrievePrayerRequest(username: username) // this is the line to uncheck when wanting to view preview
             }
         }
-        .frame(height: 250)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
-    
-//    func addPrayerRequest() {
-//        showView.toggle()
-////        
-////        if showView {
-//        SubmitPrayerRequestForm()
-////                .transition(.move(edge: .bottom))
-////                .animation(.spring(), value: showView)
-//
-//    }
 }
 
-#Preview {
-    PrayerRequestsView(prayerRequests:
-                        [PrayerRequest(username: "Matt", date: Date(), prayerRequestText: "Hello", status: "Current", firstName: "Matt", lastName: "Lam")]
-    )
-}
+//#Preview {
+//    PrayerRequestsView(prayerRequests:
+//                        [PrayerRequest(username: "Matt", date: Date(), prayerRequestText: "Hello", status: "Current", firstName: "Matt", lastName: "Lam")]
+//    ).environment(PrayerList())
+//    .environment(PrayerRequestViewModel())
+//}
 
 #Preview {
-    PrayerRequestsView(prayerRequests: PrayerRequestModel.preview)
+    PrayerRequestsView(username: "matthewthelam@gmail.com")
+        .environment(PrayerList())
+        .environment(PrayerRequestViewModel())
 }

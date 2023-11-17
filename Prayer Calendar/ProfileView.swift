@@ -11,15 +11,16 @@ import FirebaseAuth
 import FirebaseFirestore
 
 struct ProfileView: View {
-//    @Environment(DataHolder.self) var dataHolder
-//    @Environment(\.modelContext) var modelContext
-    @State var prayerRequests: [PrayerRequest] = []
-    @Bindable var dataHolder: PrayerList
+//    @State var prayerRequests: [PrayerRequest] = []
     @State private var showView: Bool = false
+    @State var username: String
     
-    init(dataHolder: PrayerList) {
-        self.dataHolder = dataHolder
-    }
+    @Environment(PrayerList.self) var dataHolder
+    @Environment(PrayerRequestViewModel.self) var viewModel
+    
+//    init(dataHolder: PrayerList) {
+//        self.dataHolder = dataHolder
+//    }
     
     var body: some View {
         NavigationStack {
@@ -74,15 +75,16 @@ struct ProfileView: View {
                     
                 Divider()
                 
-                PrayerRequestsView(prayerRequests: prayerRequests)
-                    .frame(maxWidth: .infinity)
-//                    .frame(height: 200)
-//                    .padding([.leading, .trailing], 20)
-//                    .padding([.top, .bottom], 20)
+                PrayerRequestsView(username: username)
                 }
+//                .padding([.leading, .trailing], 20)
+//                .padding([.top, .bottom], 20)
+                .frame(height: 1000)
                 .sheet(isPresented: $showView) {
                     SubmitPrayerRequestForm()
                 }
+                
+                Spacer()
             }
         }
         .navigationTitle("profile")
@@ -103,5 +105,7 @@ struct ProfileView: View {
 }
 
 #Preview {
-    ProfileView(dataHolder: PrayerList())
+    ProfileView(username: "matthewthelam@gmail.com")
+        .environment(PrayerList())
+        .environment(PrayerRequestViewModel())
 }

@@ -11,6 +11,7 @@ import SwiftUI
 
 @Observable class PrayerRequestViewModel {
     var prayerRequests = [PrayerRequest]()
+    
     let db = Firestore.firestore()
 
     //Retrieve prayer requests from Firestore
@@ -58,4 +59,17 @@ import SwiftUI
         ])
     }
     
+    func deletePrayerRequest(username: String, firstName: String, lastName: String, prayerRequestText: String) {
+        let db = Firestore.firestore()
+        let ref = db.collection("users").document(username).collection("prayerRequests").document()
+
+        ref.setData([
+            "DatePosted": Date(),
+            "FirstName": firstName,
+            "LastName": lastName,
+            "Status": "Current",
+            "PrayerRequestText": prayerRequestText,
+            "userID": username
+        ])
+    }
 }

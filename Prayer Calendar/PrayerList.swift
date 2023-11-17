@@ -21,6 +21,3 @@ import Observation
     var prayStartDate = Date()
 }
 
-@Observable class PrayerRequestObservable {
-    var status: String = ""
-}

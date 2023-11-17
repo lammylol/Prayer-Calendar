@@ -21,7 +21,7 @@ struct ContentView: View {
                         .imageScale(.large)
                     Text("Calendar")
                 }
-            ProfileView(dataHolder: dataHolder)
+            ProfileView(username: dataHolder.email)
                 .tabItem {
                     Image(systemName: "person.circle")
                         .imageScale(.large)
