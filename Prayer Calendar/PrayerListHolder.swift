@@ -10,7 +10,7 @@ import SwiftUI
 import Firebase
 import Observation
 
-@Observable class PrayerList {
+@Observable class PrayerListHolder {
     var date = Date()
     var email: String = ""
     var uid: String = ""

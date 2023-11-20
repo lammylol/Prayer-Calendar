@@ -13,14 +13,11 @@ import FirebaseFirestore
 struct ProfileView: View {
 //    @State var prayerRequests: [PrayerRequest] = []
     @State private var showView: Bool = false
+    @State private var showEditView: Bool = false
     @State var username: String
     
-    @Environment(PrayerList.self) var dataHolder
-    @Environment(PrayerRequestViewModel.self) var viewModel
-    
-//    init(dataHolder: PrayerList) {
-//        self.dataHolder = dataHolder
-//    }
+    @Environment(PrayerListHolder.self) var dataHolder
+    @Environment(PrayerRequestsHolder.self) var viewModel
     
     var body: some View {
         NavigationStack {
@@ -43,7 +40,7 @@ struct ProfileView: View {
                                         .font(.system(size: 14))
                                         .frame(width: 60, height: 25)
                                         .background(
-                                            RoundedRectangle(cornerRadius: 5)
+                                            RoundedRectangle(cornerRadius: 15)
                                                 .fill(Color.blue)
                                         )
                                         .foregroundColor(.white)
@@ -76,19 +73,16 @@ struct ProfileView: View {
                 Divider()
                 
                 PrayerRequestsView(username: username)
-                }
-//                .padding([.leading, .trailing], 20)
-//                .padding([.top, .bottom], 20)
-                .frame(height: 1000)
-                .sheet(isPresented: $showView) {
-                    SubmitPrayerRequestForm()
-                }
-                
-                Spacer()
+                    .frame(height: 1000)
+                    .sheet(isPresented: $showView) {
+                        SubmitPrayerRequestForm()
+                    }
             }
+            }
+            .navigationTitle("profile")
+            .navigationBarTitleDisplayMode(.automatic)
+            .navigationBarBackButtonHidden(true)
         }
-        .navigationTitle("profile")
-        .navigationBarTitleDisplayMode(.inline)
     }
     
     func signOut() {
@@ -106,6 +100,6 @@ struct ProfileView: View {
 
 #Preview {
     ProfileView(username: "matthewthelam@gmail.com")
-        .environment(PrayerList())
-        .environment(PrayerRequestViewModel())
+        .environment(PrayerListHolder())
+        .environment(PrayerRequestsHolder())
 }

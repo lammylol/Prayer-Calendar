@@ -11,7 +11,7 @@ import Observation
 struct DateScroller: View {
     
 //    @EnvironmentObject var dateHolder: DataHolder
-    @Environment(PrayerList.self) var dataHolder
+    @Environment(PrayerListHolder.self) var dataHolder
     
     var body: some View {
         @Bindable var dataHolder = dataHolder

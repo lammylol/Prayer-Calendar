@@ -12,10 +12,11 @@ struct PrayerRequestRow: View {
     
     var body: some View {
         VStack {
-            Text(prayerRequest.username)
+            Text(prayerRequest.firstName + " " + prayerRequest.lastName)
             Text(prayerRequest.date, style: .date)
             Text(prayerRequest.prayerRequestText)
             Text(prayerRequest.status)
+            Text(prayerRequest.priority)
         }
 //        .background(Color.gray.opacity(0.05))
         .frame(height: 80)
@@ -25,5 +26,5 @@ struct PrayerRequestRow: View {
 }
 
 #Preview {
-    PrayerRequestRow(prayerRequest: PrayerRequest(username: "matt", date: Date(), prayerRequestText: "Hello", status: "Current", firstName: "Matt", lastName: "Lam"))
+    PrayerRequestRow(prayerRequest: PrayerRequest(username: "matt", date: Date(), prayerRequestText: "Hello", status: "Current", firstName: "Matt", lastName: "Lam", priority: "high"))
 }

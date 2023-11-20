@@ -5,6 +5,8 @@
 //  Created by Matt Lam on 11/10/23.
 //
 
+// This is the view to capture the list of prayer requests.
+
 import SwiftUI
 import FirebaseFirestore
 
@@ -12,15 +14,30 @@ struct PrayerRequestsView: View {
 //    var prayerRequests: [PrayerRequest]
     let db = Firestore.firestore()
     @State private var showView: Bool = false
+    @State private var showEdit: Bool = false
     @State var username: String
     
-    @Environment(PrayerList.self) var dataHolder
-    @Environment(PrayerRequestViewModel.self) var viewModel
+    @State var prayerRequestVar: PrayerRequest = PrayerRequest.preview
+    
+    @Environment(PrayerListHolder.self) var dataHolder
+    @Environment(PrayerRequestsHolder.self) var viewModel
+    
+    func handleTap(prayerRequest: PrayerRequest){
+        self.prayerRequestVar = prayerRequest
+        self.showEdit.toggle()
+    }
     
     var body: some View {
+        
         VStack {
             List(viewModel.prayerRequests) { prayerRequest in
                 PrayerRequestRow(prayerRequest: prayerRequest)
+                    .onTapGesture {
+                        handleTap(prayerRequest: prayerRequest)
+                    }
+            }
+            .sheet(isPresented: $showEdit) {
+                EditPrayerRequestForm(prayerRequest: prayerRequestVar)
             }
             .overlay {
                 if viewModel.prayerRequests.isEmpty {
@@ -55,6 +72,6 @@ struct PrayerRequestsView: View {
 
 #Preview {
     PrayerRequestsView(username: "matthewthelam@gmail.com")
-        .environment(PrayerList())
-        .environment(PrayerRequestViewModel())
+        .environment(PrayerListHolder())
+        .environment(PrayerRequestsHolder())
 }

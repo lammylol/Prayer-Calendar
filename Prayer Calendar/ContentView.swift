@@ -10,7 +10,7 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    @Environment(PrayerList.self) var dataHolder
+    @Environment(PrayerListHolder.self) var dataHolder
     
     var body: some View {
         //Tabs for each view. Adds bottom icons.
@@ -33,5 +33,5 @@ struct ContentView: View {
 
 #Preview("Content View") {
     ContentView()
-        .environment(PrayerList())
+        .environment(PrayerListHolder())
 }

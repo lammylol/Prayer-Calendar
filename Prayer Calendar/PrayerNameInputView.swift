@@ -13,14 +13,14 @@ struct PrayerNameInputView: View {
 //    @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     
-    @Bindable var dataHolder: PrayerList
+    @Bindable var dataHolder: PrayerListHolder
 
     @State var prayStartDate: Date = Date()
     @State var prayerList: String = ""
     @State var date: Date = Date()
     @State var saved: String = ""
     
-    init(dataHolder: PrayerList) {
+    init(dataHolder: PrayerListHolder) {
         self.dataHolder = dataHolder
 //        _email = State(initialValue: dataHolder.email)
         _prayerList = State(initialValue: dataHolder.prayerList)
@@ -58,7 +58,15 @@ struct PrayerNameInputView: View {
                 ToolbarItemGroup(placement: .topBarTrailing) {
                     Button(action: {submitList(inputText: prayerList)}) {
                         Text("Save")
+                            .offset(x: -4)
+                            .font(.system(size: 14))
+                            .padding([.leading, .trailing], 5)
                     }
+                    .background {
+                        RoundedRectangle(cornerRadius: 15)
+                            .fill(.blue)
+                    }
+                    .foregroundStyle(.white)
                 }
             }
     }
@@ -74,8 +82,6 @@ struct PrayerNameInputView: View {
         
         ref.setData(["email": dataHolder.email, "prayStartDate": prayStartDate, "prayerList": prayerList])
         
-//        print(ref.collection("users").whereField("email", isEqualTo: dataHolder.email))
-        
         saved = "Saved"
         dismiss()
     }
@@ -84,7 +90,7 @@ struct PrayerNameInputView: View {
 
 struct PrayerNameInputView_Previews: PreviewProvider {
     static var previews: some View {
-        PrayerNameInputView(dataHolder: PrayerList())
-            .environment(PrayerList())
+        PrayerNameInputView(dataHolder: PrayerListHolder())
+            .environment(PrayerListHolder())
     }
 }

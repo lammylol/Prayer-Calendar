@@ -9,7 +9,7 @@ import SwiftUI
 import FirebaseFirestore
 
 struct SubmitPrayerRequestForm: View {
-    @Environment(PrayerList.self) var dataHolder
+    @Environment(PrayerListHolder.self) var dataHolder
     @Environment(\.dismiss) var dismiss
     
     var firstName = "abc"
@@ -17,16 +17,16 @@ struct SubmitPrayerRequestForm: View {
     @State var datePosted = Date()
     @State var status: String = "Current"
     @State var prayerRequestText: String = ""
-    @State private var priority = "3"
+    @State private var priority = "low"
     
     var body: some View {
         NavigationView{
             Form {
                 Section(header: Text("Share a Prayer Request")) {
                     Picker("Priority", selection: $priority) {
-                        Text("low").tag("1")
-                        Text("med").tag("2")
-                        Text("high").tag("3)")
+                        Text("low").tag("low")
+                        Text("med").tag("med")
+                        Text("high").tag("high")
                     }
                     ZStack(alignment: .topLeading) {
                         if prayerRequestText.isEmpty {
@@ -66,7 +66,7 @@ struct SubmitPrayerRequestForm: View {
     }
         
     func submitList() {
-        PrayerRequestViewModel().addPrayerRequest(username: dataHolder.email, firstName: firstName, lastName: lastName, prayerRequestText: prayerRequestText)
+        PrayerRequestsHolder().addPrayerRequest(username: dataHolder.email, firstName: firstName, lastName: lastName, prayerRequestText: prayerRequestText, priority: priority)
 
         print("Saved")
         dismiss()
@@ -75,5 +75,5 @@ struct SubmitPrayerRequestForm: View {
 
 #Preview {
     SubmitPrayerRequestForm()
-        .environment(PrayerList())
+        .environment(PrayerListHolder())
 }

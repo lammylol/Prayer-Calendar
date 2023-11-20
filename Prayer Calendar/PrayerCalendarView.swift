@@ -11,7 +11,7 @@ import FirebaseFirestore
 import FirebaseCore
 
 struct PrayerCalendarView: View {
-    @Environment(PrayerList.self) var dataHolder
+    @Environment(PrayerListHolder.self) var dataHolder
     @Environment(\.colorScheme) var colorScheme
 //    @Bindable var dataHolder: DataHolder
     
@@ -140,6 +140,6 @@ extension Text {
 struct PrayerCalendarView_Previews: PreviewProvider {
     static var previews: some View {
         PrayerCalendarView()
-            .environment(PrayerList())
+            .environment(PrayerListHolder())
     }
 }
