@@ -12,41 +12,33 @@ struct EditPrayerRequestForm: View {
     @Environment(PrayerListHolder.self) var dataHolder
     @Environment(\.dismiss) var dismiss
     
-    let prayerRequest: PrayerRequest
-    
-    //    var documentID: UUID = UUID()
-    @State var firstName: String = ""
-    @State var lastName: String = ""
-    @State var datePosted: Date = Date()
-    @State var status: String = "Current"
-    @State var prayerRequestText: String = ""
-    @State var priority: String = "low"
+    @State var prayerRequest: PrayerRequest
     
     var body: some View {
         NavigationView{
             VStack{
                 Form {
                     Section(header: Text("Share a Prayer Request")) {
-                        Picker("Priority", selection: $priority) {
+                        Picker("Priority", selection: $prayerRequest.priority) {
                             Text("low").tag("low")
                             Text("med").tag("med")
                             Text("high").tag("high")
                         }
                         
                         ZStack(alignment: .topLeading) {
-                            if prayerRequestText.isEmpty {
+                            if prayerRequest.prayerRequestText.isEmpty {
                                 Text("Enter text")
                                     .padding(.leading, 6)
                                     .padding(.top, 8)
                                     .foregroundStyle(Color.gray)
                             }
                             
-                            TextEditor(text: $prayerRequestText)
+                            TextEditor(text: $prayerRequest.prayerRequestText)
                                 .frame(height: 300)
                         }
                     }
                     Section(header: Text("Update Status")) {
-                        Picker("Status", selection: $status) {
+                        Picker("Status", selection: $prayerRequest.status) {
                             Text("Current").tag("Current")
                             Text("Answered").tag("Answered")
                             Text("No Longer Needed").tag("No Longer Needed")
@@ -54,12 +46,9 @@ struct EditPrayerRequestForm: View {
                     }
                 }
                 .onAppear() {
-                    firstName = prayerRequest.firstName
-                    lastName = prayerRequest.lastName
-                    datePosted = prayerRequest.date
-                    prayerRequestText = prayerRequest.prayerRequestText
-                    status = prayerRequest.status
-                    priority = prayerRequest.priority
+                    prayerRequest = PrayerRequest(id: prayerRequest.id, username: prayerRequest.username, date: prayerRequest.date, prayerRequestText: prayerRequest.prayerRequestText, status: prayerRequest.status, firstName: prayerRequest.firstName, lastName: prayerRequest.lastName, priority: prayerRequest.priority)
+                    
+                    print(prayerRequest.date)
                 }
             }
             
@@ -70,7 +59,9 @@ struct EditPrayerRequestForm: View {
                     }
                 }
                 ToolbarItemGroup(placement: .topBarTrailing) {
-                    Button(action: {submitPrayerRequest()}) {
+                    Button(action: {
+                        updatePrayerRequest(prayerRequestVar: prayerRequest)
+                    }) {
                         Text("Update")
                             .offset(x: -4)
                             .font(.system(size: 14))
@@ -99,8 +90,8 @@ struct EditPrayerRequestForm: View {
         }
     }
     
-    func submitPrayerRequest() {
-        PrayerRequestHelper().updatePrayerRequest(prayerRequest: prayerRequest, username: dataHolder.email)
+    func updatePrayerRequest(prayerRequestVar: PrayerRequest) {
+        PrayerRequestHelper().updatePrayerRequest(prayerRequest: prayerRequestVar, username: dataHolder.email)
 
         print("Saved")
         dismiss()

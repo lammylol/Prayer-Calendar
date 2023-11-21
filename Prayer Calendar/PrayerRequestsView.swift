@@ -22,9 +22,8 @@ struct PrayerRequestsView: View {
     @Environment(PrayerListHolder.self) var dataHolder
     @Environment(PrayerRequestsHolder.self) var viewModel
     
-    func handleTap(prayerRequest: PrayerRequest){
-        self.prayerRequestVar = prayerRequest
-        self.showEdit.toggle()
+    func handleTap(prayerRequest: PrayerRequest) async {
+        prayerRequestVar = prayerRequest
     }
     
     var body: some View {
@@ -33,11 +32,11 @@ struct PrayerRequestsView: View {
             List(viewModel.prayerRequests) { prayerRequest in
                 PrayerRequestRow(prayerRequest: prayerRequest)
                     .onTapGesture {
-                        handleTap(prayerRequest: prayerRequest)
+                        Task {
+                            await handleTap(prayerRequest: prayerRequest)
+                        }
+                        self.showEdit.toggle()
                     }
-            }
-            .sheet(isPresented: $showEdit) {
-                EditPrayerRequestForm(prayerRequest: prayerRequestVar)
             }
             .overlay {
                 if viewModel.prayerRequests.isEmpty {
@@ -58,6 +57,9 @@ struct PrayerRequestsView: View {
             .onAppear() {
                 self.viewModel.retrievePrayerRequest(username: username) // this is the line to uncheck when wanting to view preview
             }
+        }
+        .sheet(isPresented: $showEdit) {
+            EditPrayerRequestForm(prayerRequest: prayerRequestVar)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }

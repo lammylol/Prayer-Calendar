@@ -32,7 +32,7 @@ struct PrayerCalendarView: View {
                                 .padding(.horizontal, 10)
                                 .padding(.top, 20)
                                 .task {
-                                    getFirestoreData()
+                                    await getFirestoreData()
                                 }
                         }
                         .background(Color.gray.opacity(0.05))
@@ -96,7 +96,9 @@ struct PrayerCalendarView: View {
                     ForEach(1..<8)
                     { column in
                         let count = column + (row * 7)
-                        let prayerRange =  CalendarHelper().rangeOfPrayerStart(startDate: dataHolder.prayStartDate, firstDayOfMonth: firstDayofMonth) + count - startingSpaces - 1
+                        let prayerRange =
+                        CalendarHelper().rangeOfPrayerStart(startDate: dataHolder.prayStartDate, firstDayOfMonth: firstDayofMonth) + count - startingSpaces - 1
+                        
                         CalendarCell(count: count, startingSpaces: startingSpaces, daysInMonth: daysInMonth, daysInPrevMonth: daysInPrevMonth, prayerStartingSpaces: prayerStartingSpaces, prayerList: dataHolder.prayerList, prayerRange: prayerRange)
                     }
                 }
@@ -105,28 +107,31 @@ struct PrayerCalendarView: View {
     }
     
     //This function retrieves PrayerList data from Firestore.
-    func getFirestoreData() {
+    func getFirestoreData() async {
             let ref = Firestore.firestore()
                 .collection("users")
                 .document(dataHolder.email).collection("prayerList").document("prayerList1")
-        
+            
             ref.getDocument{(document, error) in
                 if let document = document, document.exists {
-                    let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
-                    print("Document data: " + dataDescription)
                     
-                    //Update Dataholder with PrayStartDate from Firestore
-                    let startDateTimeStamp = document.get("prayStartDate") as! Timestamp
-                    dataHolder.prayStartDate = startDateTimeStamp.dateValue()
+                        let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
+                        print("Document data: " + dataDescription)
+                        
+                        //Update Dataholder with PrayStartDate from Firestore
+                        let startDateTimeStamp = document.get("prayStartDate") as! Timestamp
+                        dataHolder.prayStartDate = startDateTimeStamp.dateValue()
+                        
+                        
+                        //Update Dataholder with PrayerList from Firestore
+                        dataHolder.prayerList = document.get("prayerList") as! String
                     
-                    //Update Dataholder with PrayerList from Firestore
-                    dataHolder.prayerList = document.get("prayerList") as! String
                 } else {
                     print("Document does not exist")
                     dataHolder.prayerList = ""
                 }
             }
-        }
+    }
 }
 
 extension Text {

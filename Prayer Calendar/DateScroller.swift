@@ -10,7 +10,6 @@ import Observation
 
 struct DateScroller: View {
     
-//    @EnvironmentObject var dateHolder: DataHolder
     @Environment(PrayerListHolder.self) var dataHolder
     
     var body: some View {

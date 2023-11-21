@@ -37,10 +37,10 @@ import SwiftUI
                     let status = data["Status"] as? String ?? ""
                     let userID = data["userID"] as? String ?? ""
                     let priority = data["Priority"] as? String ?? ""
+                    let documentID = queryDocumentSnapshot.documentID as? String ?? ""
                     
-                let prayerRequest = PrayerRequest(username: userID, date: datePosted, prayerRequestText: prayerRequestText, status: status, firstName: firstName, lastName: lastName, priority: priority)
+                let prayerRequest = PrayerRequest(id: documentID, username: userID, date: datePosted, prayerRequestText: prayerRequestText, status: status, firstName: firstName, lastName: lastName, priority: priority)
                     
-                    print(prayerRequest)
                     return prayerRequest
 
             }

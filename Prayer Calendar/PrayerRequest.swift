@@ -8,7 +8,7 @@
 import Foundation
 
 struct PrayerRequest : Identifiable {
-    var id = UUID()
+    var id: String = ""
     var username: String
     var date: Date
     var prayerRequestText: String
@@ -16,17 +16,6 @@ struct PrayerRequest : Identifiable {
     var firstName: String
     var lastName: String
     var priority: String
-    
-    init(id: UUID = UUID(), username: String, date: Date, prayerRequestText: String, status: String, firstName: String, lastName: String, priority: String) {
-        self.id = id
-        self.username = username
-        self.date = date
-        self.prayerRequestText = prayerRequestText
-        self.status = status
-        self.firstName = firstName
-        self.lastName = lastName
-        self.priority = priority
-    }
 }
 
 extension PrayerRequest {

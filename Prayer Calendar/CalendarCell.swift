@@ -31,8 +31,8 @@ struct CalendarCell: View {
         self.prayerListArray = prayerList.split(separator: "\n").map(String.init)
         self.prayerRange = prayerRange
     }
-    
-    var body: some View {
+        
+    var body : some View {
         VStack {
             Text(monthStruct().day())
                 .font(.title3)
@@ -43,8 +43,8 @@ struct CalendarCell: View {
                 .font(Font.system(size: 12))
             Spacer()
         }
-            .frame(maxWidth: .infinity)
-            .frame(height: 95)
+        .frame(maxWidth: .infinity)
+        .frame(height: 95)
     }
     
     func textColor(type: MonthType) -> Color {
@@ -61,7 +61,7 @@ struct CalendarCell: View {
     
     func monthStruct() -> MonthStruct {
         let start = startingSpaces // == 0 ? startingSpaces + 7: startingSpaces
-//        let prayerStart = prayerStartingSpaces == 0 ? prayerStartingSpaces + 7: prayerStartingSpaces
+        //        let prayerStart = prayerStartingSpaces == 0 ? prayerStartingSpaces + 7: prayerStartingSpaces
         
         if (count <= start) {
             let day = daysInPrevMonth - (startingSpaces - count)
@@ -81,7 +81,7 @@ struct CalendarCell: View {
     }
     
     func prayerNameFunc(count: Int, prayerRange: Int, prayerListArray: [String]) -> String {
-        if prayerRange < 0 || prayerListArray.isEmpty { //(count - startingSpaces) + prayerRange <= 0) ||
+        if prayerRange < 0 || prayerListArray.isEmpty { //(count - startingSpaces)
             return ""
         }
         return prayerListArray[prayerRange % prayerListArray.count]
