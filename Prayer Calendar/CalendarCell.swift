@@ -21,6 +21,8 @@ struct CalendarCell: View {
     let prayerListArray: [String]
     let prayerRange: Int
     
+    var prayerName: String = ""
+    
     init(count: Int, startingSpaces: Int, daysInMonth: Int, daysInPrevMonth: Int, prayerStartingSpaces: Int, prayerList: String, prayerRange: Int) {
         self.count = count
         self.startingSpaces = startingSpaces
@@ -41,6 +43,9 @@ struct CalendarCell: View {
             Spacer()
             Text(monthStruct().prayerName)
                 .font(Font.system(size: 12))
+//            .onTapGesture {
+//                NavigationLink(ProfileView(username: PrayerListHelper().grabUsername(username: monthStruct().prayerName)))
+//            }
             Spacer()
         }
         .frame(maxWidth: .infinity)

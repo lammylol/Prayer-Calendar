@@ -13,7 +13,7 @@ import FirebaseFirestore
 struct PrayerRequestsView: View {
 //    var prayerRequests: [PrayerRequest]
     let db = Firestore.firestore()
-    @State private var showView: Bool = false
+    @State private var showSubmit: Bool = false
     @State private var showEdit: Bool = false
     @State var username: String
     
@@ -40,18 +40,21 @@ struct PrayerRequestsView: View {
             }
             .overlay {
                 if viewModel.prayerRequests.isEmpty {
-                    ContentUnavailableView {
-                        Label("No Prayer Requests", systemImage: "list.bullet.rectangle.portrait")
-                    } description: {
-                        Text("Start adding prayer requests to your list")
-                    } actions: {
-                        Button(action: { showView.toggle() })
-                        {
-                            Text("Add Prayer Request")
+                    VStack{
+                        ContentUnavailableView {
+                            Label("No Prayer Requests", systemImage: "list.bullet.rectangle.portrait")
+                        } description: {
+                            Text("Start adding prayer requests to your list")
+                        } actions: {
+                            Button(action: {showSubmit.toggle() })
+                            {
+                                Text("Add Prayer Request")
+                            }
                         }
+                        .frame(height: 250)
+                        .offset(y: 120)
+                        Spacer()
                     }
-                    .frame(height: 250)
-                    .offset(y: 120)
                 }
             }
             .onAppear() {
@@ -60,6 +63,9 @@ struct PrayerRequestsView: View {
         }
         .sheet(isPresented: $showEdit) {
             EditPrayerRequestForm(prayerRequest: prayerRequestVar)
+        }
+        .sheet(isPresented: $showSubmit){
+            SubmitPrayerRequestForm()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
@@ -73,7 +79,7 @@ struct PrayerRequestsView: View {
 //}
 
 #Preview {
-    PrayerRequestsView(username: "matthewthelam@gmail.com")
+    PrayerRequestsView(username: "test@gmail.com")
         .environment(PrayerListHolder())
         .environment(PrayerRequestsHolder())
 }

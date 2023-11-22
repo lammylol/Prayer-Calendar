@@ -4,6 +4,7 @@
 //
 //  Created by Matt Lam on 11/10/23.
 //
+// Description: This captures the layout of what each row in the prayer request list looks like.
 
 import SwiftUI
 

@@ -4,6 +4,7 @@
 //
 //  Created by Matt Lam on 11/14/23.
 //
+// This is the form for a user to submit a new prayer request
 
 import SwiftUI
 import FirebaseFirestore

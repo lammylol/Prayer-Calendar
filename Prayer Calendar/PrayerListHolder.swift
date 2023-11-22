@@ -21,3 +21,12 @@ import Observation
     var prayStartDate = Date()
 }
 
+class PrayerListHelper {
+    @Environment(PrayerListHolder.self) var prayerListHolder
+    
+    func grabUsername(username: String) {
+        
+    }
+    
+}
+
