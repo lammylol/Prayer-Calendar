@@ -9,14 +9,14 @@ import SwiftUI
 import FirebaseAuth
 
 struct SignInView: View {
-    @Environment(PrayerListHolder.self) var dataHolder
+    @Environment(UserProfileHolder.self) var userHolder
     @Environment(\.colorScheme) var colorScheme
     @State var email = ""
     @State var password = ""
     
     var body: some View {
         Group {
-            if dataHolder.isLoggedIn == false {
+            if userHolder.isLoggedIn == false {
                 VStack(/*spacing: 20*/) {
                     Text("Welcome")
                         .font(.largeTitle)
@@ -72,11 +72,11 @@ struct SignInView: View {
         Auth.auth().signIn(withEmail: email, password: password) { result, error in
             if error != nil {
                 print("no account found")
-                dataHolder.isLoggedIn = false
+                userHolder.isLoggedIn = false
             } else {
-                dataHolder.uid = Auth.auth().currentUser!.uid as String
-                dataHolder.isLoggedIn = true
-                dataHolder.email = email
+                userHolder.uid = Auth.auth().currentUser!.uid as String
+                userHolder.isLoggedIn = true
+                userHolder.person = PrayerPerson(name: "", username: email) // need to add Name retrieved from Firestore
                 email = ""
                 password = ""
             }
@@ -120,5 +120,5 @@ struct MyTextView: View {
 
 #Preview {
     SignInView()
-        .environment(PrayerListHolder())
+        .environment(UserProfileHolder())
 }

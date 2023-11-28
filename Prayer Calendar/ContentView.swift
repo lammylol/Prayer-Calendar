@@ -10,7 +10,9 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    @Environment(PrayerListHolder.self) var dataHolder
+    @Environment(UserProfileHolder.self) var userHolder
+//    @Environment(PrayerListHolder.self) var dataHolder
+//    @Environment(PrayerRequestsHolder.self) var prayerRequestsHolder
     
     var body: some View {
         //Tabs for each view. Adds bottom icons.
@@ -21,7 +23,7 @@ struct ContentView: View {
                         .imageScale(.large)
                     Text("Calendar")
                 }
-            ProfileView(username: dataHolder.email)
+            ProfileView(person: userHolder.person)
                 .tabItem {
                     Image(systemName: "person.circle")
                         .imageScale(.large)
@@ -34,4 +36,6 @@ struct ContentView: View {
 #Preview("Content View") {
     ContentView()
         .environment(PrayerListHolder())
+        .environment(UserProfileHolder())
+        .environment(PrayerRequestsHolder())
 }

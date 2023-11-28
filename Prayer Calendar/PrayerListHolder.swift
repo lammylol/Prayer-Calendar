@@ -9,24 +9,14 @@ import Foundation
 import SwiftUI
 import Firebase
 import Observation
-
-@Observable class PrayerListHolder {
-    var date = Date()
-    var email: String = ""
-    var uid: String = ""
-    
-    var prayerListArray: [String] = [""]
-    var prayerList: String = ""
-    var isLoggedIn: Bool = false
-    var prayStartDate = Date()
-}
-
-class PrayerListHelper {
-    @Environment(PrayerListHolder.self) var prayerListHolder
-    
-    func grabUsername(username: String) {
-        
-    }
-    
-}
-
+//
+//@Observable class PrayerListHolder {
+//    var date = Date()
+//    var email: String = ""
+//    var uid: String = ""
+//    
+//    var prayerListArray: [String] = [""]
+//    var prayerList: String = ""
+//    var isLoggedIn: Bool = false
+//    var prayStartDate = Date()
+//}

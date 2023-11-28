@@ -11,6 +11,7 @@ import FirebaseFirestore
 import FirebaseCore
 
 struct PrayerCalendarView: View {
+    @Environment(UserProfileHolder.self) var userHolder
     @Environment(PrayerListHolder.self) var dataHolder
     @Environment(\.colorScheme) var colorScheme
 //    @Bindable var dataHolder: DataHolder
@@ -110,7 +111,7 @@ struct PrayerCalendarView: View {
     func getFirestoreData() async {
             let ref = Firestore.firestore()
                 .collection("users")
-                .document(dataHolder.email).collection("prayerList").document("prayerList1")
+                .document(userHolder.person.username).collection("prayerList").document("prayerList1")
             
             ref.getDocument{(document, error) in
                 if let document = document, document.exists {
@@ -145,6 +146,7 @@ extension Text {
 struct PrayerCalendarView_Previews: PreviewProvider {
     static var previews: some View {
         PrayerCalendarView()
+            .environment(UserProfileHolder())
             .environment(PrayerListHolder())
     }
 }

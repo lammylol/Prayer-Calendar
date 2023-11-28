@@ -10,7 +10,7 @@ import SwiftUI
 import FirebaseFirestore
 
 struct SubmitPrayerRequestForm: View {
-    @Environment(PrayerListHolder.self) var dataHolder
+    @Environment(UserProfileHolder.self) var userHolder
     @Environment(\.dismiss) var dismiss
     
     var firstName = "abc"
@@ -67,7 +67,7 @@ struct SubmitPrayerRequestForm: View {
     }
         
     func submitList() {
-        PrayerRequestsHolder().addPrayerRequest(username: dataHolder.email, firstName: firstName, lastName: lastName, prayerRequestText: prayerRequestText, priority: priority)
+        PrayerRequestsHolder().addPrayerRequest(username: userHolder.person.username, firstName: firstName, lastName: lastName, prayerRequestText: prayerRequestText, priority: priority)
 
         print("Saved")
         dismiss()
@@ -76,5 +76,5 @@ struct SubmitPrayerRequestForm: View {
 
 #Preview {
     SubmitPrayerRequestForm()
-        .environment(PrayerListHolder())
+        .environment(UserProfileHolder())
 }

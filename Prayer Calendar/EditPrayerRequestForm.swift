@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct EditPrayerRequestForm: View {
-    @Environment(PrayerListHolder.self) var dataHolder
+    @Environment(UserProfileHolder.self) var userHolder
     @Environment(\.dismiss) var dismiss
     
     @State var prayerRequest: PrayerRequest
@@ -91,14 +91,14 @@ struct EditPrayerRequestForm: View {
     }
     
     func updatePrayerRequest(prayerRequestVar: PrayerRequest) {
-        PrayerRequestHelper().updatePrayerRequest(prayerRequest: prayerRequestVar, username: dataHolder.email)
+        PrayerRequestHelper().updatePrayerRequest(prayerRequest: prayerRequestVar, username: userHolder.person.username)
 
         print("Saved")
         dismiss()
     }
     
     func deletePrayerRequest() {
-        PrayerRequestHelper().deletePrayerRequest(prayerRequest: prayerRequest, username: dataHolder.email)
+        PrayerRequestHelper().deletePrayerRequest(prayerRequest: prayerRequest, username: userHolder.person.username)
 
         print("Deleted")
         dismiss()
@@ -107,5 +107,5 @@ struct EditPrayerRequestForm: View {
 
 #Preview {
     EditPrayerRequestForm(prayerRequest: PrayerRequest.preview)
-        .environment(PrayerListHolder())
+        .environment(UserProfileHolder())
 }

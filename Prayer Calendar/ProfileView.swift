@@ -4,6 +4,7 @@
 //
 //  Created by Matt Lam on 10/6/23.
 //
+// Description: ProfileView with conditional statements changing the view depending on whether it is your profile you are viewing or someone else's.
 
 import SwiftUI
 import SwiftData
@@ -11,13 +12,13 @@ import FirebaseAuth
 import FirebaseFirestore
 
 struct ProfileView: View {
-//    @State var prayerRequests: [PrayerRequest] = []
     @State private var showView: Bool = false
     @State private var showEditView: Bool = false
-    @State var username: String
+    @State var person: PrayerPerson
     
+    @Environment(UserProfileHolder.self) var userHolder
     @Environment(PrayerListHolder.self) var dataHolder
-    @Environment(PrayerRequestsHolder.self) var viewModel
+//    @Environment(PrayerRequestsHolder.self) var viewModel
     
     var body: some View {
         NavigationStack {
@@ -26,30 +27,34 @@ struct ProfileView: View {
                 VStack {
                     Text("")
                         .toolbar {
+//                            if userHolder.email == person.username {
                             ToolbarItem(placement: .topBarLeading) {
+                                // user view of own profile
                                 NavigationLink(destination: PrayerNameInputView(dataHolder: dataHolder)){
                                     Image(systemName: "list.bullet.rectangle")
                                 }
                             }
-                            
-                            ToolbarItem(placement: .topBarTrailing) {
-                                Button(action: {
-                                    self.signOut()
-                                }) {Text("logout")
-                                        .bold()
-                                        .font(.system(size: 14))
-                                        .frame(width: 60, height: 25)
-                                        .background(
-                                            RoundedRectangle(cornerRadius: 15)
-                                                .fill(Color.blue)
-                                        )
-                                        .foregroundColor(.white)
+//                                }
+                                
+                                ToolbarItem(placement: .topBarTrailing) {
+                                    Button(action: {
+                                        self.signOut()
+                                    }) {Text("logout")
+                                            .bold()
+                                            .font(.system(size: 14))
+                                            .frame(width: 60, height: 25)
+                                            .background(
+                                                RoundedRectangle(cornerRadius: 15)
+                                                    .fill(Color.blue)
+                                            )
+                                            .foregroundColor(.white)
+                                    }
                                 }
                             }
-                        }
+//                        }
                     
                 HStack {
-                    Text("Logged in as: \(dataHolder.email)").padding(.leading, 20)
+                    Text(person.name).padding(.leading, 20)
                         .font(.system(size: 15))
                         .italic()
                     Spacer()
@@ -72,7 +77,7 @@ struct ProfileView: View {
                     
                 Divider()
                 
-                PrayerRequestsView(username: username)
+                    PrayerRequestsView(username: person.username)
                     .frame(height: 1000)
                     .sheet(isPresented: $showView) {
                         SubmitPrayerRequestForm()
@@ -81,7 +86,7 @@ struct ProfileView: View {
             }
             .navigationTitle("profile")
             .navigationBarTitleDisplayMode(.automatic)
-            .navigationBarBackButtonHidden(true)
+//            .navigationBarBackButtonHidden(true)
         }
     }
     
@@ -89,7 +94,7 @@ struct ProfileView: View {
         // Sign out from firebase and change loggedIn to return to SignInView.
         try? Auth.auth().signOut()
         dataHolder.prayerList = ""
-        dataHolder.isLoggedIn = false
+        userHolder.isLoggedIn = false
     }
                     
     func resetInfo() {
@@ -99,7 +104,8 @@ struct ProfileView: View {
 }
 
 #Preview {
-    ProfileView(username: "matthewthelam@gmail.com")
+    ProfileView(person: PrayerPerson.preview)
+        .environment(UserProfileHolder())
         .environment(PrayerListHolder())
         .environment(PrayerRequestsHolder())
 }

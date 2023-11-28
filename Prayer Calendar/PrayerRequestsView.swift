@@ -19,7 +19,7 @@ struct PrayerRequestsView: View {
     
     @State var prayerRequestVar: PrayerRequest = PrayerRequest.preview
     
-    @Environment(PrayerListHolder.self) var dataHolder
+//    @Environment(UserProfileHolder.self) var dataHolder
     @Environment(PrayerRequestsHolder.self) var viewModel
     
     func handleTap(prayerRequest: PrayerRequest) async {
@@ -80,6 +80,6 @@ struct PrayerRequestsView: View {
 
 #Preview {
     PrayerRequestsView(username: "test@gmail.com")
-        .environment(PrayerListHolder())
+//        .environment(PrayerListHolder())
         .environment(PrayerRequestsHolder())
 }

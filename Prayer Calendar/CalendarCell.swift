@@ -18,7 +18,7 @@ struct CalendarCell: View {
     
     let prayerStartingSpaces: Int
     let prayerList: String
-    let prayerListArray: [String]
+    let prayerListArray: [PrayerPerson]
     let prayerRange: Int
     
     var prayerName: String = ""
@@ -30,26 +30,42 @@ struct CalendarCell: View {
         self.daysInPrevMonth = daysInPrevMonth
         self.prayerStartingSpaces = prayerStartingSpaces
         self.prayerList = prayerList
-        self.prayerListArray = prayerList.split(separator: "\n").map(String.init)
         self.prayerRange = prayerRange
+        self.prayerListArray = PrayerNameHelper().retrievePrayerPersonArray(prayerList: prayerList)
     }
         
     var body : some View {
-        VStack {
-            Text(monthStruct().day())
-                .font(.title3)
-                .fontWeight(.semibold)
-                .foregroundColor(textColor(type: monthStruct().monthType))
-            Spacer()
-            Text(monthStruct().prayerName)
-                .font(Font.system(size: 12))
-//            .onTapGesture {
-//                NavigationLink(ProfileView(username: PrayerListHelper().grabUsername(username: monthStruct().prayerName)))
-//            }
-            Spacer()
+        if monthStruct().person.name == "" {
+            VStack {
+                Text(monthStruct().day())
+                    .font(.title3)
+                    .fontWeight(.semibold)
+                    .foregroundColor(textColor(type: monthStruct().monthType))
+                Spacer()
+                Text(monthStruct().person.name)
+                    .font(Font.system(size: 12))
+                    .foregroundColor(textColor(type: monthStruct().monthType))
+                Spacer()
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 95)
+        } else {
+            NavigationLink(destination: ProfileView(person: monthStruct().person)) {
+                VStack {
+                    Text(monthStruct().day())
+                        .font(.title3)
+                        .fontWeight(.semibold)
+                        .foregroundColor(textColor(type: monthStruct().monthType))
+                    Spacer()
+                    Text(monthStruct().person.name)
+                        .font(Font.system(size: 12))
+                        .foregroundColor(textColor(type: monthStruct().monthType))
+                    Spacer()
+                }
+                .frame(maxWidth: .infinity)
+                .frame(height: 95)
+            }
         }
-        .frame(maxWidth: .infinity)
-        .frame(height: 95)
     }
     
     func textColor(type: MonthType) -> Color {
@@ -70,27 +86,28 @@ struct CalendarCell: View {
         
         if (count <= start) {
             let day = daysInPrevMonth - (startingSpaces - count)
-            let name = prayerNameFunc(count: count, prayerRange: prayerRange, prayerListArray: prayerListArray)
-            return MonthStruct(monthType: MonthType.Previous, dayInt: day, prayerName: name, prayerRange: prayerRange)
+            let person = prayerNameFunc(count: count, prayerRange: prayerRange, prayerListArray: prayerListArray)
+            return MonthStruct(monthType: MonthType.Previous, dayInt: day, /*prayerName: person?.name ?? "",*/ prayerRange: prayerRange, /*prayerUsername: person?.username ?? "",*/ person: person ?? PrayerPerson.blank)
         }
         
         else if ((count - startingSpaces) > daysInMonth) {
             let day = count - startingSpaces - daysInMonth
-            let name = prayerNameFunc(count: count, prayerRange: prayerRange, prayerListArray: prayerListArray)
-            return MonthStruct(monthType: MonthType.Next, dayInt: day, prayerName: name, prayerRange: prayerRange)
+            let person = prayerNameFunc(count: count, prayerRange: prayerRange, prayerListArray: prayerListArray)
+            return MonthStruct(monthType: MonthType.Next, dayInt: day, /*prayerName: person?.name ?? "",*/ prayerRange: prayerRange, /*prayerUsername: person?.username ?? "",*/ person: person ?? PrayerPerson.blank)
         }
         
         let day = count-start
-        let name = prayerNameFunc(count: count, prayerRange: prayerRange, prayerListArray: prayerListArray)
-        return MonthStruct(monthType: MonthType.Current, dayInt: day, prayerName: name, prayerRange: prayerRange)
+        let person = prayerNameFunc(count: count, prayerRange: prayerRange, prayerListArray: prayerListArray)
+        return MonthStruct(monthType: MonthType.Current, dayInt: day, /*prayerName: person?.name ?? "",*/ prayerRange: prayerRange, /*prayerUsername: person?.username ?? "", */person: person ?? PrayerPerson.blank)
     }
     
-    func prayerNameFunc(count: Int, prayerRange: Int, prayerListArray: [String]) -> String {
+    func prayerNameFunc(count: Int, prayerRange: Int, prayerListArray: [PrayerPerson]) -> PrayerPerson? {
         if prayerRange < 0 || prayerListArray.isEmpty { //(count - startingSpaces)
-            return ""
+            return nil
         }
         return prayerListArray[prayerRange % prayerListArray.count]
     }
+
 }
 
 struct CalendarCell_Previews: PreviewProvider {

@@ -11,6 +11,7 @@ import FirebaseFirestore
 
 struct PrayerNameInputView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(UserProfileHolder.self) var userHolder
     
     @Bindable var dataHolder: PrayerListHolder
 
@@ -40,6 +41,20 @@ struct PrayerNameInputView: View {
                     .padding([.leading, .trailing], 20)
                     .padding([.top], 10)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .contextMenu {
+                        Button(action: { }) {
+                            HStack {
+                                Image(systemName: "trash")
+                                Text("Delete")
+                            }
+                        }
+                        Button(action: { }) {
+                            HStack {
+                                Image(systemName: "pencil.tip")
+                                Text("Highlight")
+                            }
+                        }
+                    }
                 Spacer()
                 Text(saved)
                     .font(Font.system(size: 12))
@@ -77,9 +92,9 @@ struct PrayerNameInputView: View {
         dataHolder.prayStartDate = prayStartDate
 
         let db = Firestore.firestore()
-        let ref = db.collection("users").document(dataHolder.email).collection("prayerList").document("prayerList1")
+        let ref = db.collection("users").document(userHolder.person.username).collection("prayerList").document("prayerList1")
         
-        ref.setData(["email": dataHolder.email, "prayStartDate": prayStartDate, "prayerList": prayerList])
+        ref.setData(["email": userHolder.person.username, "prayStartDate": prayStartDate, "prayerList": prayerList])
         
         saved = "Saved"
         dismiss()
@@ -91,5 +106,6 @@ struct PrayerNameInputView_Previews: PreviewProvider {
     static var previews: some View {
         PrayerNameInputView(dataHolder: PrayerListHolder())
             .environment(PrayerListHolder())
+            .environment(UserProfileHolder())
     }
 }
