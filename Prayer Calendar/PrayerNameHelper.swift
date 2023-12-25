@@ -9,24 +9,6 @@ import Foundation
 import SwiftUI
 
 class PrayerNameHelper {
-
-//    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
-//        let menu = UIEditMenuInteraction.self
-//                let newInstanceItem = UIMenuItem(title: "Comment", action:#selector(reportAFault))
-//                menu.menuItems = [newInstanceItem]
-//                menu.update()
-//                if action == #selector(copy(_:)) || action == #selector(selectAll(_:)) || action == #selector(commentThisText){
-//                    
-//                    return true
-//                }
-//                return false
-//        }
-//        
-//
-//        
-//        @objc func commentThisText() {
-//                YOUR CODE
-//        }
     
     // The following function returns an array of PrayerPerson's so that the view can grab both the username or name.
     func retrievePrayerPersonArray(prayerList: String) -> [PrayerPerson] {

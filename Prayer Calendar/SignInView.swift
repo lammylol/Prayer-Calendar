@@ -7,11 +7,13 @@
 
 import SwiftUI
 import FirebaseAuth
+import FirebaseFirestore
 
 struct SignInView: View {
     @Environment(UserProfileHolder.self) var userHolder
     @Environment(\.colorScheme) var colorScheme
     @State var email = ""
+    @State var username = ""
     @State var password = ""
     
     var body: some View {
@@ -27,7 +29,7 @@ struct SignInView: View {
                         Text("Email: ")
                             .padding(.leading, 40)
                         MyTextView(placeholder: "", text: $email, textPrompt: "enter email", textFieldType: "text")
-                            .keyboardType(.emailAddress)
+//                            .keyboardType(.emailAddress)
                     }
                     
                     Rectangle()
@@ -74,25 +76,41 @@ struct SignInView: View {
                 print("no account found")
                 userHolder.isLoggedIn = false
             } else {
-                userHolder.uid = Auth.auth().currentUser!.uid as String
+                userHolder.userID = Auth.auth().currentUser!.uid
                 userHolder.isLoggedIn = true
                 userHolder.person = PrayerPerson(name: "", username: email) // need to add Name retrieved from Firestore
                 email = ""
                 password = ""
+                username = ""
             }
         }
     }
     
     func register() {
-        Auth.auth().createUser(withEmail: email, password: password) { result, error in 
+        Auth.auth().createUser(withEmail: email, password: password) { result, error in
             if error != nil {
                 print(error!.localizedDescription.localizedLowercase)
             } else {
-//                email = ""
-//                password = ""
             }
         }
     }
+    
+//    func register() {
+//        Auth.auth().createUser(withEmail: email, password: password) { result, error in
+//            if error != nil {
+//                print(error!.localizedDescription.localizedLowercase)
+//            } else {
+//                var userID = result?.user.uid
+//                let db = Firestore.firestore()
+//                let ref = db.collection("users").document("\(userID)").collection("UserProfile").document()
+//
+//                ref.setData(["email: ": email, "username": username, "prayerList": prayerList])
+//
+//                saved = "Saved"
+//                dismiss()
+//            }
+//        }
+//    }
 }
 
 struct MyTextView: View {

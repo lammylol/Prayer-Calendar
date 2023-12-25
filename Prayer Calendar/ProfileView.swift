@@ -18,7 +18,6 @@ struct ProfileView: View {
     
     @Environment(UserProfileHolder.self) var userHolder
     @Environment(PrayerListHolder.self) var dataHolder
-//    @Environment(PrayerRequestsHolder.self) var viewModel
     
     var body: some View {
         NavigationStack {
@@ -77,7 +76,7 @@ struct ProfileView: View {
                     
                 Divider()
                 
-                    PrayerRequestsView(username: person.username)
+                    PrayerRequestsView(username: <#String#>, userID: person.id)
                     .frame(height: 1000)
                     .sheet(isPresented: $showView) {
                         SubmitPrayerRequestForm()

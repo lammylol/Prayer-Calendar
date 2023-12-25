@@ -27,5 +27,5 @@ struct PrayerRequestRow: View {
 }
 
 #Preview {
-    PrayerRequestRow(prayerRequest: PrayerRequest(username: "matt", date: Date(), prayerRequestText: "Hello", status: "Current", firstName: "Matt", lastName: "Lam", priority: "high"))
+    PrayerRequestRow(prayerRequest: PrayerRequest(userID: "", date: Date(), prayerRequestText: "Hello", status: "Current", firstName: "Matt", lastName: "Lam", priority: "high"))
 }

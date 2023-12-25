@@ -9,20 +9,22 @@ import Foundation
 
 struct PrayerPerson : Identifiable {
     let id = UUID()
-    var name: String
     var username: String
+    var email: String = ""
+    var firstName: String = ""
+    var lastName: String = ""
 }
 
 extension PrayerPerson {
     static var blank: PrayerPerson {
         let item =
-        PrayerPerson(name: "", username: "")
+        PrayerPerson(username: "")
         return item
     }
     
     static var preview: PrayerPerson {
         let item =
-        PrayerPerson(name: "Matt", username: "matthewthelam@gmail.com")
+        PrayerPerson(username: "matthewthelam@gmail.com", firstName: "Matt", lastName: "Lam")
         return item
     }
 }

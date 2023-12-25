@@ -35,14 +35,14 @@ struct CalendarCell: View {
     }
         
     var body : some View {
-        if monthStruct().person.name == "" {
+        if monthStruct().person.firstName == "" {
             VStack {
                 Text(monthStruct().day())
                     .font(.title3)
                     .fontWeight(.semibold)
                     .foregroundColor(textColor(type: monthStruct().monthType))
                 Spacer()
-                Text(monthStruct().person.name)
+                Text(monthStruct().person.firstName)
                     .font(Font.system(size: 12))
                     .foregroundColor(textColor(type: monthStruct().monthType))
                 Spacer()
@@ -57,7 +57,7 @@ struct CalendarCell: View {
                         .fontWeight(.semibold)
                         .foregroundColor(textColor(type: monthStruct().monthType))
                     Spacer()
-                    Text(monthStruct().person.name)
+                    Text(monthStruct().person.firstName)
                         .font(Font.system(size: 12))
                         .foregroundColor(textColor(type: monthStruct().monthType))
                     Spacer()
@@ -87,13 +87,13 @@ struct CalendarCell: View {
         if (count <= start) {
             let day = daysInPrevMonth - (startingSpaces - count)
             let person = prayerNameFunc(count: count, prayerRange: prayerRange, prayerListArray: prayerListArray)
-            return MonthStruct(monthType: MonthType.Previous, dayInt: day, /*prayerName: person?.name ?? "",*/ prayerRange: prayerRange, /*prayerUsername: person?.username ?? "",*/ person: person ?? PrayerPerson.blank)
+            return MonthStruct(monthType: MonthType.Previous, dayInt: day, prayerRange: prayerRange, person: person ?? PrayerPerson.blank)
         }
         
         else if ((count - startingSpaces) > daysInMonth) {
             let day = count - startingSpaces - daysInMonth
             let person = prayerNameFunc(count: count, prayerRange: prayerRange, prayerListArray: prayerListArray)
-            return MonthStruct(monthType: MonthType.Next, dayInt: day, /*prayerName: person?.name ?? "",*/ prayerRange: prayerRange, /*prayerUsername: person?.username ?? "",*/ person: person ?? PrayerPerson.blank)
+            return MonthStruct(monthType: MonthType.Next, dayInt: day, prayerRange: prayerRange, person: person ?? PrayerPerson.blank)
         }
         
         let day = count-start

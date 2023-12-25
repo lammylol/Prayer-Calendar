@@ -33,7 +33,7 @@ struct PrayerCalendarView: View {
                                 .padding(.horizontal, 10)
                                 .padding(.top, 20)
                                 .task {
-                                    await getFirestoreData()
+                                    await CalendarHelper().getFirestoreData(userHolder: userHolder, dataHolder: dataHolder)
                                 }
                         }
                         .background(Color.gray.opacity(0.05))
@@ -105,33 +105,6 @@ struct PrayerCalendarView: View {
                 }
             }
         }
-    }
-    
-    //This function retrieves PrayerList data from Firestore.
-    func getFirestoreData() async {
-            let ref = Firestore.firestore()
-                .collection("users")
-                .document(userHolder.person.username).collection("prayerList").document("prayerList1")
-            
-            ref.getDocument{(document, error) in
-                if let document = document, document.exists {
-                    
-                        let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
-                        print("Document data: " + dataDescription)
-                        
-                        //Update Dataholder with PrayStartDate from Firestore
-                        let startDateTimeStamp = document.get("prayStartDate") as! Timestamp
-                        dataHolder.prayStartDate = startDateTimeStamp.dateValue()
-                        
-                        
-                        //Update Dataholder with PrayerList from Firestore
-                        dataHolder.prayerList = document.get("prayerList") as! String
-                    
-                } else {
-                    print("Document does not exist")
-                    dataHolder.prayerList = ""
-                }
-            }
     }
 }
 

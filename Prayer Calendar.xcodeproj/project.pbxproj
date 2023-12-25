@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7A27B7B62B2FE0EB00FF72FC /* CreateProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A27B7B52B2FE0EA00FF72FC /* CreateProfileView.swift */; };
 		7A3158E92AEF9C0B009B6E59 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 7A3158E82AEF9C0B009B6E59 /* FirebaseAnalytics */; };
 		7A3158EB2AEF9C0B009B6E59 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 7A3158EA2AEF9C0B009B6E59 /* FirebaseAnalyticsSwift */; };
 		7A3158ED2AF357F5009B6E59 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3158EC2AF357F5009B6E59 /* SignInView.swift */; };
@@ -62,6 +63,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7A27B7B52B2FE0EA00FF72FC /* CreateProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateProfileView.swift; sourceTree = "<group>"; };
 		7A3158EC2AF357F5009B6E59 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		7A416B7A2AFC71CA00249BB3 /* UIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIHelper.swift; sourceTree = "<group>"; };
 		7A4F25F52AD0D23900FB086C /* Prayer Calendar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Prayer Calendar.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -202,6 +204,7 @@
 			isa = PBXGroup;
 			children = (
 				7A3158EC2AF357F5009B6E59 /* SignInView.swift */,
+				7A27B7B52B2FE0EA00FF72FC /* CreateProfileView.swift */,
 				7AD808D02AD6F9E000A0ECA6 /* ContentView.swift */,
 				7A4F262A2AD0D2B100FB086C /* ProfileView.swift */,
 				7A4F26292AD0D2B000FB086C /* PrayerNameInputView.swift */,
@@ -413,6 +416,7 @@
 				7A4F26392AD0D2B600FB086C /* CalendarHelper.swift in Sources */,
 				7A4F263A2AD0D2B600FB086C /* MonthStruct.swift in Sources */,
 				7A4F26382AD0D2B600FB086C /* PrayerCalendarSwiftApp.swift in Sources */,
+				7A27B7B62B2FE0EB00FF72FC /* CreateProfileView.swift in Sources */,
 				7ADE4C532B046CD400CE6B33 /* SubmitPrayerRequestForm.swift in Sources */,
 				7ADE4C552B0811AC00CE6B33 /* EditPrayerRequestForm.swift in Sources */,
 				7AF1E9F02B145848007E3303 /* UserProfileHolder.swift in Sources */,

@@ -6,10 +6,38 @@
 //
 
 import Foundation
+import FirebaseFirestore
 
 class CalendarHelper
 {
     let calendar = Calendar.current
+    
+    //This function retrieves PrayerList data from Firestore.
+    func getFirestoreData(userHolder: UserProfileHolder, dataHolder: PrayerListHolder) async {
+            let ref = Firestore.firestore()
+                .collection("users")
+                .document(userHolder.userID).collection("prayerList").document("prayerList1")
+            
+            ref.getDocument{(document, error) in
+                if let document = document, document.exists {
+                    
+                        let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
+                        print("Document data: " + dataDescription)
+                        
+                        //Update Dataholder with PrayStartDate from Firestore
+                        let startDateTimeStamp = document.get("prayStartDate") as! Timestamp
+                        dataHolder.prayStartDate = startDateTimeStamp.dateValue()
+                        
+                        
+                        //Update Dataholder with PrayerList from Firestore
+                        dataHolder.prayerList = document.get("prayerList") as! String
+                    
+                } else {
+                    print("Document does not exist")
+                    dataHolder.prayerList = ""
+                }
+            }
+    }
     
     func plusMonth(date: Date) -> Date
     {

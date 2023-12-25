@@ -46,7 +46,7 @@ struct EditPrayerRequestForm: View {
                     }
                 }
                 .onAppear() {
-                    prayerRequest = PrayerRequest(id: prayerRequest.id, username: prayerRequest.username, date: prayerRequest.date, prayerRequestText: prayerRequest.prayerRequestText, status: prayerRequest.status, firstName: prayerRequest.firstName, lastName: prayerRequest.lastName, priority: prayerRequest.priority)
+                    prayerRequest = PrayerRequest(id: prayerRequest.id, userID: prayerRequest.userID, date: prayerRequest.date, prayerRequestText: prayerRequest.prayerRequestText, status: prayerRequest.status, firstName: prayerRequest.firstName, lastName: prayerRequest.lastName, priority: prayerRequest.priority)
                     
                     print(prayerRequest.date)
                 }

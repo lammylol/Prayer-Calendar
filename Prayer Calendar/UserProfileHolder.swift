@@ -10,15 +10,15 @@ import SwiftUI
 
 @Observable class UserProfileHolder {
 //    var email: String = ""
-    var uid: String = ""
-    var person: PrayerPerson = PrayerPerson(name: "", username: "")
+    var userID: String = ""
+    var person: PrayerPerson = PrayerPerson(username: "")
     var isLoggedIn: Bool = false
 }
 
 @Observable class PrayerListHolder {
     var date = Date()
+    var userID: String = ""
     var email: String = ""
-    var uid: String = ""
     
     var prayerListArray: [String] = [""]
     var prayerList: String = ""

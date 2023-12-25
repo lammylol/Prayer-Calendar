@@ -9,7 +9,7 @@ import Foundation
 
 struct PrayerRequest : Identifiable {
     var id: String = ""
-    var username: String
+    var userID: String
     var date: Date
     var prayerRequestText: String
     var status: String
@@ -22,7 +22,7 @@ extension PrayerRequest {
     static var preview: PrayerRequest {
         let item =
         PrayerRequest(
-            username: "Matt",
+            userID: "Matt",
             date: Date(),
             prayerRequestText: "Hello, World",
             status: "Current",
@@ -36,7 +36,7 @@ extension PrayerRequest {
 struct PrayerRequestsModel {
     static var preview: [PrayerRequest] =
         [PrayerRequest(
-            username: "Matt",
+            userID: "Matt",
             date: Date(),
             prayerRequestText: "Hello, World",
             status: "Current",
@@ -44,7 +44,7 @@ struct PrayerRequestsModel {
             lastName: "Lam",
             priority: "high"),
          PrayerRequest(
-            username: "Jane",
+            userID: "Jane",
             date: Date(),
             prayerRequestText: "Hello, Jane",
             status: "Past",

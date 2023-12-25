@@ -22,7 +22,7 @@ class PrayerRequestHelper {
             "LastName": prayerRequest.lastName,
             "Status": prayerRequest.status,
             "PrayerRequestText": prayerRequest.prayerRequestText,
-            "userID": prayerRequest.username,
+            "userID": prayerRequest.userID,
             "Priority": prayerRequest.priority
         ])
         

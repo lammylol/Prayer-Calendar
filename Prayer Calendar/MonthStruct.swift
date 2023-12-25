@@ -22,7 +22,7 @@ struct MonthStruct {
     }
     
     func name() -> String {
-        return person.name
+        return person.firstName
     }
     
     func prange() -> String {
