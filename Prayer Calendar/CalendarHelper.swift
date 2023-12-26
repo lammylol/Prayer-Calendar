@@ -39,6 +39,22 @@ class CalendarHelper
             }
     }
     
+    // The following function returns an array of PrayerPerson's so that the view can grab both the username or name.
+    func retrievePrayerPersonArray(prayerList: String) -> [PrayerPerson] {
+        let ref = prayerList.components(separatedBy: "\n")
+        var prayerArray: [PrayerPerson] = []
+        
+        for person in ref {
+            let array = person.split(separator: "; ", omittingEmptySubsequences: true)
+            /*.map(String.init)*/
+            let prayerPerson = PrayerPerson(username: String(array.last ?? ""), firstName: String(array.first ?? ""))
+            prayerArray.append(prayerPerson)
+            print(prayerPerson.firstName)
+        }
+        
+        return prayerArray
+    }
+    
     func plusMonth(date: Date) -> Date
     {
         return calendar.date(byAdding: .month, value:1, to: date)!

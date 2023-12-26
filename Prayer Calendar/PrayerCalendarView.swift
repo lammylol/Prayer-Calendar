@@ -12,16 +12,9 @@ import FirebaseCore
 
 struct PrayerCalendarView: View {
     @Environment(UserProfileHolder.self) var userHolder
-    @Environment(PrayerListHolder.self) var dataHolder
+    @Environment(PrayerListHolder.self) var prayerListHolder
+    @Environment(DateHolder.self) var dateHolder
     @Environment(\.colorScheme) var colorScheme
-//    @Bindable var dataHolder: DataHolder
-    
-//    init(dataHolder: DataHolder) {
-//        self.dataHolder = dataHolder
-////        _email = State(initialValue: dataHolder.email)
-//        _prayerList = State(initialValue: dataHolder.prayerList)
-//        _prayStartDate = State(initialValue: dataHolder.prayStartDate)
-//    }
     
     var body: some View {
         NavigationStack{        //Navigation Stack.
@@ -33,7 +26,7 @@ struct PrayerCalendarView: View {
                                 .padding(.horizontal, 10)
                                 .padding(.top, 20)
                                 .task {
-                                    await CalendarHelper().getFirestoreData(userHolder: userHolder, dataHolder: dataHolder)
+                                    await CalendarHelper().getFirestoreData(userHolder: userHolder, dataHolder: prayerListHolder)
                                 }
                         }
                         .background(Color.gray.opacity(0.05))
@@ -41,7 +34,7 @@ struct PrayerCalendarView: View {
                         VStack (spacing: 0) {
                             Text("")
                                 .toolbar() {
-                                    NavigationLink(destination: PrayerNameInputView(dataHolder: dataHolder)){
+                                    NavigationLink(destination: PrayerNameInputView(dataHolder: prayerListHolder)){
                                         Image(systemName: "list.bullet.rectangle")
                                     }
                                 }
@@ -84,12 +77,12 @@ struct PrayerCalendarView: View {
     var calendarGrid: some View {
         VStack() {
 //            prayerList = dataHolder.prayerList //Required so that view will reset when prayerList changes.
-            let firstDayofMonth = CalendarHelper().firstDayOfMonth(date: dataHolder.date) //First Day of the Month
+            let firstDayofMonth = CalendarHelper().firstDayOfMonth(date: dateHolder.date) //First Day of the Month
             let startingSpaces = CalendarHelper().weekDay(date: firstDayofMonth)-1 //Number of spaces before month starts in a table of 42 rows.
-            let daysInMonth = CalendarHelper().daysInMonth(date: dataHolder.date) //Number of days in each month.
-            let daysInPrevMonth = CalendarHelper().daysInMonth(date: CalendarHelper().minusMonth(date: dataHolder.date))
+            let daysInMonth = CalendarHelper().daysInMonth(date: dateHolder.date) //Number of days in each month.
+            let daysInPrevMonth = CalendarHelper().daysInMonth(date: CalendarHelper().minusMonth(date: dateHolder.date))
             
-            let prayerStartingSpaces = CalendarHelper().weekDay(date: dataHolder.prayStartDate) //Number of spaces before prayer start date begins in a table of 42 rows.
+            let prayerStartingSpaces = CalendarHelper().weekDay(date: prayerListHolder.prayStartDate) //Number of spaces before prayer start date begins in a table of 42 rows.
             
             ForEach(0..<5){ row in
                 HStack(spacing: 1)
@@ -98,9 +91,9 @@ struct PrayerCalendarView: View {
                     { column in
                         let count = column + (row * 7)
                         let prayerRange =
-                        CalendarHelper().rangeOfPrayerStart(startDate: dataHolder.prayStartDate, firstDayOfMonth: firstDayofMonth) + count - startingSpaces - 1
+                        CalendarHelper().rangeOfPrayerStart(startDate: prayerListHolder.prayStartDate, firstDayOfMonth: firstDayofMonth) + count - startingSpaces - 1
                         
-                        CalendarCell(count: count, startingSpaces: startingSpaces, daysInMonth: daysInMonth, daysInPrevMonth: daysInPrevMonth, prayerStartingSpaces: prayerStartingSpaces, prayerList: dataHolder.prayerList, prayerRange: prayerRange)
+                        CalendarCell(count: count, startingSpaces: startingSpaces, daysInMonth: daysInMonth, daysInPrevMonth: daysInPrevMonth, prayerStartingSpaces: prayerStartingSpaces, prayerList: prayerListHolder.prayerList, prayerRange: prayerRange)
                     }
                 }
             }

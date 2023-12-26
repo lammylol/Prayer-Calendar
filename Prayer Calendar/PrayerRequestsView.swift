@@ -11,16 +11,16 @@ import SwiftUI
 import FirebaseFirestore
 
 struct PrayerRequestsView: View {
-//    var prayerRequests: [PrayerRequest]
     let db = Firestore.firestore()
     @State private var showSubmit: Bool = false
     @State private var showEdit: Bool = false
     @State var username: String
     
     @State var prayerRequestVar: PrayerRequest = PrayerRequest.preview
+    @State var prayerRequests = [PrayerRequest]()
     
 //    @Environment(UserProfileHolder.self) var dataHolder
-    @Environment(PrayerRequestsHolder.self) var viewModel
+//    @Environment(PrayerRequestsHolder.self) var viewModel
     
     func handleTap(prayerRequest: PrayerRequest) async {
         prayerRequestVar = prayerRequest
@@ -29,7 +29,7 @@ struct PrayerRequestsView: View {
     var body: some View {
         
         VStack {
-            List(viewModel.prayerRequests) { prayerRequest in
+            List(prayerRequests) { prayerRequest in
                 PrayerRequestRow(prayerRequest: prayerRequest)
                     .onTapGesture {
                         Task {
@@ -39,7 +39,7 @@ struct PrayerRequestsView: View {
                     }
             }
             .overlay {
-                if viewModel.prayerRequests.isEmpty {
+                if prayerRequests.isEmpty {
                     VStack{
                         ContentUnavailableView {
                             Label("No Prayer Requests", systemImage: "list.bullet.rectangle.portrait")
@@ -58,7 +58,7 @@ struct PrayerRequestsView: View {
                 }
             }
             .onAppear() {
-                self.viewModel.retrievePrayerRequest(username: username) // this is the line to uncheck when wanting to view preview
+                prayerRequests = PrayerRequestHelper().retrievePrayerRequest(username: username) // this is the line to uncheck when wanting to view preview
             }
         }
         .sheet(isPresented: $showEdit) {
@@ -81,5 +81,5 @@ struct PrayerRequestsView: View {
 #Preview {
     PrayerRequestsView(username: "test@gmail.com")
 //        .environment(PrayerListHolder())
-        .environment(PrayerRequestsHolder())
+//        .environment(PrayerRequestsHolder())
 }

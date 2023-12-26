@@ -53,7 +53,7 @@ struct ProfileView: View {
 //                        }
                     
                 HStack {
-                    Text(person.name).padding(.leading, 20)
+                    Text(person.firstName).padding(.leading, 20)
                         .font(.system(size: 15))
                         .italic()
                     Spacer()
@@ -76,7 +76,7 @@ struct ProfileView: View {
                     
                 Divider()
                 
-                    PrayerRequestsView(username: <#String#>, userID: person.id)
+                    PrayerRequestsView(username: )
                     .frame(height: 1000)
                     .sheet(isPresented: $showView) {
                         SubmitPrayerRequestForm()

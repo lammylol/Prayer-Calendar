@@ -16,11 +16,15 @@ import SwiftUI
 }
 
 @Observable class PrayerListHolder {
-    var date = Date()
+//    var date = Date()
     var userID: String = ""
-    var email: String = ""
+//    var email: String = ""
     
-    var prayerListArray: [String] = [""]
+//    var prayerListArray: [String] = [""]
     var prayerList: String = ""
     var prayStartDate = Date()
+}
+
+@Observable class DateHolder {
+    var date = Date()
 }
