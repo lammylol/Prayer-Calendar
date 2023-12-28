@@ -26,7 +26,7 @@ struct PrayerCalendarView: View {
                                 .padding(.horizontal, 10)
                                 .padding(.top, 20)
                                 .task {
-                                    await CalendarHelper().getFirestoreData(userHolder: userHolder, dataHolder: prayerListHolder)
+                                    await PrayerPersonHelper().getFirestoreData(userHolder: userHolder, dataHolder: prayerListHolder)
                                 }
                         }
                         .background(Color.gray.opacity(0.05))

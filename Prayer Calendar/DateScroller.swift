@@ -10,7 +10,7 @@ import Observation
 
 struct DateScroller: View {
     
-    @Environment(PrayerListHolder.self) var dataHolder
+    @Environment(DateHolder.self) var dataHolder
     
     var body: some View {
         @Bindable var dataHolder = dataHolder

@@ -11,6 +11,67 @@ import FirebaseFirestore
 
 class PrayerRequestHelper {
     
+    // Retrieve requested userID off of username
+    func retrieveUserID(username: String) -> String {
+        var userID = ""
+        let db = Firestore.firestore()
+        let ref = db.collection("users").document(username)
+
+        ref.getDocument{(document, error) in
+            if let document = document, document.exists {
+                
+                    let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
+                    print("Document data: " + dataDescription)
+                    
+                    //Update Dataholder with PrayerList from Firestore
+                    userID = document.get("userID") as! String
+                
+            } else {
+                print("Document does not exist")
+                userID = ""
+            }
+        }
+        
+        return userID
+    }
+    
+    //Retrieve prayer requests from Firestore
+    func retrievePrayerRequest(username: String) -> [PrayerRequest] {
+        var prayerRequests = [PrayerRequest]()
+        let db = Firestore.firestore()
+        
+        let userID = retrieveUserID(username: username)
+        let ref = db.collection("users").document(userID).collection("prayerRequests").order(by: "DatePosted", descending: true)
+        
+        ref.addSnapshotListener { documentSnapshot, error in
+            guard let document = documentSnapshot?.documents else {
+                print("Error fetching document: \(String(describing: error))")
+                return
+            }
+            
+            prayerRequests = document.map { (queryDocumentSnapshot) -> PrayerRequest in
+                let data = queryDocumentSnapshot.data()
+
+                    let timestamp = data["DatePosted"] as? Timestamp ?? Timestamp()
+                    let datePosted = timestamp.dateValue()
+                    
+                    let firstName = data["FirstName"] as? String ?? ""
+                    let lastName = data["LastName"] as? String ?? ""
+                    let prayerRequestText = data["PrayerRequestText"] as? String ?? ""
+                    let status = data["Status"] as? String ?? ""
+                    let userID = data["userID"] as? String ?? ""
+                    let priority = data["Priority"] as? String ?? ""
+                    let documentID = queryDocumentSnapshot.documentID as String
+                    
+                let prayerRequest = PrayerRequest(id: documentID, userID: userID, date: datePosted, prayerRequestText: prayerRequestText, status: status, firstName: firstName, lastName: lastName, priority: priority)
+                    
+                    return prayerRequest
+
+            }
+        }
+        return prayerRequests
+    }
+    
     // Update Prayer Requests off of given request from row selection
     func updatePrayerRequest(prayerRequest: PrayerRequest, username: String) {
         let db = Firestore.firestore()
@@ -42,42 +103,6 @@ class PrayerRequestHelper {
                 print(prayerRequest.prayerRequestText)
             }
         }
-    }
-
-    //Retrieve prayer requests from Firestore
-    func retrievePrayerRequest(username: String) -> [PrayerRequest] {
-        var prayerRequests = [PrayerRequest]()
-        
-        let db = Firestore.firestore()
-        let ref = db.collection("users").document(username).collection("prayerRequests").order(by: "DatePosted", descending: true)
-        
-        ref.addSnapshotListener { documentSnapshot, error in
-            guard let document = documentSnapshot?.documents else {
-                print("Error fetching document: \(String(describing: error))")
-                return
-            }
-            
-            prayerRequests = document.map { (queryDocumentSnapshot) -> PrayerRequest in
-                let data = queryDocumentSnapshot.data()
-
-                    let timestamp = data["DatePosted"] as? Timestamp ?? Timestamp()
-                    let datePosted = timestamp.dateValue()
-                    
-                    let firstName = data["FirstName"] as? String ?? ""
-                    let lastName = data["LastName"] as? String ?? ""
-                    let prayerRequestText = data["PrayerRequestText"] as? String ?? ""
-                    let status = data["Status"] as? String ?? ""
-                    let userID = data["userID"] as? String ?? ""
-                    let priority = data["Priority"] as? String ?? ""
-                    let documentID = queryDocumentSnapshot.documentID as String
-                    
-                let prayerRequest = PrayerRequest(id: documentID, userID: userID, date: datePosted, prayerRequestText: prayerRequestText, status: status, firstName: firstName, lastName: lastName, priority: priority)
-                    
-                    return prayerRequest
-
-            }
-        }
-        return prayerRequests
     }
     
     func addPrayerRequest(username: String, firstName: String, lastName: String, prayerRequestText: String, priority: String) {

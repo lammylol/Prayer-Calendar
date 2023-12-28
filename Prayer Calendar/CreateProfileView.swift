@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import FirebaseFirestore
+import FirebaseAuth
 
 struct CreateProfileView: View {
     
@@ -99,20 +101,23 @@ struct CreateProfileView: View {
     }
     
     func createAccount() {
-    //        Auth.auth().createUser(withEmail: email, password: password) { result, error in
-    //            if error != nil {
-    //                print(error!.localizedDescription.localizedLowercase)
-    //            } else {
-    //                var userID = result?.user.uid
-    //                let db = Firestore.firestore()
-    //                let ref = db.collection("users").document("\(userID)").collection("UserProfile").document()
-    //
-    //                ref.setData(["email: ": email, "username": username, "prayerList": prayerList])
-    //
-    //                saved = "Saved"
-    //                dismiss()
-    //            }
-    //        }
+            Auth.auth().createUser(withEmail: email, password: password) { result, error in
+                if error != nil {
+                    print(error!.localizedDescription.localizedLowercase)
+                } else {
+                    let userID = result?.user.uid
+                    let db = Firestore.firestore()
+                    let ref = db.collection("users").document("\(userID ?? "")").collection("UserProfile").document()
+    
+                    ref.setData(["email: ": email, "username": username, "firstName": firstName, "lastName": lastName])
+                    
+                    let ref2 = db.collection("users").document("\(username)")
+                    ref2.setData(["userID": userID ?? ""])
+//
+//                    saved = "Saved"
+                    dismiss()
+                }
+            }
     }
 }
 

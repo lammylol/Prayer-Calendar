@@ -76,7 +76,7 @@ struct ProfileView: View {
                     
                 Divider()
                 
-                    PrayerRequestsView(username: )
+                    PrayerRequestsView(username: person.username)
                     .frame(height: 1000)
                     .sheet(isPresented: $showView) {
                         SubmitPrayerRequestForm()
@@ -87,6 +87,9 @@ struct ProfileView: View {
             .navigationBarTitleDisplayMode(.automatic)
 //            .navigationBarBackButtonHidden(true)
         }
+        .onAppear(
+            PrayerRequestHelper().
+        )
     }
     
     func signOut() {
@@ -106,5 +109,5 @@ struct ProfileView: View {
     ProfileView(person: PrayerPerson.preview)
         .environment(UserProfileHolder())
         .environment(PrayerListHolder())
-        .environment(PrayerRequestsHolder())
+//        .environment(PrayerRequestsHolder())
 }

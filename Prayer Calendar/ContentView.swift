@@ -37,5 +37,5 @@ struct ContentView: View {
     ContentView()
         .environment(PrayerListHolder())
         .environment(UserProfileHolder())
-        .environment(PrayerRequestsHolder())
+//        .environment(PrayerRequestsHolder())
 }
