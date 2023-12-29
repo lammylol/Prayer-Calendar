@@ -15,6 +15,7 @@ struct SignInView: View {
     @State var email = ""
     @State var username = ""
     @State var password = ""
+    @State var showCreateAccount: Bool = false
     
     var body: some View {
         Group {
@@ -58,10 +59,13 @@ struct SignInView: View {
                     .padding(.top, 15)
                     
                     Button(action: {
-                        self.register()
+                        showCreateAccount.toggle()
                     }) {Text("Create an Account")
                     }
                     .padding(.top, 10)
+                }
+                .sheet(isPresented: $showCreateAccount) {
+                    CreateProfileView()
                 }
             }
             else {
@@ -78,19 +82,10 @@ struct SignInView: View {
             } else {
                 userHolder.userID = Auth.auth().currentUser!.uid
                 userHolder.isLoggedIn = true
-                userHolder.person = PrayerPerson(name: "", username: email) // need to add Name retrieved from Firestore
+                userHolder.person = PrayerPerson(username: email, firstName: "") // need to add Name retrieved from Firestore
                 email = ""
                 password = ""
                 username = ""
-            }
-        }
-    }
-    
-    func register() {
-        Auth.auth().createUser(withEmail: email, password: password) { result, error in
-            if error != nil {
-                print(error!.localizedDescription.localizedLowercase)
-            } else {
             }
         }
     }

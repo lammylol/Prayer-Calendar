@@ -31,6 +31,7 @@ struct PrayerCalendarSwiftApp: App {
             SignInView()
                 .environment(UserProfileHolder())
                 .environment(PrayerListHolder())
+                .environment(DateHolder())
 //                .environment(PrayerRequestsHolder())
         }
     }

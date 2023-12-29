@@ -12,10 +12,9 @@ import FirebaseFirestore
 class PrayerPersonHelper {
     
 //    This function retrieves PrayerList data from Firestore.
-    func getFirestoreData(userHolder: UserProfileHolder, dataHolder: PrayerListHolder) async {
+    func getPrayerList(userHolder: UserProfileHolder, dataHolder: PrayerListHolder) async {
             let ref = Firestore.firestore()
-                .collection("users")
-                .document(userHolder.userID).collection("prayerList").document("prayerList1")
+            .collection("prayerlists").document(userHolder.userID)
             
             ref.getDocument{(document, error) in
                 if let document = document, document.exists {
@@ -52,5 +51,47 @@ class PrayerPersonHelper {
         }
         
         return prayerArray
+    }
+    
+    // Retrieve requested userID off of username
+    func retrieveUserID(username: String) -> String {
+        var userID = ""
+        let db = Firestore.firestore()
+        let ref = db.collection("users").document(username)
+
+        ref.getDocument{(document, error) in
+            if let document = document, document.exists {
+                
+                    let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
+                    print("Document data: " + dataDescription)
+                    
+                    //Update Dataholder with PrayerList from Firestore
+                    userID = document.get("userID") as! String
+                
+            } else {
+                print("Document does not exist")
+                userID = ""
+            }
+        }
+        
+        return userID
+    }
+    
+    func checkIfUsernameExists(username: String) -> Bool {
+        var check = Bool()
+        
+        let ref = Firestore.firestore()
+            .collection("users")
+            .document(username)
+        
+        ref.getDocument{(document, error) in
+            if let document = document, document.exists {
+                check = true
+            } else {
+                check = false
+            }
+        }
+        
+        return check
     }
 }

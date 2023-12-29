@@ -14,7 +14,7 @@ struct PrayerRequestsView: View {
     let db = Firestore.firestore()
     @State private var showSubmit: Bool = false
     @State private var showEdit: Bool = false
-    @State var username: String
+    @State var userID: String
     
     @State var prayerRequestVar: PrayerRequest = PrayerRequest.preview
     @State var prayerRequests = [PrayerRequest]()
@@ -58,7 +58,7 @@ struct PrayerRequestsView: View {
                 }
             }
             .onAppear() {
-                prayerRequests = PrayerRequestHelper().retrievePrayerRequest(username: username) // this is the line to uncheck when wanting to view preview
+                prayerRequests = PrayerRequestHelper().retrievePrayerRequest(userID: userID) // this is the line to uncheck when wanting to view preview
             }
         }
         .sheet(isPresented: $showEdit) {
@@ -79,7 +79,7 @@ struct PrayerRequestsView: View {
 //}
 
 #Preview {
-    PrayerRequestsView(username: "test@gmail.com")
+    PrayerRequestsView(userID: "test@gmail.com")
 //        .environment(PrayerListHolder())
 //        .environment(PrayerRequestsHolder())
 }

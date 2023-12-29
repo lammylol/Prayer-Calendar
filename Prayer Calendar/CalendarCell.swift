@@ -31,7 +31,7 @@ struct CalendarCell: View {
         self.prayerStartingSpaces = prayerStartingSpaces
         self.prayerList = prayerList
         self.prayerRange = prayerRange
-        self.prayerListArray = CalendarHelper().retrievePrayerPersonArray(prayerList: prayerList)
+        self.prayerListArray = PrayerPersonHelper().retrievePrayerPersonArray(prayerList: prayerList)
     }
         
     var body : some View {

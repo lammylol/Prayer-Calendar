@@ -11,36 +11,11 @@ import FirebaseFirestore
 
 class PrayerRequestHelper {
     
-    // Retrieve requested userID off of username
-    func retrieveUserID(username: String) -> String {
-        var userID = ""
-        let db = Firestore.firestore()
-        let ref = db.collection("users").document(username)
-
-        ref.getDocument{(document, error) in
-            if let document = document, document.exists {
-                
-                    let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
-                    print("Document data: " + dataDescription)
-                    
-                    //Update Dataholder with PrayerList from Firestore
-                    userID = document.get("userID") as! String
-                
-            } else {
-                print("Document does not exist")
-                userID = ""
-            }
-        }
-        
-        return userID
-    }
-    
     //Retrieve prayer requests from Firestore
-    func retrievePrayerRequest(username: String) -> [PrayerRequest] {
+    func retrievePrayerRequest(userID: String) -> [PrayerRequest] {
         var prayerRequests = [PrayerRequest]()
         let db = Firestore.firestore()
         
-        let userID = retrieveUserID(username: username)
         let ref = db.collection("users").document(userID).collection("prayerRequests").order(by: "DatePosted", descending: true)
         
         ref.addSnapshotListener { documentSnapshot, error in
@@ -73,9 +48,9 @@ class PrayerRequestHelper {
     }
     
     // Update Prayer Requests off of given request from row selection
-    func updatePrayerRequest(prayerRequest: PrayerRequest, username: String) {
+    func updatePrayerRequest(prayerRequest: PrayerRequest, userID: String) {
         let db = Firestore.firestore()
-        let ref = db.collection("users").document(username).collection("prayerRequests").document("\(prayerRequest.id)")
+        let ref = db.collection("users").document(userID).collection("prayerRequests").document("\(prayerRequest.id)")
 
         ref.setData([
             "DatePosted": prayerRequest.date,
@@ -90,9 +65,9 @@ class PrayerRequestHelper {
         print(prayerRequest.prayerRequestText)
     }
     
-    func deletePrayerRequest(prayerRequest: PrayerRequest, username: String) {
+    func deletePrayerRequest(prayerRequest: PrayerRequest, userID: String) {
         let db = Firestore.firestore()
-        let ref = db.collection("users").document(username).collection("prayerRequests").document("\(prayerRequest.id)")
+        let ref = db.collection("users").document(userID).collection("prayerRequests").document("\(prayerRequest.id)")
         
         ref.delete() { err in
             if let err = err {
@@ -105,9 +80,9 @@ class PrayerRequestHelper {
         }
     }
     
-    func addPrayerRequest(username: String, firstName: String, lastName: String, prayerRequestText: String, priority: String) {
+    func addPrayerRequest(userID: String, firstName: String, lastName: String, prayerRequestText: String, priority: String) {
         let db = Firestore.firestore()
-        let ref = db.collection("users").document(username).collection("prayerRequests").document()
+        let ref = db.collection("users").document(userID).collection("prayerRequests").document()
 
         ref.setData([
             "DatePosted": Date(),
@@ -115,7 +90,7 @@ class PrayerRequestHelper {
             "LastName": lastName,
             "Status": "Current",
             "PrayerRequestText": prayerRequestText,
-            "userID": username,
+            "userID": userID,
             "Priority": priority
         ])
     }

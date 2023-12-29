@@ -17,6 +17,7 @@ struct CreateProfileView: View {
     @State var username = ""
     @State var firstName = ""
     @State var lastName = ""
+    @State var usernameCheck = ""
     
     var body: some View {
         NavigationView{
@@ -24,12 +25,12 @@ struct CreateProfileView: View {
                 Text("Create an Account")
                     .font(.largeTitle)
                     .bold()
-                    .offset(x: 0, y: -50)
+                    .offset(x: 0, y: 0)
                 
                 HStack {
                     Text("First Name: ")
                         .padding(.leading, 40)
-                    MyTextView(placeholder: "", text: $password, textPrompt: "first name", textFieldType: "text")
+                    MyTextView(placeholder: "", text: $firstName, textPrompt: "first name", textFieldType: "text")
                 }
                 
                 Rectangle()
@@ -38,8 +39,11 @@ struct CreateProfileView: View {
                 HStack {
                     Text("Last Name: ")
                         .padding(.leading, 40)
-                    MyTextView(placeholder: "", text: $password, textPrompt: "last name", textFieldType: "text")
+                    MyTextView(placeholder: "", text: $lastName, textPrompt: "last name", textFieldType: "text")
                 }
+                
+                Rectangle()
+                    .frame(width: 310, height: 1)
                 
                 HStack {
                     Text("Email: ")
@@ -54,7 +58,7 @@ struct CreateProfileView: View {
                 HStack {
                     Text("Username: ")
                         .padding(.leading, 40)
-                    MyTextView(placeholder: "", text: $password, textPrompt: "enter password", textFieldType: "secure")
+                    MyTextView(placeholder: "", text: $username, textPrompt: "enter username", textFieldType: "text")
                 }
                 
                 Rectangle()
@@ -71,7 +75,7 @@ struct CreateProfileView: View {
             
                 Button(action: {
                     self.createAccount()
-                }) {Text("Login")
+                }) {Text("Create Account")
                         .bold()
                         .frame(width: 150, height: 35)
                 }
@@ -80,13 +84,7 @@ struct CreateProfileView: View {
                         .fill(.blue)
                 )
                 .foregroundStyle(.white)
-                .padding(.top, 15)
-                
-                Button(action: {
-                    self.createAccount()
-                }) {Text("Create an Account")
-                }
-                .padding(.top, 10)
+                .padding(.top, 30)
             }
             .toolbar {
                 ToolbarItemGroup(placement: .topBarLeading) {
@@ -101,23 +99,28 @@ struct CreateProfileView: View {
     }
     
     func createAccount() {
+        if PrayerPersonHelper().checkIfUsernameExists(username: username) == true {
+            usernameCheck = "Username already taken. Please submit a new username."
+        } else {
             Auth.auth().createUser(withEmail: email, password: password) { result, error in
                 if error != nil {
                     print(error!.localizedDescription.localizedLowercase)
                 } else {
                     let userID = result?.user.uid
                     let db = Firestore.firestore()
-                    let ref = db.collection("users").document("\(userID ?? "")").collection("UserProfile").document()
+                    let ref = db.collection("userinfo").document("\(userID ?? "")")/*.collection("UserProfile").document()*/
     
-                    ref.setData(["email: ": email, "username": username, "firstName": firstName, "lastName": lastName])
+                    ref.setData(["email": email, "username": username, "firstName": firstName, "lastName": lastName])
                     
-                    let ref2 = db.collection("users").document("\(username)")
-                    ref2.setData(["userID": userID ?? ""])
-//
-//                    saved = "Saved"
+                    let ref2 = db.collection("usernames").document("\(username)")/*.collection("\(userID ?? "")").document()*/
+                    
+                    ref2.setData(["username": username, "userID": userID ?? ""])
+                    
+                    print("Account successfully created.")
                     dismiss()
                 }
             }
+        }
     }
 }
 
