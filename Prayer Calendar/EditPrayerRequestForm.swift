@@ -91,14 +91,14 @@ struct EditPrayerRequestForm: View {
     }
     
     func updatePrayerRequest(prayerRequestVar: PrayerRequest) {
-        PrayerRequestHelper().updatePrayerRequest(prayerRequest: prayerRequestVar, userID: userHolder.userID)
+        PrayerRequestHelper().updatePrayerRequest(prayerRequest: prayerRequestVar, userID: userHolder.person.userID)
 
         print("Saved")
         dismiss()
     }
     
     func deletePrayerRequest() {
-        PrayerRequestHelper().deletePrayerRequest(prayerRequest: prayerRequest, userID: userHolder.userID)
+        PrayerRequestHelper().deletePrayerRequest(prayerRequest: prayerRequest, userID: userHolder.person.userID)
 
         print("Deleted")
         dismiss()

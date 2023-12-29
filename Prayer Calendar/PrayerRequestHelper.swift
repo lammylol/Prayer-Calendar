@@ -9,14 +9,23 @@ import Foundation
 import SwiftUI
 import FirebaseFirestore
 
+enum PrayerRequestRetrievalError: Error {
+    case noUserID
+//    case errorRetrievingFromFirebase
+}
+
 class PrayerRequestHelper {
     
     //Retrieve prayer requests from Firestore
-    func retrievePrayerRequest(userID: String) -> [PrayerRequest] {
+    func retrievePrayerRequest(userID: String) async throws -> [PrayerRequest] {
         var prayerRequests = [PrayerRequest]()
         let db = Firestore.firestore()
         
-        let ref = db.collection("users").document(userID).collection("prayerRequests").order(by: "DatePosted", descending: true)
+        guard userID != "" else {
+            throw PrayerRequestRetrievalError.noUserID
+        }
+        
+        let ref = db.collection("users").document(userID).collection("prayerrequests").order(by: "DatePosted", descending: true)
         
         ref.addSnapshotListener { documentSnapshot, error in
             guard let document = documentSnapshot?.documents else {
@@ -27,30 +36,31 @@ class PrayerRequestHelper {
             prayerRequests = document.map { (queryDocumentSnapshot) -> PrayerRequest in
                 let data = queryDocumentSnapshot.data()
 
-                    let timestamp = data["DatePosted"] as? Timestamp ?? Timestamp()
-                    let datePosted = timestamp.dateValue()
-                    
-                    let firstName = data["FirstName"] as? String ?? ""
-                    let lastName = data["LastName"] as? String ?? ""
-                    let prayerRequestText = data["PrayerRequestText"] as? String ?? ""
-                    let status = data["Status"] as? String ?? ""
-                    let userID = data["userID"] as? String ?? ""
-                    let priority = data["Priority"] as? String ?? ""
-                    let documentID = queryDocumentSnapshot.documentID as String
+                let timestamp = data["DatePosted"] as? Timestamp ?? Timestamp()
+                let datePosted = timestamp.dateValue()
+                
+                let firstName = data["FirstName"] as? String ?? ""
+                let lastName = data["LastName"] as? String ?? ""
+                let prayerRequestText = data["PrayerRequestText"] as? String ?? ""
+                let status = data["Status"] as? String ?? ""
+                let userID = data["userID"] as? String ?? ""
+                let priority = data["Priority"] as? String ?? ""
+                let documentID = queryDocumentSnapshot.documentID as String
                     
                 let prayerRequest = PrayerRequest(id: documentID, userID: userID, date: datePosted, prayerRequestText: prayerRequestText, status: status, firstName: firstName, lastName: lastName, priority: priority)
-                    
-                    return prayerRequest
-
+                
+                return prayerRequest
             }
         }
+        
+        print(prayerRequests)
         return prayerRequests
     }
     
     // Update Prayer Requests off of given request from row selection
     func updatePrayerRequest(prayerRequest: PrayerRequest, userID: String) {
         let db = Firestore.firestore()
-        let ref = db.collection("users").document(userID).collection("prayerRequests").document("\(prayerRequest.id)")
+        let ref = db.collection("users").document(userID).collection("prayerrequests").document(prayerRequest.id)
 
         ref.setData([
             "DatePosted": prayerRequest.date,
@@ -67,13 +77,13 @@ class PrayerRequestHelper {
     
     func deletePrayerRequest(prayerRequest: PrayerRequest, userID: String) {
         let db = Firestore.firestore()
-        let ref = db.collection("users").document(userID).collection("prayerRequests").document("\(prayerRequest.id)")
+        let ref = db.collection("users").document(userID).collection("prayerrequests").document(prayerRequest.id)
         
         ref.delete() { err in
             if let err = err {
                 print("Error removing document: \(err)")
             } else {
-                print("Document successfull deleted")
+                print("Document successfully deleted")
                 print(prayerRequest.id)
                 print(prayerRequest.prayerRequestText)
             }
@@ -82,7 +92,7 @@ class PrayerRequestHelper {
     
     func addPrayerRequest(userID: String, firstName: String, lastName: String, prayerRequestText: String, priority: String) {
         let db = Firestore.firestore()
-        let ref = db.collection("users").document(userID).collection("prayerRequests").document()
+        let ref = db.collection("users").document(userID).collection("prayerrequests").document()
 
         ref.setData([
             "DatePosted": Date(),

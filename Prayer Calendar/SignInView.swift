@@ -80,9 +80,12 @@ struct SignInView: View {
                 print("no account found")
                 userHolder.isLoggedIn = false
             } else {
-                userHolder.userID = Auth.auth().currentUser!.uid
+                let userID = Auth.auth().currentUser!.uid
+                Task {
+                    await PrayerPersonHelper().getUserInfo(userID: userID, email: email, userHolder: userHolder)
+                }
+                print("username: " + userHolder.person.username)
                 userHolder.isLoggedIn = true
-                userHolder.person = PrayerPerson(username: email, firstName: "") // need to add Name retrieved from Firestore
                 email = ""
                 password = ""
                 username = ""

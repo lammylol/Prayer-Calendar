@@ -92,9 +92,9 @@ struct PrayerNameInputView: View {
         dataHolder.prayStartDate = prayStartDate
 
         let db = Firestore.firestore()
-        let ref = db.collection("prayerlists").document("\(userHolder.userID)")
+        let ref = db.collection("prayerlists").document(userHolder.person.userID)
         
-        ref.setData(["userID: ": userHolder.userID, "prayStartDate": prayStartDate, "prayerList": prayerList])
+        ref.setData(["userID: ": userHolder.person.userID, "prayStartDate": prayStartDate, "prayerList": prayerList])
         
         saved = "Saved"
         dismiss()

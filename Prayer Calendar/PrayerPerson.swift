@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct PrayerPerson : Identifiable {
-    let id = UUID()
+struct PrayerPerson {
+    var userID: String = ""
     var username: String
     var email: String = ""
     var firstName: String = ""

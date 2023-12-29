@@ -15,7 +15,6 @@ struct ProfileView: View {
     @State private var showView: Bool = false
     @State private var showEditView: Bool = false
     @State var person: PrayerPerson
-    @State var userID = ""
     
     @Environment(UserProfileHolder.self) var userHolder
     @Environment(PrayerListHolder.self) var dataHolder
@@ -77,7 +76,7 @@ struct ProfileView: View {
                     
                 Divider()
                 
-                PrayerRequestsView(userID: userID)
+                    PrayerRequestsView(userID: person.userID)
                 .frame(height: 1000)
                 .sheet(isPresented: $showView) {
                     SubmitPrayerRequestForm()
@@ -86,11 +85,10 @@ struct ProfileView: View {
             }
             .navigationTitle("profile")
             .navigationBarTitleDisplayMode(.automatic)
-//            .navigationBarBackButtonHidden(true)
         }
-        .onAppear() {
-            userID = PrayerPersonHelper().retrieveUserID(username: person.username)
-        }
+//        .onAppear() {
+//            person.userID = PrayerPersonHelper().retrieveUserID(username: person.username)
+//        }
     }
     
     func signOut() {
@@ -107,7 +105,7 @@ struct ProfileView: View {
 }
 
 #Preview {
-    ProfileView(person: PrayerPerson.preview, userID: "")
+    ProfileView(person: PrayerPerson.preview/*, userID: ""*/)
         .environment(UserProfileHolder())
         .environment(PrayerListHolder())
 }

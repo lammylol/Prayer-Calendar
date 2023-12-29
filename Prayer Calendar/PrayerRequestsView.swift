@@ -19,9 +19,6 @@ struct PrayerRequestsView: View {
     @State var prayerRequestVar: PrayerRequest = PrayerRequest.preview
     @State var prayerRequests = [PrayerRequest]()
     
-//    @Environment(UserProfileHolder.self) var dataHolder
-//    @Environment(PrayerRequestsHolder.self) var viewModel
-    
     func handleTap(prayerRequest: PrayerRequest) async {
         prayerRequestVar = prayerRequest
     }
@@ -57,8 +54,16 @@ struct PrayerRequestsView: View {
                     }
                 }
             }
-            .onAppear() {
-                prayerRequests = PrayerRequestHelper().retrievePrayerRequest(userID: userID) // this is the line to uncheck when wanting to view preview
+            .task {
+                do {
+                    prayerRequests = try await PrayerRequestHelper().retrievePrayerRequest(userID: userID)
+                    print("Success retrieving prayer requests for \(userID)")
+                    print(prayerRequests)
+                } catch PrayerRequestRetrievalError.noUserID {
+                    print("No User ID to retrieve prayer requests with.")
+                } catch {
+                    print("Error retrieving prayer requests.")
+                }
             }
         }
         .sheet(isPresented: $showEdit) {
@@ -79,7 +84,7 @@ struct PrayerRequestsView: View {
 //}
 
 #Preview {
-    PrayerRequestsView(userID: "test@gmail.com")
+    PrayerRequestsView(userID: "aMq0YdteGEbYXWlSgxehVy7Fyrl2")
 //        .environment(PrayerListHolder())
 //        .environment(PrayerRequestsHolder())
 }
