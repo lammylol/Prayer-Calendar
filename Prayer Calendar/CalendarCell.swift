@@ -50,7 +50,7 @@ struct CalendarCell: View {
             .frame(maxWidth: .infinity)
             .frame(height: 95)
         } else {
-            NavigationLink(destination: ProfileView(person: PrayerPerson(userID: PrayerPersonHelper().retrieveUserID(username: monthStruct().person.username), username: monthStruct().person.username, firstName: monthStruct().person.firstName, lastName: monthStruct().person.lastName))) {
+            NavigationLink(destination: ProfileView(person: PrayerPerson(username: monthStruct().person.username, firstName: monthStruct().person.firstName, lastName: monthStruct().person.lastName))) {
                 VStack {
                     Text(monthStruct().day())
                         .font(.title3)

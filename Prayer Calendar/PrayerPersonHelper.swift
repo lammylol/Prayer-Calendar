@@ -54,7 +54,7 @@ class PrayerPersonHelper {
     }
     
     // Retrieve requested userID off of username
-    func retrieveUserID(username: String) -> String {
+    func retrieveUserID(username: String) async -> String {
         var userID = ""
         let db = Firestore.firestore()
         let ref = db.collection("usernames").document(username)
@@ -63,7 +63,7 @@ class PrayerPersonHelper {
             if let document = document, document.exists {
                 
                     let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
-                    print("Document data: " + dataDescription)
+//                    print("Document data: " + dataDescription)
                     
                     //Update Dataholder with PrayerList from Firestore
                     userID = document.get("userID") as! String

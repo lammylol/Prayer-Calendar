@@ -80,15 +80,15 @@ struct SignInView: View {
                 print("no account found")
                 userHolder.isLoggedIn = false
             } else {
-                let userID = Auth.auth().currentUser!.uid
                 Task {
+                    let userID = Auth.auth().currentUser!.uid
                     await PrayerPersonHelper().getUserInfo(userID: userID, email: email, userHolder: userHolder)
+                    print("username: " + userHolder.person.username)
+                    userHolder.isLoggedIn = true
+                    email = ""
+                    password = ""
+                    username = ""
                 }
-                print("username: " + userHolder.person.username)
-                userHolder.isLoggedIn = true
-                email = ""
-                password = ""
-                username = ""
             }
         }
     }
