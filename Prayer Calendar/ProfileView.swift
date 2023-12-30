@@ -88,6 +88,7 @@ struct ProfileView: View {
         }
 //        .onAppear() {
 //            person.userID = PrayerPersonHelper().retrieveUserID(username: person.username)
+//            print(person.username)
 //        }
     }
     
