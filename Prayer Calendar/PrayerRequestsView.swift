@@ -14,7 +14,7 @@ struct PrayerRequestsView: View {
     let db = Firestore.firestore()
     @State private var showSubmit: Bool = false
     @State private var showEdit: Bool = false
-    @State var userID: String
+    @State var person: PrayerPerson
     
     @State var prayerRequestVar: PrayerRequest = PrayerRequest.preview
     @State var prayerRequests = [PrayerRequest]()
@@ -56,8 +56,9 @@ struct PrayerRequestsView: View {
             }
             .task {
                 do {
-                    prayerRequests = try await PrayerRequestHelper().retrievePrayerRequest(userID: userID)
-                    print("Success retrieving prayer requests for \(userID)")
+                    person.userID = await PrayerPersonHelper().retrieveUserID(person: person)
+                    prayerRequests = try await PrayerRequestHelper().retrievePrayerRequest(userID: person.userID)
+                    print("Success retrieving prayer requests for \(person.userID)")
                     print(prayerRequests)
                 } catch PrayerRequestRetrievalError.noUserID {
                     print("No User ID to retrieve prayer requests with.")
@@ -84,7 +85,7 @@ struct PrayerRequestsView: View {
 //}
 
 #Preview {
-    PrayerRequestsView(userID: "aMq0YdteGEbYXWlSgxehVy7Fyrl2")
+    PrayerRequestsView(/*userID: "aMq0YdteGEbYXWlSgxehVy7Fyrl2"*/person: PrayerPerson(username: "lammylol"))
 //        .environment(PrayerListHolder())
 //        .environment(PrayerRequestsHolder())
 }
