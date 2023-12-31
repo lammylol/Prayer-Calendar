@@ -12,16 +12,17 @@ struct PrayerRequestRow: View {
     let prayerRequest: PrayerRequest
     
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             Text(prayerRequest.firstName + " " + prayerRequest.lastName)
             Text(prayerRequest.date, style: .date)
             Text(prayerRequest.prayerRequestText)
             Text(prayerRequest.status)
             Text(prayerRequest.priority)
+            Divider()
         }
 //        .background(Color.gray.opacity(0.05))
-        .frame(maxHeight: .infinity)
-        .frame(maxWidth: .infinity)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .multilineTextAlignment(.leading)
         .padding([.leading, .trailing], 20)
     }
 }
