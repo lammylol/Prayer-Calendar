@@ -25,8 +25,34 @@ struct PrayerRequestsView: View {
     
     var body: some View {
         
-        VStack {
-            List(prayerRequests) { prayerRequest in
+//        VStack {
+//            List(prayerRequests) { prayerRequest in
+//                PrayerRequestRow(prayerRequest: prayerRequest)
+//                    .onTapGesture {
+//                        Task {
+//                            await handleTap(prayerRequest: prayerRequest)
+//                        }
+//                        self.showEdit.toggle()
+//                    }
+//            }
+        LazyVStack {
+    
+            HStack {
+                Text("Prayer Requests")
+                    .font(.title3)
+                    .bold()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.leading, 20)
+                Button(action: { showSubmit.toggle()
+                }) {
+                    Image(systemName: "plus")
+                }
+                .padding(.trailing, 15)
+            }
+                
+            Divider()
+            
+            ForEach(prayerRequests) { prayerRequest in
                 PrayerRequestRow(prayerRequest: prayerRequest)
                     .onTapGesture {
                         Task {
@@ -35,28 +61,44 @@ struct PrayerRequestsView: View {
                         self.showEdit.toggle()
                     }
             }
-            .overlay {
-                if prayerRequests.isEmpty {
-                    VStack{
-                        ContentUnavailableView {
-                            Label("No Prayer Requests", systemImage: "list.bullet.rectangle.portrait")
-                        } description: {
-                            Text("Start adding prayer requests to your list")
-                        } actions: {
-                            Button(action: {showSubmit.toggle() })
-                            {
-                                Text("Add Prayer Request")
-                            }
+        }
+        
+        .overlay {
+            if prayerRequests.isEmpty {
+                VStack{
+                    ContentUnavailableView {
+                        Label("No Prayer Requests", systemImage: "list.bullet.rectangle.portrait")
+                    } description: {
+                        Text("Start adding prayer requests to your list")
+                    } actions: {
+                        Button(action: {showSubmit.toggle() })
+                        {
+                            Text("Add Prayer Request")
                         }
-                        .frame(height: 250)
-                        .offset(y: 120)
-                        Spacer()
                     }
+                    .frame(height: 250)
+                    .offset(y: 120)
+                    Spacer()
                 }
             }
-            .task {
+        }
+        
+        .task {
+            do {
+                person.userID = await PrayerPersonHelper().retrieveUserID(person: person)
+                prayerRequests = try await PrayerRequestHelper().retrievePrayerRequest(userID: person.userID)
+                print("Success retrieving prayer requests for \(person.userID)")
+                print(prayerRequests)
+            } catch PrayerRequestRetrievalError.noUserID {
+                print("No User ID to retrieve prayer requests with.")
+            } catch {
+                print("Error retrieving prayer requests.")
+            }
+        }
+        
+        .sheet(isPresented: $showEdit, onDismiss: {
+            Task {
                 do {
-                    person.userID = await PrayerPersonHelper().retrieveUserID(person: person)
                     prayerRequests = try await PrayerRequestHelper().retrievePrayerRequest(userID: person.userID)
                     print("Success retrieving prayer requests for \(person.userID)")
                     print(prayerRequests)
@@ -66,26 +108,30 @@ struct PrayerRequestsView: View {
                     print("Error retrieving prayer requests.")
                 }
             }
-        }
-        .sheet(isPresented: $showEdit) {
+        }, content: {
             EditPrayerRequestForm(prayerRequest: prayerRequestVar)
-        }
-        .sheet(isPresented: $showSubmit){
+        })
+        
+        .sheet(isPresented: $showSubmit, onDismiss: {
+            Task {
+                do {
+                    prayerRequests = try await PrayerRequestHelper().retrievePrayerRequest(userID: person.userID)
+                    print("Success retrieving prayer requests for \(person.userID)")
+                    print(prayerRequests)
+                } catch PrayerRequestRetrievalError.noUserID {
+                    print("No User ID to retrieve prayer requests with.")
+                } catch {
+                    print("Error retrieving prayer requests.")
+                }
+            }
+        }, content: {
             SubmitPrayerRequestForm()
-        }
+        })
+        
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
-//#Preview {
-//    PrayerRequestsView(prayerRequests:
-//                        [PrayerRequest(username: "Matt", date: Date(), prayerRequestText: "Hello", status: "Current", firstName: "Matt", lastName: "Lam")]
-//    ).environment(PrayerList())
-//    .environment(PrayerRequestViewModel())
-//}
-
 #Preview {
-    PrayerRequestsView(/*userID: "aMq0YdteGEbYXWlSgxehVy7Fyrl2"*/person: PrayerPerson(username: "lammylol"))
-//        .environment(PrayerListHolder())
-//        .environment(PrayerRequestsHolder())
+    PrayerRequestsView(person: PrayerPerson(userID: "aMq0YdteGEbYXWlSgxehVy7Fyrl2", username: "lammylol"))
 }

@@ -20,12 +20,12 @@ struct PrayerRequestRow: View {
             Text(prayerRequest.priority)
         }
 //        .background(Color.gray.opacity(0.05))
-        .frame(height: 80)
+        .frame(maxHeight: .infinity)
         .frame(maxWidth: .infinity)
         .padding([.leading, .trailing], 20)
     }
 }
 
 #Preview {
-    PrayerRequestRow(prayerRequest: PrayerRequest(userID: "", date: Date(), prayerRequestText: "Hello", status: "Current", firstName: "Matt", lastName: "Lam", priority: "high"))
+    PrayerRequestRow(prayerRequest: PrayerRequest(userID: "", date: Date(), prayerRequestText: "Hello jklasjdksjdklsjdklsajdklasjdkalsdjkalsdjlasjdaksd", status: "Current", firstName: "Matt", lastName: "Lam", priority: "high"))
 }

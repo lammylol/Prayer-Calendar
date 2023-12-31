@@ -12,7 +12,7 @@ import FirebaseAuth
 import FirebaseFirestore
 
 struct ProfileView: View {
-    @State private var showView: Bool = false
+    @State private var showSubmit: Bool = false
     @State private var showEditView: Bool = false
     @State var person: PrayerPerson
     
@@ -21,19 +21,16 @@ struct ProfileView: View {
     
     var body: some View {
         NavigationStack {
-            //                LazyVStack(alignment: .leading, spacing: 0, pinnedViews: .sectionHeaders) { // LazyStack to freeze the top header when scrolling down.
             ScrollView {
                 VStack {
                     Text("")
                         .toolbar {
-//                            if userHolder.email == person.username {
                             ToolbarItem(placement: .topBarLeading) {
                                 // user view of own profile
                                 NavigationLink(destination: PrayerNameInputView(dataHolder: dataHolder)){
                                     Image(systemName: "list.bullet.rectangle")
                                 }
                             }
-//                                }
                                 
                                 ToolbarItem(placement: .topBarTrailing) {
                                     Button(action: {
@@ -50,41 +47,20 @@ struct ProfileView: View {
                                     }
                                 }
                             }
-//                        }
                     
-                HStack {
-                    Text(person.firstName).padding(.leading, 20)
-                        .font(.system(size: 15))
-                        .italic()
-                    Spacer()
-                }
-                
-                Spacer()
-                
-                HStack {
-                    Text("Prayer Requests")
-                        .font(.title3)
-                        .bold()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.leading, 20)
-                    Button(action: { showView.toggle()
-                    }) {
-                        Image(systemName: "plus")
+                    HStack {
+                        Text(person.firstName).padding(.leading, 20)
+                            .font(.system(size: 15))
+                            .italic()
+                        Spacer()
                     }
-                    .padding(.trailing, 15)
-                }
                     
-                Divider()
+                    Spacer()
                 
                     PrayerRequestsView(person: person)
-                .frame(height: 1000)
-                .sheet(isPresented: $showView) {
-                    SubmitPrayerRequestForm()
+                        .frame(maxHeight: .infinity)
+                        .padding(.top, 20)
                 }
-//                .task {
-//                    person.userID = await PrayerPersonHelper().retrieveUserID(person: person)
-//                }
-            }
             }
             .navigationTitle("profile")
             .navigationBarTitleDisplayMode(.automatic)
@@ -105,7 +81,7 @@ struct ProfileView: View {
 }
 
 #Preview {
-    ProfileView(person: PrayerPerson.preview/*, userID: ""*/)
+    ProfileView(person: PrayerPerson(userID: "aMq0YdteGEbYXWlSgxehVy7Fyrl2", username: "lammylol"))
         .environment(UserProfileHolder())
         .environment(PrayerListHolder())
 }
