@@ -13,8 +13,7 @@ struct SubmitPrayerRequestForm: View {
     @Environment(UserProfileHolder.self) var userHolder
     @Environment(\.dismiss) var dismiss
     
-    var firstName = "abc"
-    var lastName = "test"
+    var person: PrayerPerson
     @State var datePosted = Date()
     @State var status: String = "Current"
     @State var prayerRequestText: String = ""
@@ -67,7 +66,7 @@ struct SubmitPrayerRequestForm: View {
     }
         
     func submitList() {
-        PrayerRequestHelper().addPrayerRequest(userID: userHolder.person.userID, firstName: firstName, lastName: lastName, prayerRequestText: prayerRequestText, priority: priority)
+        PrayerRequestHelper().addPrayerRequest(userID: userHolder.person.userID, person: person, prayerRequestText: prayerRequestText, priority: priority)
 
         print("Saved")
         dismiss()
@@ -75,6 +74,6 @@ struct SubmitPrayerRequestForm: View {
 }
 
 #Preview {
-    SubmitPrayerRequestForm()
+    SubmitPrayerRequestForm(person: PrayerPerson(username: "lammylol"))
         .environment(UserProfileHolder())
 }

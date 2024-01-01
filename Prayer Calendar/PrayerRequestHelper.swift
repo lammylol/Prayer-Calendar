@@ -17,7 +17,7 @@ enum PrayerRequestRetrievalError: Error {
 class PrayerRequestHelper {
     
     //Retrieve prayer requests from Firestore
-    func retrievePrayerRequest(userID: String) async throws -> [PrayerRequest] {
+    func retrievePrayerRequest(userID: String, person: PrayerPerson) async throws -> [PrayerRequest] {
         var prayerRequests = [PrayerRequest]()
         let db = Firestore.firestore()
         
@@ -26,7 +26,7 @@ class PrayerRequestHelper {
         }
         
         do {
-          let querySnapshot = try await db.collection("users").document(userID).collection("prayerrequests").getDocuments()
+          let querySnapshot = try await db.collection("users").document(userID).collection("prayerrequests").document("profiles").collection("\(person.firstName.lowercased())_\(person.lastName.lowercased())").getDocuments()
             
           for document in querySnapshot.documents {
               print("\(document.documentID) => \(document.data())")
@@ -84,7 +84,7 @@ class PrayerRequestHelper {
     // Update Prayer Requests off of given request from row selection
     func updatePrayerRequest(prayerRequest: PrayerRequest, userID: String) {
         let db = Firestore.firestore()
-        let ref = db.collection("users").document(userID).collection("prayerrequests").document(prayerRequest.id)
+        let ref = db.collection("users").document(userID).collection("prayerrequests").document("profiles").collection("\(prayerRequest.firstName.lowercased())_\(prayerRequest.lastName.lowercased())").document(prayerRequest.id)
 
         ref.setData([
             "DatePosted": prayerRequest.date,
@@ -101,7 +101,7 @@ class PrayerRequestHelper {
     
     func deletePrayerRequest(prayerRequest: PrayerRequest, userID: String) {
         let db = Firestore.firestore()
-        let ref = db.collection("users").document(userID).collection("prayerrequests").document(prayerRequest.id)
+        let ref = db.collection("users").document(userID).collection("prayerrequests").document("profiles").collection("\(prayerRequest.firstName.lowercased())_\(prayerRequest.lastName.lowercased())").document(prayerRequest.id)
         
         ref.delete() { err in
             if let err = err {
@@ -114,14 +114,14 @@ class PrayerRequestHelper {
         }
     }
     
-    func addPrayerRequest(userID: String, firstName: String, lastName: String, prayerRequestText: String, priority: String) {
+    func addPrayerRequest(userID: String, person: PrayerPerson, prayerRequestText: String, priority: String) {
         let db = Firestore.firestore()
-        let ref = db.collection("users").document(userID).collection("prayerrequests").document()
+        let ref = db.collection("users").document(userID).collection("prayerrequests").document("profiles").collection("\(person.firstName.lowercased())_\(person.lastName.lowercased())").document()
 
         ref.setData([
             "DatePosted": Date(),
-            "FirstName": firstName,
-            "LastName": lastName,
+            "FirstName": person.firstName,
+            "LastName": person.lastName,
             "Status": "Current",
             "PrayerRequestText": prayerRequestText,
             "userID": userID,

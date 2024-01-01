@@ -11,13 +11,15 @@ import SwiftUI
 import FirebaseFirestore
 
 struct PrayerRequestsView: View {
-    let db = Firestore.firestore()
+    @Environment(UserProfileHolder.self) var userHolder
     @State private var showSubmit: Bool = false
     @State private var showEdit: Bool = false
     @State var person: PrayerPerson
-    
+
     @State var prayerRequestVar: PrayerRequest = PrayerRequest.preview
     @State var prayerRequests = [PrayerRequest]()
+    
+    let db = Firestore.firestore()
     
     func handleTap(prayerRequest: PrayerRequest) async {
         prayerRequestVar = prayerRequest
@@ -25,16 +27,6 @@ struct PrayerRequestsView: View {
     
     var body: some View {
         
-//        VStack {
-//            List(prayerRequests) { prayerRequest in
-//                PrayerRequestRow(prayerRequest: prayerRequest)
-//                    .onTapGesture {
-//                        Task {
-//                            await handleTap(prayerRequest: prayerRequest)
-//                        }
-//                        self.showEdit.toggle()
-//                    }
-//            }
         LazyVStack {
     
             HStack {
@@ -85,8 +77,8 @@ struct PrayerRequestsView: View {
         
         .task {
             do {
-                person.userID = await PrayerPersonHelper().retrieveUserID(person: person)
-                prayerRequests = try await PrayerRequestHelper().retrievePrayerRequest(userID: person.userID)
+                person.userID = await PrayerPersonHelper().retrieveUserID(person: person, userHolder: userHolder)
+                prayerRequests = try await PrayerRequestHelper().retrievePrayerRequest(userID: person.userID, person: person)
                 print("Success retrieving prayer requests for \(person.userID)")
                 print(prayerRequests)
             } catch PrayerRequestRetrievalError.noUserID {
@@ -99,7 +91,7 @@ struct PrayerRequestsView: View {
         .sheet(isPresented: $showEdit, onDismiss: {
             Task {
                 do {
-                    prayerRequests = try await PrayerRequestHelper().retrievePrayerRequest(userID: person.userID)
+                    prayerRequests = try await PrayerRequestHelper().retrievePrayerRequest(userID: person.userID, person: person)
                     print("Success retrieving prayer requests for \(person.userID)")
                     print(prayerRequests)
                 } catch PrayerRequestRetrievalError.noUserID {
@@ -115,7 +107,7 @@ struct PrayerRequestsView: View {
         .sheet(isPresented: $showSubmit, onDismiss: {
             Task {
                 do {
-                    prayerRequests = try await PrayerRequestHelper().retrievePrayerRequest(userID: person.userID)
+                    prayerRequests = try await PrayerRequestHelper().retrievePrayerRequest(userID: person.userID, person: person)
                     print("Success retrieving prayer requests for \(person.userID)")
                     print(prayerRequests)
                 } catch PrayerRequestRetrievalError.noUserID {
@@ -125,7 +117,7 @@ struct PrayerRequestsView: View {
                 }
             }
         }, content: {
-            SubmitPrayerRequestForm()
+            SubmitPrayerRequestForm(person: person)
         })
         
         .frame(maxWidth: .infinity, maxHeight: .infinity)
