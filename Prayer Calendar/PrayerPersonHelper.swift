@@ -51,7 +51,7 @@ class PrayerPersonHelper {
             if array.count == 1 {
                 username = "" // If the array is only 1, assume that there was no username entered.
             } else {
-                username = String(array.last ?? "").trimmingCharacters(in: .whitespaces)
+                username = String(array.last ?? "").trimmingCharacters(in: .whitespaces).lowercased()
             }
             
             let nameArray = array.first?.split(separator: " ", omittingEmptySubsequences: true) // Separate First name from Last. If there is middle name, last name will only grab last of array.
@@ -110,7 +110,7 @@ class PrayerPersonHelper {
         
         let ref = Firestore.firestore()
             .collection("usernames")
-            .document(username)
+            .document(username.lowercased())
         
         ref.getDocument{(document, error) in
             if let document = document, document.exists {

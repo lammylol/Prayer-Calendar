@@ -112,7 +112,7 @@ struct CreateProfileView: View {
     
                     ref.setData(
                         ["email": email,
-                         "username": username,
+                         "username": username.lowercased(),
                          "firstName": firstName,
                          "lastName": lastName]
                     )
@@ -120,7 +120,7 @@ struct CreateProfileView: View {
                     let ref2 = db.collection("usernames").document("\(username)")/*.collection("\(userID ?? "")").document()*/
                     
                     ref2.setData(
-                        ["username": username,
+                        ["username": username.lowercased(),
                          "userID": userID ?? "",
                          "firstName": firstName,
                          "lastName": lastName]
