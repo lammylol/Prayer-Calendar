@@ -81,7 +81,7 @@ struct EditPrayerRequestForm: View {
                     }
                         .background(
                             RoundedRectangle(cornerRadius: 15)
-                                .fill(.gray)
+                                .fill(.red)
                         )
                         .foregroundStyle(.white)
                 }
