@@ -43,11 +43,13 @@ class PrayerPersonHelper {
         var prayerArray: [PrayerPerson] = []
         
         for person in ref {
-            let array = person.split(separator: "; ", omittingEmptySubsequences: true)
-            /*.map(String.init)*/
-            let prayerPerson = PrayerPerson(username: String(array.last ?? ""), firstName: String(array.first ?? ""))
+            let array = person.split(separator: ";", omittingEmptySubsequences: true) // Separate name from username
+            let nameArray = array.first?.split(separator: " ", omittingEmptySubsequences: true) // Separate First name from Last. If there is middle name, last name will only grab last of array.
+            let firstName = String(nameArray?.first ?? "").trimmingCharacters(in: .whitespaces)
+            let lastName = String(nameArray?.last ?? "").trimmingCharacters(in: .whitespaces)
+            
+            let prayerPerson = PrayerPerson(username: String(array.last ?? "").trimmingCharacters(in: .whitespaces), firstName: firstName, lastName: lastName)
             prayerArray.append(prayerPerson)
-//            print(prayerPerson.firstName)
         }
         
         return prayerArray
