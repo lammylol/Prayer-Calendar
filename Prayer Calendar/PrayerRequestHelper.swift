@@ -26,11 +26,14 @@ class PrayerRequestHelper {
         }
         
         do {
-          let querySnapshot = try await db.collection("users").document(userID).collection("prayerrequests").document("profiles").collection("\(person.firstName.lowercased())_\(person.lastName.lowercased())").getDocuments()
+            let profiles = db.collection("users").document(userID).collection("prayerrequests").document("profiles").collection("\(person.firstName.lowercased())_\(person.lastName.lowercased())").order(by: "DatePosted", descending: true)
+
+            let querySnapshot = try await profiles.getDocuments()
             
           for document in querySnapshot.documents {
               print("\(document.documentID) => \(document.data())")
               let timestamp = document.data()["DatePosted"] as? Timestamp ?? Timestamp()
+//              let timestamp = document.data()["DatePosted"]/* as? ip_timestamp ?? ip_timestamp()*/
               let datePosted = timestamp.dateValue()
 
               let firstName = document.data()["FirstName"] as? String ?? ""

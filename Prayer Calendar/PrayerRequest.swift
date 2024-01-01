@@ -33,23 +33,23 @@ extension PrayerRequest {
     }
 }
 
-struct PrayerRequestsModel {
-    static var preview: [PrayerRequest] =
-        [PrayerRequest(
-            userID: "Matt",
-            date: Date(),
-            prayerRequestText: "Hello, World",
-            status: "Current",
-            firstName: "Matt",
-            lastName: "Lam",
-            priority: "high"),
-         PrayerRequest(
-            userID: "Jane",
-            date: Date(),
-            prayerRequestText: "Hello, Jane",
-            status: "Past",
-            firstName: "Jane",
-            lastName: "Choi",
-            priority: "high"
-         )]
-}
+//struct PrayerRequestsModel {
+//    static var preview: [PrayerRequest] =
+//        [PrayerRequest(
+//            userID: "Matt",
+//            date: Date(),
+//            prayerRequestText: "Hello, World",
+//            status: "Current",
+//            firstName: "Matt",
+//            lastName: "Lam",
+//            priority: "high"),
+//         PrayerRequest(
+//            userID: "Jane",
+//            date: Date(),
+//            prayerRequestText: "Hello, Jane",
+//            status: "Past",
+//            firstName: "Jane",
+//            lastName: "Choi",
+//            priority: "high"
+//         )]
+//}

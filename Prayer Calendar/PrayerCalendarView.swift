@@ -18,7 +18,7 @@ struct PrayerCalendarView: View {
     
     var body: some View {
         NavigationStack{        //Navigation Stack.
-            ScrollView {        //ScrollView enables title to shrink.
+/*            ScrollView {  */      //ScrollView enables title to shrink.
                 LazyVStack(alignment: .leading, spacing: 0, pinnedViews: .sectionHeaders) { // LazyStack to freeze the top header when scrolling down.
                     Section {
                         VStack (spacing: 0) {
@@ -54,7 +54,7 @@ struct PrayerCalendarView: View {
                         .toolbarBackground(UIHelper().backgroundColor(colorScheme: colorScheme), for: .navigationBar)
                     }
                 }
-        }
+//        }
         }
     }
     

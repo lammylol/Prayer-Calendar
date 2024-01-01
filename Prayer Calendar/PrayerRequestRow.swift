@@ -13,16 +13,15 @@ struct PrayerRequestRow: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text(prayerRequest.firstName + " " + prayerRequest.lastName)
-            Text(prayerRequest.date, style: .date)
-            Text(prayerRequest.prayerRequestText)
-            Text(prayerRequest.status)
-            Text(prayerRequest.priority)
+//            Text(prayerRequest.firstName + " " + prayerRequest.lastName)
+            Text(prayerRequest.date, style: .date).italic()
+            Text("\(prayerRequest.status): \(prayerRequest.prayerRequestText)")
+            Text("Priority: \(prayerRequest.priority)")
             Divider()
         }
 //        .background(Color.gray.opacity(0.05))
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .multilineTextAlignment(.leading)
+//        .multilineTextAlignment(.leading)
         .padding([.leading, .trailing], 20)
     }
 }
