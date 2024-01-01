@@ -110,11 +110,21 @@ struct CreateProfileView: View {
                     let db = Firestore.firestore()
                     let ref = db.collection("userinfo").document("\(userID ?? "")")/*.collection("UserProfile").document()*/
     
-                    ref.setData(["email": email, "username": username, "firstName": firstName, "lastName": lastName])
+                    ref.setData(
+                        ["email": email,
+                         "username": username,
+                         "firstName": firstName,
+                         "lastName": lastName]
+                    )
                     
                     let ref2 = db.collection("usernames").document("\(username)")/*.collection("\(userID ?? "")").document()*/
                     
-                    ref2.setData(["username": username, "userID": userID ?? ""])
+                    ref2.setData(
+                        ["username": username,
+                         "userID": userID ?? "",
+                         "firstName": firstName,
+                         "lastName": lastName]
+                    )
                     
                     print("Account successfully created.")
                     dismiss()

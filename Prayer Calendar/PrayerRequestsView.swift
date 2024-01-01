@@ -77,7 +77,7 @@ struct PrayerRequestsView: View {
         
         .task {
             do {
-                person.userID = await PrayerPersonHelper().retrieveUserID(person: person, userHolder: userHolder)
+                person = await PrayerPersonHelper().retrieveUserInfoFromUsername(person: person, userHolder: userHolder)
                 prayerRequests = try await PrayerRequestHelper().retrievePrayerRequest(userID: person.userID, person: person)
                 print("Success retrieving prayer requests for \(person.userID)")
                 print(prayerRequests)

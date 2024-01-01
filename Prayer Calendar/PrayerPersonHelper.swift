@@ -72,21 +72,27 @@ class PrayerPersonHelper {
     }
     
     // Retrieve requested userID off of username
-    func retrieveUserID(person: PrayerPerson,userHolder: UserProfileHolder) async -> String {
+    func retrieveUserInfoFromUsername(person: PrayerPerson,userHolder: UserProfileHolder) async -> PrayerPerson {
         var userID = ""
-        let db = Firestore.firestore()
-        let ref = db.collection("usernames").document(person.username)
+        var firstName = person.firstName
+        var lastName = person.lastName
         
-        if person.username == userHolder.person.username {
+        if person.username == "" {
             userID = userHolder.person.userID
         } else {
             do {
+                let db = Firestore.firestore()
+                let ref = db.collection("usernames").document(person.username)
+                
                 let document = try await ref.getDocument()
+        
                 if document.exists {
                     let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
                     print("Document data: " + dataDescription)
                     
-                    userID = document.get("userID") as! String
+                    userID = document.get("userID") as? String ?? ""
+                    firstName = document.get("firstName") as? String ?? ""
+                    lastName = document.get("lastName") as? String ?? ""
                 } else {
                     print("Error Retrieving User ID. Document does not exist")
                 }
@@ -95,8 +101,8 @@ class PrayerPersonHelper {
             }
         }
         
-        print("username: \(person.username); userID: \(userID)")
-        return userID
+        print("username: \(person.username); userID: \(userID); firstName: \(firstName); lastName: \(lastName)")
+        return PrayerPerson(userID: userID, username: person.username, firstName: firstName, lastName: lastName)
     }
     
     func checkIfUsernameExists(username: String) -> Bool {
