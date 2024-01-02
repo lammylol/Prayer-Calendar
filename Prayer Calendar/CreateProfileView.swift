@@ -108,7 +108,7 @@ struct CreateProfileView: View {
                 } else {
                     let userID = result?.user.uid
                     let db = Firestore.firestore()
-                    let ref = db.collection("userinfo").document("\(userID ?? "")")/*.collection("UserProfile").document()*/
+                    let ref = db.collection("userinfo").document("\(userID ?? "")")
     
                     ref.setData(
                         ["email": email,
@@ -117,7 +117,7 @@ struct CreateProfileView: View {
                          "lastName": lastName]
                     )
                     
-                    let ref2 = db.collection("usernames").document("\(username)")/*.collection("\(userID ?? "")").document()*/
+                    let ref2 = db.collection("usernames").document("\(username)")
                     
                     ref2.setData(
                         ["username": username.lowercased(),
