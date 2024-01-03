@@ -19,23 +19,25 @@ struct PrayerNameInputView: View {
     @State var prayerList: String = ""
     @State var date: Date = Date()
     @State var saved: String = ""
+    @FocusState private var isFocused: Bool
     
     init(dataHolder: PrayerListHolder) {
         self.dataHolder = dataHolder
-//        _email = State(initialValue: dataHolder.email)
         _prayerList = State(initialValue: dataHolder.prayerList)
         _prayStartDate = State(initialValue: dataHolder.prayStartDate)
     }
     
     var body: some View {
+        
         NavigationStack {
             VStack{
                 DatePicker(
-                    "Start Date",
-                    selection: $prayStartDate,
-                    displayedComponents: [.date]
+                "Start Date",
+                selection: $prayStartDate,
+                displayedComponents: [.date]
                 )
                 .padding([.leading, .trailing], 90)
+
                 Divider()
                 Text("*Enter your prayer list below. To link your person to an active profile, paste a semicolon ; followed by the person's username.\n\nex. Matt; matt12345")
                     .italic()
@@ -45,22 +47,9 @@ struct PrayerNameInputView: View {
                     .padding([.leading, .trailing], 20)
                     .padding([.top], 10)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .contextMenu {
-                        Button(action: { }) {
-                            HStack {
-                                Image(systemName: "trash")
-                                Text("Delete")
-                            }
-                        }
-                        Button(action: { }) {
-                            HStack {
-                                Image(systemName: "pencil.tip")
-                                Text("Highlight")
-                            }
-                        }
-                    }
+                    .focused($isFocused)
                 Spacer()
-                Text(saved)
+                Text(savedText())
                     .font(Font.system(size: 12))
                 Spacer()
             }
@@ -68,13 +57,19 @@ struct PrayerNameInputView: View {
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .toolbar {
-                ToolbarItemGroup(placement: .topBarLeading) {
+                ToolbarItem(placement: .topBarLeading) {
                     Button("Cancel") {
                         dismiss()
+                        prayerList = dataHolder.prayerList
+                        prayStartDate = dataHolder.prayStartDate
+                        self.isFocused = false
+                        saved = ""
                     }
                 }
-                ToolbarItemGroup(placement: .topBarTrailing) {
-                    Button(action: {submitList(inputText: prayerList)}) {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button(action: {
+                        submitList(inputText: prayerList)
+                    }) {
                         Text("Save")
                             .offset(x: -4)
                             .font(.system(size: 14))
@@ -101,7 +96,17 @@ struct PrayerNameInputView: View {
         ref.setData(["userID: ": userHolder.person.userID, "prayStartDate": prayStartDate, "prayerList": prayerList])
         
         saved = "Saved"
+        self.isFocused = false
         dismiss()
+    }
+    
+    //Function to changed "saved" text. When user saves textEditor, saved will appear until the user clicks back into textEditor, then the words "saved" should disappear. This will also occur when cancel is selected.
+    func savedText() -> String {
+        if self.isFocused == true {
+            return ""
+        } else {
+            return saved
+        }
     }
                            
 }
