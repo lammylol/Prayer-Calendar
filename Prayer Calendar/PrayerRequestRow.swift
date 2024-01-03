@@ -14,9 +14,19 @@ struct PrayerRequestRow: View {
     var body: some View {
         VStack(alignment: .leading) {
 //            Text(prayerRequest.firstName + " " + prayerRequest.lastName)
-            Text(prayerRequest.date, style: .date).italic()
-            Text("\(prayerRequest.status): \(prayerRequest.prayerRequestText)")
-            Text("Priority: \(prayerRequest.priority)")
+            HStack() {
+                Text("status: ")+Text(prayerRequest.status.capitalized).bold()+Text(", priority: ")+Text(prayerRequest.priority.capitalized).bold()
+                Spacer()
+                Text(prayerRequest.date, style: .date)
+                Text(prayerRequest.date, style: .time)
+            }.font(.system(size: 12))
+            HStack() {
+
+                Spacer()
+            }
+
+            Text("\(prayerRequest.prayerRequestText)")
+
             Divider()
         }
 //        .background(Color.gray.opacity(0.05))
@@ -27,5 +37,5 @@ struct PrayerRequestRow: View {
 }
 
 #Preview {
-    PrayerRequestRow(prayerRequest: PrayerRequest(userID: "", date: Date(), prayerRequestText: "Hello jklasjdksjdklsjdklsajdklasjdkalsdjkalsdjlasjdaksd", status: "Current", firstName: "Matt", lastName: "Lam", priority: "high"))
+    PrayerRequestRow(prayerRequest: PrayerRequest(userID: "", date: Date(), prayerRequestText: "Prayers for this text to look beautiful. Prayers for this text to look beautiful.", status: "Current", firstName: "Matt", lastName: "Lam", priority: "high"))
 }

@@ -25,13 +25,14 @@ struct ProfileView: View {
                 VStack {
                     Text("")
                         .toolbar {
-                            ToolbarItem(placement: .topBarLeading) {
-                                // user view of own profile
-                                NavigationLink(destination: PrayerNameInputView(dataHolder: dataHolder)){
-                                    Image(systemName: "list.bullet.rectangle")
-                                }
-                            }
-                                
+                            //Hiding Toolbar Navigation to PrayerNameInput for now.
+//                            ToolbarItem(placement: .topBarLeading) {
+//                                // user view of own profile
+//                                NavigationLink(destination: PrayerNameInputView(dataHolder: dataHolder)){
+//                                    Image(systemName: "list.bullet.rectangle")
+//                                }
+//                            }
+                            if person.username == userHolder.person.username {
                                 ToolbarItem(placement: .topBarTrailing) {
                                     Button(action: {
                                         self.signOut()
@@ -47,19 +48,15 @@ struct ProfileView: View {
                                     }
                                 }
                             }
+                        }
                     
                     HStack {
-                        Text("\(person.firstName)"+" \(person.lastName)").padding(.leading, 20)
-                            .font(.system(size: 15))
-                            .italic()
-                        if person.username == "" {
-                        } else {
-                            Text("|| username: \(person.username)")
-                                .font(.system(size: 15))
-                                .italic()
-                        }
+                        Text(usernameDisplay())
                         Spacer()
                     }
+                    .padding(.leading, 20)
+                    .font(.system(size: 14))
+                    .italic()
                     
                     Spacer()
                 
@@ -68,7 +65,7 @@ struct ProfileView: View {
                         .padding(.top, 20)
                 }
             }
-            .navigationTitle("profile")
+            .navigationTitle(person.firstName + " " + person.lastName)
             .navigationBarTitleDisplayMode(.automatic)
         }
     }
@@ -83,6 +80,15 @@ struct ProfileView: View {
     func resetInfo() {
         dataHolder.prayerList = ""
         dataHolder.prayStartDate = Date()
+    }
+    
+    func usernameDisplay() -> String {
+        
+        if person.username == "" {
+            return "no active profile linked via username. data will be stored under your own account."
+        } else {
+            return "username: \(person.username)"
+        }
     }
 }
 

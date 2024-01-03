@@ -56,6 +56,9 @@ struct PrayerCalendarView: View {
                 }
 //        }
         }
+        .onAppear {
+            dateHolder.date = Date() // Resets the view to current month 
+        }
     }
     
     var dayOfWeekStack: some View {

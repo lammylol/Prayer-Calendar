@@ -66,6 +66,7 @@ struct EditPrayerRequestForm: View {
                             .offset(x: -4)
                             .font(.system(size: 14))
                             .padding([.leading, .trailing], 5)
+                            .bold()
                     }
                     .background(
                         RoundedRectangle(cornerRadius: 15)

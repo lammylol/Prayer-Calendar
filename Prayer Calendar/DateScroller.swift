@@ -20,7 +20,7 @@ struct DateScroller: View {
                 Image(systemName: "arrow.left.circle.fill")
                     .imageScale(.small)
                     .font(Font.title)
-                    .padding(.leading, 35)
+                    .padding(.leading, 33)
             }
             Text(CalendarHelper().monthString(date: dataHolder.date) + " " + CalendarHelper().yearString(date: dataHolder.date))
                 .font(.title2)
@@ -33,7 +33,7 @@ struct DateScroller: View {
                 Image(systemName: "arrow.right.circle.fill")
                     .imageScale(.small)
                     .font(Font.title)
-                    .padding(.trailing, 35)
+                    .padding(.trailing, 33)
             }
             Spacer()
         }

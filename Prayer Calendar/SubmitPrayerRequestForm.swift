@@ -53,6 +53,7 @@ struct SubmitPrayerRequestForm: View {
                             .offset(x: -4)
                             .font(.system(size: 16))
                             .padding([.leading, .trailing], 10)
+                            .bold()
                     }
                     .background(
                         RoundedRectangle(cornerRadius: 15)

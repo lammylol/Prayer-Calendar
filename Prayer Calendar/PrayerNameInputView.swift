@@ -36,13 +36,13 @@ struct PrayerNameInputView: View {
                 selection: $prayStartDate,
                 displayedComponents: [.date]
                 )
-                .padding([.leading, .trailing], 90)
+                .padding([.leading, .trailing], 85)
 
                 Divider()
-                Text("*Enter your prayer list below. To link your person to an active profile, paste a semicolon ; followed by the person's username.\n\nex. Matt; matt12345")
+                Text("Input your list below. To link to an active profile, paste a semicolon followed by the person's username.\n\nex. Matt; matt12345")
                     .italic()
                     .padding(.all, 10)
-                    .font(.system(size: 12))
+                    .font(.system(size: 14))
                 TextEditor(text: $prayerList)
                     .padding([.leading, .trailing], 20)
                     .padding([.top], 10)
@@ -53,7 +53,7 @@ struct PrayerNameInputView: View {
                     .font(Font.system(size: 12))
                 Spacer()
             }
-            .navigationTitle("Input Your Prayer List")
+            .navigationTitle("List of People to Pray For")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .toolbar {
@@ -74,6 +74,7 @@ struct PrayerNameInputView: View {
                             .offset(x: -4)
                             .font(.system(size: 14))
                             .padding([.leading, .trailing], 5)
+                            .bold()
                     }
                     .background {
                         RoundedRectangle(cornerRadius: 15)
