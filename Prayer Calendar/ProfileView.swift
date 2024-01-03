@@ -49,7 +49,7 @@ struct ProfileView: View {
                             }
                     
                     HStack {
-                        Text("\(person.firstName)").padding(.leading, 20)
+                        Text("\(person.firstName)"+" \(person.lastName)").padding(.leading, 20)
                             .font(.system(size: 15))
                             .italic()
                         if person.username == "" {

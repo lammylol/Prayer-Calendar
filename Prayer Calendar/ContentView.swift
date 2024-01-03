@@ -11,7 +11,7 @@ import SwiftData
 
 struct ContentView: View {
     @Environment(UserProfileHolder.self) var userHolder
-//    @Environment(PrayerListHolder.self) var dataHolder
+    @Environment(PrayerListHolder.self) var dataHolder
 //    @Environment(PrayerRequestsHolder.self) var prayerRequestsHolder
     
     var body: some View {
@@ -22,6 +22,12 @@ struct ContentView: View {
                     Image(systemName: "calendar.circle")
                         .imageScale(.large)
                     Text("Calendar")
+                }
+            PrayerNameInputView(dataHolder: dataHolder)
+                .tabItem {
+                    Image(systemName: "list.bullet.rectangle")
+                        .imageScale(.large)
+                    Text("People List")
                 }
             ProfileView(person: userHolder.person)
                 .tabItem {

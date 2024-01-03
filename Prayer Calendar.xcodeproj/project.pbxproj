@@ -34,6 +34,7 @@
 		7A77CD832AEF8F7900A19ACE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7A77CD822AEF8F7900A19ACE /* GoogleService-Info.plist */; };
 		7A77CD842AEF8F7900A19ACE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7A77CD822AEF8F7900A19ACE /* GoogleService-Info.plist */; };
 		7A77CD852AEF8F7900A19ACE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7A77CD822AEF8F7900A19ACE /* GoogleService-Info.plist */; };
+		7A8D40B52B44A9CF00B029E6 /* PrayerFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8D40B42B44A9CF00B029E6 /* PrayerFeedView.swift */; };
 		7AD78FDA2AFB1A8800388663 /* PrayerCalendarViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD78FD92AFB1A8800388663 /* PrayerCalendarViewTests.swift */; };
 		7AD808D12AD6F9E000A0ECA6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD808D02AD6F9E000A0ECA6 /* ContentView.swift */; };
 		7ADE4C532B046CD400CE6B33 /* SubmitPrayerRequestForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ADE4C522B046CD400CE6B33 /* SubmitPrayerRequestForm.swift */; };
@@ -86,6 +87,7 @@
 		7A5C72342AFF5E3100A75636 /* PrayerRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerRequest.swift; sourceTree = "<group>"; };
 		7A66A0C42B0B24BC000CA93E /* PrayerRequestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerRequestHelper.swift; sourceTree = "<group>"; };
 		7A77CD822AEF8F7900A19ACE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		7A8D40B42B44A9CF00B029E6 /* PrayerFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerFeedView.swift; sourceTree = "<group>"; };
 		7AD78FD92AFB1A8800388663 /* PrayerCalendarViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerCalendarViewTests.swift; sourceTree = "<group>"; };
 		7AD808D02AD6F9E000A0ECA6 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		7ADE4C522B046CD400CE6B33 /* SubmitPrayerRequestForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubmitPrayerRequestForm.swift; sourceTree = "<group>"; };
@@ -203,6 +205,7 @@
 				7A27B7B52B2FE0EA00FF72FC /* CreateProfileView.swift */,
 				7AD808D02AD6F9E000A0ECA6 /* ContentView.swift */,
 				7A4F262A2AD0D2B100FB086C /* ProfileView.swift */,
+				7A8D40B42B44A9CF00B029E6 /* PrayerFeedView.swift */,
 				7A4F26292AD0D2B000FB086C /* PrayerNameInputView.swift */,
 				7ADE4C512B046C6600CE6B33 /* Calendar */,
 				7ADE4C502B046C3600CE6B33 /* PrayerRequest */,
@@ -411,6 +414,7 @@
 				7A27B7B62B2FE0EB00FF72FC /* CreateProfileView.swift in Sources */,
 				7ADE4C532B046CD400CE6B33 /* SubmitPrayerRequestForm.swift in Sources */,
 				7ADE4C552B0811AC00CE6B33 /* EditPrayerRequestForm.swift in Sources */,
+				7A8D40B52B44A9CF00B029E6 /* PrayerFeedView.swift in Sources */,
 				7AF1E9F02B145848007E3303 /* UserProfileHolder.swift in Sources */,
 				7A4F26362AD0D2B600FB086C /* CalendarCell.swift in Sources */,
 			);

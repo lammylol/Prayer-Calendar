@@ -30,11 +30,20 @@ struct PrayerRequestsView: View {
         LazyVStack {
     
             HStack {
-                Text("Prayer Requests")
-                    .font(.title3)
-                    .bold()
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.leading, 20)
+                if person.username == userHolder.person.username {
+                    Text("My Prayer Requests")
+                        .font(.title3)
+                        .bold()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.leading, 20)
+                } else {
+                    Text("\(person.firstName)'s Prayer Requests")
+                        .font(.title3)
+                        .bold()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.leading, 20)
+                }
+
                 Button(action: { showSubmit.toggle()
                 }) {
                     Image(systemName: "plus")
