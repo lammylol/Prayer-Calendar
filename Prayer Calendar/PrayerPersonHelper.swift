@@ -23,15 +23,15 @@ class PrayerPersonHelper {
             ref.getDocument{(document, error) in
                 if let document = document, document.exists {
                     
-                        let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
-                        print("Document data: " + dataDescription)
-                        
+                    let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
+                    print("Document data: " + dataDescription)
+                    
                         //Update Dataholder with PrayStartDate from Firestore
-                        let startDateTimeStamp = document.get("prayStartDate") as! Timestamp
-                        prayerListHolder.prayStartDate = startDateTimeStamp.dateValue()
+                    let startDateTimeStamp = document.get("prayStartDate") as? Timestamp ?? Timestamp(date: Date())
+                    prayerListHolder.prayStartDate = startDateTimeStamp.dateValue()
                         
-                        //Update Dataholder with PrayerList from Firestore
-                        prayerListHolder.prayerList = document.get("prayerList") as! String
+                    //Update Dataholder with PrayerList from Firestore
+                    prayerListHolder.prayerList = document.get("prayerList") as! String
                     
                 } else {
                     print("Document does not exist")

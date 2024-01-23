@@ -104,10 +104,13 @@ struct CreateProfileView: View {
                 usernameCheck = "Username already taken. Please submit a new username."
             } else {
                 Auth.auth().createUser(withEmail: email, password: password) { result, error in
+                    
                     if error != nil {
                         print(error!.localizedDescription.localizedLowercase)
                     } else {
                         let userID = result?.user.uid
+                        print("userID: " + (userID ?? ""))
+                        
                         let db = Firestore.firestore()
                         let ref = db.collection("users").document("\(userID ?? "")")
         
