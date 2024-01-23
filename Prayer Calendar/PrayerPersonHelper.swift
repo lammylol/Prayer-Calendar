@@ -14,7 +14,11 @@ class PrayerPersonHelper {
 //    This function retrieves PrayerList data from Firestore.
     func getPrayerList(userHolder: UserProfileHolder, prayerListHolder: PrayerListHolder) async {
             let ref = Firestore.firestore()
-            .collection("prayerlists").document(userHolder.person.userID)
+            .collection("users").document(userHolder.person.userID)
+        
+//            //old data structure
+//            let ref = Firestore.firestore()
+//            .collection("prayerlists").document(userHolder.person.userID)
             
             ref.getDocument{(document, error) in
                 if let document = document, document.exists {
@@ -25,7 +29,6 @@ class PrayerPersonHelper {
                         //Update Dataholder with PrayStartDate from Firestore
                         let startDateTimeStamp = document.get("prayStartDate") as! Timestamp
                         prayerListHolder.prayStartDate = startDateTimeStamp.dateValue()
-                        
                         
                         //Update Dataholder with PrayerList from Firestore
                         prayerListHolder.prayerList = document.get("prayerList") as! String
@@ -82,22 +85,27 @@ class PrayerPersonHelper {
         } else {
             do {
                 let db = Firestore.firestore()
-                let ref = db.collection("usernames").document(person.username)
                 
-                let document = try await ref.getDocument()
-        
-                if document.exists {
-                    let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
-                    print("Document data: " + dataDescription)
-                    
-                    userID = document.get("userID") as? String ?? ""
-                    firstName = document.get("firstName") as? String ?? ""
-                    lastName = document.get("lastName") as? String ?? ""
-                } else {
-                    print("Error Retrieving User ID. Document does not exist")
+                //                //old data structure
+                //                let ref = db.collection("usernames").document(person.username)
+                
+                let ref = try await db.collection("users").whereField("username", isEqualTo: person.username).getDocuments()
+                
+                for document in ref.documents {
+                    //                    print("\(document.documentID) => \(document.data())")
+                    if document.exists {
+                        let dataDescription = document.data()
+                        print("Document data: \(dataDescription)")
+                        
+                        userID = document.get("userID") as? String ?? ""
+                        firstName = document.get("firstName") as? String ?? ""
+                        lastName = document.get("lastName") as? String ?? ""
+                    } else {
+                        print("Error Retrieving User ID. Document does not exist")
+                    }
                 }
             } catch {
-                print("Error getting document: \(error)")
+                    print("Error getting document: \(error)")
             }
         }
         
@@ -105,22 +113,37 @@ class PrayerPersonHelper {
         return PrayerPerson(userID: userID, username: person.username, firstName: firstName, lastName: lastName)
     }
     
-    func checkIfUsernameExists(username: String) -> Bool {
+    func checkIfUsernameExists(username: String) async -> Bool {
         var check = Bool()
         
-        let ref = Firestore.firestore()
-            .collection("usernames")
-            .document(username.lowercased())
+        let db = Firestore.firestore()
         
-        ref.getDocument{(document, error) in
-            if let document = document, document.exists {
-                check = true
-            } else {
+        do {
+            let ref = try await db.collection("users").whereField("username", isEqualTo: username).getDocuments()
+            
+            if ref.isEmpty {
                 check = false
+            } else {
+                check = true
             }
+        } catch {
+            print("Error retrieving username ref")
+            check = false
         }
         
         return check
+        
+//        let ref = Firestore.firestore()
+//            .collection("usernames")
+//            .document(username.lowercased())
+//        
+//        ref.getDocument{(document, error) in
+//            if let document = document, document.exists {
+//                check = true
+//            } else {
+//                check = false
+//            }
+//        }
     }
     
     //  This function retrieves Userinfo data from Firestore.
@@ -129,7 +152,7 @@ class PrayerPersonHelper {
         userHolder.person.userID = userID
         userHolder.person.email = email
         
-        let ref = Firestore.firestore().collection("userinfo").document(userID)
+        let ref = Firestore.firestore().collection("users").document(userID)
         
         ref.getDocument{(document, error) in
             if let document = document, document.exists {

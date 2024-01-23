@@ -99,35 +99,37 @@ struct CreateProfileView: View {
     }
     
     func createAccount() {
-        if PrayerPersonHelper().checkIfUsernameExists(username: username) == true {
-            usernameCheck = "Username already taken. Please submit a new username."
-        } else {
-            Auth.auth().createUser(withEmail: email, password: password) { result, error in
-                if error != nil {
-                    print(error!.localizedDescription.localizedLowercase)
-                } else {
-                    let userID = result?.user.uid
-                    let db = Firestore.firestore()
-                    let ref = db.collection("userinfo").document("\(userID ?? "")")
-    
-                    ref.setData(
-                        ["email": email,
-                         "username": username.lowercased(),
-                         "firstName": firstName,
-                         "lastName": lastName]
-                    )
-                    
-                    let ref2 = db.collection("usernames").document("\(username)")
-                    
-                    ref2.setData(
-                        ["username": username.lowercased(),
-                         "userID": userID ?? "",
-                         "firstName": firstName,
-                         "lastName": lastName]
-                    )
-                    
-                    print("Account successfully created.")
-                    dismiss()
+        Task {
+            if await PrayerPersonHelper().checkIfUsernameExists(username: username) == true {
+                usernameCheck = "Username already taken. Please submit a new username."
+            } else {
+                Auth.auth().createUser(withEmail: email, password: password) { result, error in
+                    if error != nil {
+                        print(error!.localizedDescription.localizedLowercase)
+                    } else {
+                        let userID = result?.user.uid
+                        let db = Firestore.firestore()
+                        let ref = db.collection("users").document("\(userID ?? "")")
+        
+                        ref.setData(
+                            ["email": email,
+                             "username": username.lowercased(),
+                             "firstName": firstName,
+                             "lastName": lastName]
+                        )
+                        
+                        let ref2 = db.collection("usernames").document("\(username)")
+                        
+                        ref2.setData(
+                            ["username": username.lowercased(),
+                             "userID": userID ?? "",
+                             "firstName": firstName,
+                             "lastName": lastName]
+                        )
+                        
+                        print("Account successfully created.")
+                        dismiss()
+                    }
                 }
             }
         }
