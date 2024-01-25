@@ -26,7 +26,7 @@ class PrayerRequestHelper {
         }
         
         do {
-            let profiles = db.collection("users").document(userID).collection("prayerrequests").document("profiles").collection("\(person.firstName.lowercased())_\(person.lastName.lowercased())").order(by: "DatePosted", descending: true)
+            let profiles = db.collection("users").document(userID).collection("prayerList").document("\(person.firstName.lowercased())_\(person.lastName.lowercased())").collection("prayerRequests").order(by: "DatePosted", descending: true)
 
             let querySnapshot = try await profiles.getDocuments()
             
@@ -51,34 +51,6 @@ class PrayerRequestHelper {
         } catch {
           print("Error getting documents: \(error)")
         }
-
-        
-//        old snapshot listener.
-//        ref.addSnapshotListener { documentSnapshot, error in
-//            guard let document = documentSnapshot?.documents else {
-//                print("Error fetching document: \(String(describing: error))")
-//                return
-//            }
-//            
-//            prayerRequests = document.map { (queryDocumentSnapshot) -> PrayerRequest in
-//                let data = queryDocumentSnapshot.data()
-//
-//                let timestamp = data["DatePosted"] as? Timestamp ?? Timestamp()
-//                let datePosted = timestamp.dateValue()
-//                
-//                let firstName = data["FirstName"] as? String ?? ""
-//                let lastName = data["LastName"] as? String ?? ""
-//                let prayerRequestText = data["PrayerRequestText"] as? String ?? ""
-//                let status = data["Status"] as? String ?? ""
-//                let userID = data["userID"] as? String ?? ""
-//                let priority = data["Priority"] as? String ?? ""
-//                let documentID = queryDocumentSnapshot.documentID as String
-//                    
-//                let prayerRequest = PrayerRequest(id: documentID, userID: userID, date: datePosted, prayerRequestText: prayerRequestText, status: status, firstName: firstName, lastName: lastName, priority: priority)
-//                
-//                return prayerRequest
-//            }
-//        }
         
         print(prayerRequests)
         return prayerRequests
@@ -87,7 +59,7 @@ class PrayerRequestHelper {
     // Update Prayer Requests off of given request from row selection
     func updatePrayerRequest(prayerRequest: PrayerRequest, userID: String) {
         let db = Firestore.firestore()
-        let ref = db.collection("users").document(userID).collection("prayerrequests").document("profiles").collection("\(prayerRequest.firstName.lowercased())_\(prayerRequest.lastName.lowercased())").document(prayerRequest.id)
+        let ref = db.collection("users").document(userID).collection("prayerList").document("\(prayerRequest.firstName.lowercased())_\(prayerRequest.lastName.lowercased())").collection("prayerRequests").document(prayerRequest.id)
 
         ref.setData([
             "DatePosted": prayerRequest.date,
@@ -104,7 +76,7 @@ class PrayerRequestHelper {
     
     func deletePrayerRequest(prayerRequest: PrayerRequest, userID: String) {
         let db = Firestore.firestore()
-        let ref = db.collection("users").document(userID).collection("prayerrequests").document("profiles").collection("\(prayerRequest.firstName.lowercased())_\(prayerRequest.lastName.lowercased())").document(prayerRequest.id)
+        let ref = db.collection("users").document(userID).collection("prayerList").document("\(prayerRequest.firstName.lowercased())_\(prayerRequest.lastName.lowercased())").collection("prayerRequests").document(prayerRequest.id)
         
         ref.delete() { err in
             if let err = err {
@@ -119,7 +91,7 @@ class PrayerRequestHelper {
     
     func addPrayerRequest(userID: String, person: PrayerPerson, prayerRequestText: String, priority: String) {
         let db = Firestore.firestore()
-        let ref = db.collection("users").document(userID).collection("prayerrequests").document("profiles").collection("\(person.firstName.lowercased())_\(person.lastName.lowercased())").document()
+        let ref = db.collection("users").document(userID).collection("prayerList").document("\(person.firstName.lowercased())_\(person.lastName.lowercased())").collection("prayerRequests").document()
 
         ref.setData([
             "DatePosted": Date(),

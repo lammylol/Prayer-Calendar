@@ -37,7 +37,7 @@ struct PrayerNameInputView: View {
                 displayedComponents: [.date]
                 )
                 .padding([.leading, .trailing], 85)
-
+                
                 Divider()
                 Text("Input your list below. To link to an active profile, paste a semicolon followed by the person's username.\n\nex. Matt; matt12345")
                     .italic()
@@ -57,30 +57,32 @@ struct PrayerNameInputView: View {
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button("Cancel") {
-                        dismiss()
-                        prayerList = dataHolder.prayerList
-                        prayStartDate = dataHolder.prayStartDate
-                        self.isFocused = false
-                        saved = ""
+                if self.isFocused == true {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button("Cancel") {
+                            dismiss()
+                            prayerList = dataHolder.prayerList
+                            prayStartDate = dataHolder.prayStartDate
+                            self.isFocused = false
+                            saved = ""
+                        }
                     }
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button(action: {
-                        submitList(inputText: prayerList)
-                    }) {
-                        Text("Save")
-                            .offset(x: -4)
-                            .font(.system(size: 14))
-                            .padding([.leading, .trailing], 5)
-                            .bold()
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button(action: {
+                            submitList(inputText: prayerList)
+                        }) {
+                            Text("Save")
+                                .offset(x: -4)
+                                .font(.system(size: 14))
+                                .padding([.leading, .trailing], 5)
+                                .bold()
+                        }
+                        .background {
+                            RoundedRectangle(cornerRadius: 15)
+                                .fill(.blue)
+                        }
+                        .foregroundStyle(.white)
                     }
-                    .background {
-                        RoundedRectangle(cornerRadius: 15)
-                            .fill(.blue)
-                    }
-                    .foregroundStyle(.white)
                 }
             }
     }
@@ -92,9 +94,13 @@ struct PrayerNameInputView: View {
         dataHolder.prayStartDate = prayStartDate
 
         let db = Firestore.firestore()
-        let ref = db.collection("prayerlists").document(userHolder.person.userID)
+        let ref = db.collection("users").document(userHolder.person.userID)
         
-        ref.setData(["userID: ": userHolder.person.userID, "prayStartDate": prayStartDate, "prayerList": prayerList])
+        ref.updateData([
+            "userID": userHolder.person.userID,
+            "prayStartDate": prayStartDate,
+            "prayerList": prayerList
+        ])
         
         saved = "Saved"
         self.isFocused = false

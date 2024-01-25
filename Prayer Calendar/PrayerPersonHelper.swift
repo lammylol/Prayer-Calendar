@@ -31,7 +31,7 @@ class PrayerPersonHelper {
                     prayerListHolder.prayStartDate = startDateTimeStamp.dateValue()
                         
                     //Update Dataholder with PrayerList from Firestore
-                    prayerListHolder.prayerList = document.get("prayerList") as! String
+                    prayerListHolder.prayerList = document.get("prayerList") as? String ?? ""
                     
                 } else {
                     print("Document does not exist")
@@ -62,6 +62,7 @@ class PrayerPersonHelper {
             // nameArray?.count == 1 ensures that if user enters only first name, last name will be "", not first name.
             if nameArray?.count == 1 {
                 firstName = String(nameArray?.first ?? "").trimmingCharacters(in: .whitespaces)
+                lastName = ""
             } else {
                 firstName = String(nameArray?.first ?? "").trimmingCharacters(in: .whitespaces)
                 lastName = String(nameArray?.last ?? "").trimmingCharacters(in: .whitespaces)
@@ -75,7 +76,7 @@ class PrayerPersonHelper {
     }
     
     // Retrieve requested userID off of username
-    func retrieveUserInfoFromUsername(person: PrayerPerson,userHolder: UserProfileHolder) async -> PrayerPerson {
+    func retrieveUserInfoFromUsername(person: PrayerPerson, userHolder: UserProfileHolder) async -> PrayerPerson {
         var userID = ""
         var firstName = person.firstName
         var lastName = person.lastName
