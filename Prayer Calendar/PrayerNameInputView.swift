@@ -115,7 +115,13 @@ struct PrayerNameInputView: View {
             for person in prayerNames {
                 if person.username != "" {
                     let personID = await PrayerPersonHelper().retrieveUserInfoFromUsername(person: person, userHolder: userHolder).userID
+                    
                     let refFriends = db.collection("users").document(personID).collection("friendsList").document(userHolder.person.userID)
+                    
+                    try await refFriends.setData([
+                        "username": person.username
+                    ])
+                    
                     linkedFriends.append(person.firstName + " " + person.lastName)
                 }
             }
