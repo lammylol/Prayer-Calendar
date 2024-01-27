@@ -88,7 +88,7 @@ struct PrayerNameInputView: View {
     }
     }
     
-    func submitList(inputText: String) async {
+    func submitList(inputText: String) {
         let inputList = inputText.split(separator: "\n").map(String.init)
         dataHolder.prayerList = inputList.joined(separator: "\n")
         dataHolder.prayStartDate = prayStartDate
@@ -110,12 +110,16 @@ struct PrayerNameInputView: View {
         Task {
             let prayerNames = PrayerPersonHelper().retrievePrayerPersonArray(prayerList: prayerList)
             
+            var linkedFriends = []
+            
             for person in prayerNames {
                 if person.username != "" {
                     let personID = await PrayerPersonHelper().retrieveUserInfoFromUsername(person: person, userHolder: userHolder).userID
                     let refFriends = db.collection("users").document(personID).collection("friendsList").document(userHolder.person.userID)
+                    linkedFriends.append(person.firstName + " " + person.lastName)
                 }
             }
+            print("Profiles linked: \(linkedFriends)")
         }
         
         saved = "Saved"
