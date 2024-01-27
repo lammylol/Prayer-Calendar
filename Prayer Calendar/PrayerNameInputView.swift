@@ -88,19 +88,35 @@ struct PrayerNameInputView: View {
     }
     }
     
-    func submitList(inputText: String) {
+    func submitList(inputText: String) async {
         let inputList = inputText.split(separator: "\n").map(String.init)
         dataHolder.prayerList = inputList.joined(separator: "\n")
         dataHolder.prayStartDate = prayStartDate
 
         let db = Firestore.firestore()
-        let ref = db.collection("users").document(userHolder.person.userID)
         
-        ref.updateData([
-            "userID": userHolder.person.userID,
-            "prayStartDate": prayStartDate,
-            "prayerList": prayerList
-        ])
+        //Create user data in personal doc.
+        Task {
+            let ref = db.collection("users").document(userHolder.person.userID)
+            
+            ref.updateData([
+                "userID": userHolder.person.userID,
+                "prayStartDate": prayStartDate,
+                "prayerList": prayerList
+            ])
+        }
+        
+        //Add user as friend to the friend's list.
+        Task {
+            let prayerNames = PrayerPersonHelper().retrievePrayerPersonArray(prayerList: prayerList)
+            
+            for person in prayerNames {
+                if person.username != "" {
+                    let personID = await PrayerPersonHelper().retrieveUserInfoFromUsername(person: person, userHolder: userHolder).userID
+                    let refFriends = db.collection("users").document(personID).collection("friendsList").document(userHolder.person.userID)
+                }
+            }
+        }
         
         saved = "Saved"
         self.isFocused = false

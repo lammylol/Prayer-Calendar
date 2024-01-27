@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import FirebaseFirestore
+import FirebaseFunctions
 
 enum PrayerRequestRetrievalError: Error {
     case noUserID
@@ -15,6 +16,11 @@ enum PrayerRequestRetrievalError: Error {
 }
 
 class PrayerRequestHelper {
+    
+    //Retrieve prayerFeed for each user
+    func retrieveFeed(userID: String) {
+        
+    }
     
     //Retrieve prayer requests from Firestore
     func retrievePrayerRequest(userID: String, person: PrayerPerson) async throws -> [PrayerRequest] {
@@ -91,6 +97,8 @@ class PrayerRequestHelper {
     
     func addPrayerRequest(userID: String, person: PrayerPerson, prayerRequestText: String, priority: String) {
         let db = Firestore.firestore()
+        
+        // Create new PrayerRequestID to users/{userID}/prayerList/{person}/prayerRequests
         let ref = db.collection("users").document(userID).collection("prayerList").document("\(person.firstName.lowercased())_\(person.lastName.lowercased())").collection("prayerRequests").document()
 
         ref.setData([
@@ -102,6 +110,17 @@ class PrayerRequestHelper {
             "userID": userID,
             "Priority": priority
         ])
+        
+        var prayerRequestID = ref.documentID
+        
+        // Add PrayerRequestID to prayerRequests/{userID}/prayerFeed
+        
+        let ref2 =
+        db.collection("prayerRequests").document(userID).collection("prayerFeed").document(prayerRequestID)
+        
+        // Create new PrayerRequestDoc to bring in.
+        
+        
     }
     
 }

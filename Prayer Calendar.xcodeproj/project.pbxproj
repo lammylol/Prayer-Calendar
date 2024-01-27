@@ -30,6 +30,7 @@
 		7A5C72312AFEBADE00A75636 /* PrayerRequestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A5C72302AFEBADE00A75636 /* PrayerRequestsView.swift */; };
 		7A5C72332AFF5D9F00A75636 /* PrayerRequestRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A5C72322AFF5D9E00A75636 /* PrayerRequestRow.swift */; };
 		7A5C72352AFF5E3100A75636 /* PrayerRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A5C72342AFF5E3100A75636 /* PrayerRequest.swift */; };
+		7A5D85BF2B623E2E002F55B2 /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = 7A5D85BE2B623E2E002F55B2 /* FirebaseFunctions */; };
 		7A66A0C52B0B24BC000CA93E /* PrayerRequestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A66A0C42B0B24BC000CA93E /* PrayerRequestHelper.swift */; };
 		7A77CD832AEF8F7900A19ACE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7A77CD822AEF8F7900A19ACE /* GoogleService-Info.plist */; };
 		7A77CD842AEF8F7900A19ACE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7A77CD822AEF8F7900A19ACE /* GoogleService-Info.plist */; };
@@ -104,6 +105,7 @@
 			files = (
 				7A3158EB2AEF9C0B009B6E59 /* FirebaseAnalyticsSwift in Frameworks */,
 				7A3158F12AF359B4009B6E59 /* FirebaseFirestore in Frameworks */,
+				7A5D85BF2B623E2E002F55B2 /* FirebaseFunctions in Frameworks */,
 				7A3158EF2AF359B4009B6E59 /* FirebaseAuth in Frameworks */,
 				7A3158E92AEF9C0B009B6E59 /* FirebaseAnalytics in Frameworks */,
 			);
@@ -274,6 +276,7 @@
 				7A3158EA2AEF9C0B009B6E59 /* FirebaseAnalyticsSwift */,
 				7A3158EE2AF359B4009B6E59 /* FirebaseAuth */,
 				7A3158F02AF359B4009B6E59 /* FirebaseFirestore */,
+				7A5D85BE2B623E2E002F55B2 /* FirebaseFunctions */,
 			);
 			productName = "Prayer Calendar";
 			productReference = 7A4F25F52AD0D23900FB086C /* Prayer Calendar.app */;
@@ -812,6 +815,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 7A3158E72AEF9C0B009B6E59 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestore;
+		};
+		7A5D85BE2B623E2E002F55B2 /* FirebaseFunctions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7A3158E72AEF9C0B009B6E59 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFunctions;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
