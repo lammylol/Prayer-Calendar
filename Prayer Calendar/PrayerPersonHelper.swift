@@ -153,7 +153,9 @@ class PrayerPersonHelper {
         userHolder.person.userID = userID
         userHolder.person.email = email
         
-        let ref = Firestore.firestore().collection("users").document(userID)
+        let db = Firestore.firestore()
+        
+        let ref = db.collection("users").document(userID)
         
         ref.getDocument{(document, error) in
             if let document = document, document.exists {
@@ -170,6 +172,18 @@ class PrayerPersonHelper {
 //                        userHolder.prayerList = ""
             }
         }
-
+        
+        do {
+            let friendsListRef = db.collection("users").document(userID).collection("friendsList")
+            let querySnapshot = try await friendsListRef.getDocuments()
+    
+            //append FriendsListArray in userHolder
+            for document in querySnapshot.documents {
+              print("\(document.documentID) => \(document.data())")
+              userHolder.friendsList.append(document.documentID)
+            }
+        } catch {
+          print("Error getting documents: \(error)")
+        }
     }
 }

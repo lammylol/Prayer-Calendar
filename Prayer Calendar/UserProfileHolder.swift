@@ -11,6 +11,7 @@ import SwiftUI
 @Observable class UserProfileHolder {
     var person: PrayerPerson = PrayerPerson(username: "")
     var isLoggedIn: Bool = false
+    var friendsList: [String] = []
 }
 
 @Observable class PrayerListHolder {

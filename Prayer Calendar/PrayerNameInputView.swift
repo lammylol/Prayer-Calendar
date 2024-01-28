@@ -88,6 +88,7 @@ struct PrayerNameInputView: View {
     }
     }
     
+    //function to submit prayer list to firestore. This will update users' prayer list for retrieval into prayer calendar and it will also tie a friend to this user if the username is linked.
     func submitList(inputText: String) {
         let inputList = inputText.split(separator: "\n").map(String.init)
         dataHolder.prayerList = inputList.joined(separator: "\n")
@@ -118,9 +119,12 @@ struct PrayerNameInputView: View {
                     
                     let refFriends = db.collection("users").document(personID).collection("friendsList").document(userHolder.person.userID)
                     
-                    try await refFriends.setData([
-                        "username": person.username
-                    ])
+                    do {
+                        try await refFriends.setData([
+                            "username": person.username
+                        ])} catch {
+                        print("error update friend: username")
+                    }
                     
                     linkedFriends.append(person.firstName + " " + person.lastName)
                 }

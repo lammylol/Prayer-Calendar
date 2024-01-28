@@ -95,32 +95,48 @@ class PrayerRequestHelper {
         }
     }
     
-    func addPrayerRequest(userID: String, person: PrayerPerson, prayerRequestText: String, priority: String) {
+    func addPrayerRequest(userID: String, person: PrayerPerson, prayerRequestText: String, priority: String, userHolder: UserProfileHolder) {
         let db = Firestore.firestore()
         
         // Create new PrayerRequestID to users/{userID}/prayerList/{person}/prayerRequests
         let ref = db.collection("users").document(userID).collection("prayerList").document("\(person.firstName.lowercased())_\(person.lastName.lowercased())").collection("prayerRequests").document()
 
         ref.setData([
-            "DatePosted": Date(),
-            "FirstName": person.firstName,
-            "LastName": person.lastName,
-            "Status": "Current",
-            "PrayerRequestText": prayerRequestText,
+            "datePosted": Date(),
+            "firstName": person.firstName,
+            "lastName": person.lastName,
+            "status": "Current",
+            "prayerRequestText": prayerRequestText,
             "userID": userID,
-            "Priority": priority
+            "priority": priority
         ])
         
         var prayerRequestID = ref.documentID
         
-        // Add PrayerRequestID to prayerRequests/{userID}/prayerFeed
+        // Add PrayerRequestID to prayerFeed/{userID}
+        if userHolder.friendsList.isEmpty == false {
+            for friendID in userHolder.friendsList {
+                let ref2 = db.collection("prayerFeed").document(friendID).collection("prayerRequests").document(prayerRequestID)
+                ref2.setData([
+                    "userID": friendID,
+                    "datePosted": Date()
+                ])
+            }
+        }
         
-        let ref2 =
-        db.collection("prayerRequests").document(userID).collection("prayerFeed").document(prayerRequestID)
+        // Add PrayerRequestID and Data to prayerRequests/{prayerRequestID}
+        let ref3 =
+        db.collection("prayerRequests").document(prayerRequestID)
         
-        // Create new PrayerRequestDoc to bring in.
-        
-        
+        ref3.setData([
+            "datePosted": Date(),
+            "firstName": person.firstName,
+            "lastName": person.lastName,
+            "status": "Current",
+            "prayerRequestText": prayerRequestText,
+            "userID": userID,
+            "priority": priority
+        ])
     }
     
 }
