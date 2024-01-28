@@ -25,13 +25,6 @@ struct ProfileView: View {
                 VStack {
                     Text("")
                         .toolbar {
-                            //Hiding Toolbar Navigation to PrayerNameInput for now.
-//                            ToolbarItem(placement: .topBarLeading) {
-//                                // user view of own profile
-//                                NavigationLink(destination: PrayerNameInputView(dataHolder: dataHolder)){
-//                                    Image(systemName: "list.bullet.rectangle")
-//                                }
-//                            }
                             if person.username == userHolder.person.username {
                                 ToolbarItem(placement: .topBarTrailing) {
                                     Button(action: {

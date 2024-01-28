@@ -32,22 +32,22 @@ class PrayerRequestHelper {
         }
         
         do {
-            let profiles = db.collection("users").document(userID).collection("prayerList").document("\(person.firstName.lowercased())_\(person.lastName.lowercased())").collection("prayerRequests").order(by: "DatePosted", descending: true)
+            let profiles = db.collection("users").document(userID).collection("prayerList").document("\(person.firstName.lowercased())_\(person.lastName.lowercased())").collection("prayerRequests").order(by: "datePosted", descending: true)
 
             let querySnapshot = try await profiles.getDocuments()
             
           for document in querySnapshot.documents {
               print("\(document.documentID) => \(document.data())")
-              let timestamp = document.data()["DatePosted"] as? Timestamp ?? Timestamp()
+              let timestamp = document.data()["datePosted"] as? Timestamp ?? Timestamp()
 //              let timestamp = document.data()["DatePosted"]/* as? ip_timestamp ?? ip_timestamp()*/
               let datePosted = timestamp.dateValue()
 
-              let firstName = document.data()["FirstName"] as? String ?? ""
-              let lastName = document.data()["LastName"] as? String ?? ""
-              let prayerRequestText = document.data()["PrayerRequestText"] as? String ?? ""
-              let status = document.data()["Status"] as? String ?? ""
+              let firstName = document.data()["firstName"] as? String ?? ""
+              let lastName = document.data()["lastName"] as? String ?? ""
+              let prayerRequestText = document.data()["prayerRequestText"] as? String ?? ""
+              let status = document.data()["status"] as? String ?? ""
               let userID = document.data()["userID"] as? String ?? ""
-              let priority = document.data()["Priority"] as? String ?? ""
+              let priority = document.data()["priority"] as? String ?? ""
               let documentID = document.documentID as String
 
               let prayerRequest = PrayerRequest(id: documentID, userID: userID, date: datePosted, prayerRequestText: prayerRequestText, status: status, firstName: firstName, lastName: lastName, priority: priority)
@@ -111,14 +111,14 @@ class PrayerRequestHelper {
             "priority": priority
         ])
         
-        var prayerRequestID = ref.documentID
+        let prayerRequestID = ref.documentID
         
         // Add PrayerRequestID to prayerFeed/{userID}
         if userHolder.friendsList.isEmpty == false {
             for friendID in userHolder.friendsList {
                 let ref2 = db.collection("prayerFeed").document(friendID).collection("prayerRequests").document(prayerRequestID)
                 ref2.setData([
-                    "userID": friendID,
+                    "userID": userID,
                     "datePosted": Date()
                 ])
             }
