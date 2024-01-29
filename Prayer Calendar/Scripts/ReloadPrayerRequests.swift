@@ -36,55 +36,38 @@ class ReloadPrayerRequests {
         do {
             let querySnapshot = try await db.collection("users").getDocuments()
             for document in querySnapshot.documents {
-                print("\(document.documentID) => \(document.data())")
+                //                print("\(document.documentID) => \(document.data())")
                 users.append(document.documentID)
             }
-          } catch {
-            print("Error getting users: \(error)")
-          }
+        } catch {
+            print("error getting users")
+        }
         
         for user in users {
-            var prayerListPeople: [String] = []
-            
+//                    var prayerListPeople: [String] = []
             let friendsList = await getFriendsList(userID: user)
             
-            do {
-                let querySnapshot2 = try await db.collection("users").document(user).collection("prayerList").getDocuments()
-                for document in querySnapshot2.documents {
-                    print("\(document.documentID) => \(document.data())")
-                    prayerListPeople.append(document.documentID)
-                }
-              } catch {
-                print("Error getting prayerListPeople: \(error)")
-              }
-            
-            for person in prayerListPeople {
-                do {
-                    let querySnapshot3 = try await db.collection("users").document(user).collection("prayerList").document(person).collection("prayerRequests").getDocuments()
+            db.collection("users").document(user).collection("prayerList").whereField("userID", isEqualTo: user).getDocuments() { (snapshot, error) in
+                let querySnapshot = snapshot!.documents
+                
+                for document in querySnapshot {
+                    let timestamp = document.data()["DatePosted"] as? Timestamp ?? Timestamp()
                     
-                    for document in querySnapshot3.documents {
-                        print("\(document.documentID) => \(document.data())")
-                        
-                        let timestamp = document.data()["DatePosted"] as? Timestamp ?? Timestamp()
-
-                        let datePosted = timestamp.dateValue()
-                        let firstName = document.data()["FirstName"] as? String ?? ""
-                        let lastName = document.data()["LastName"] as? String ?? ""
-                        let prayerRequestText = document.data()["PrayerRequestText"] as? String ?? ""
-                        let status = document.data()["Status"] as? String ?? ""
-                        let userID = document.data()["userID"] as? String ?? ""
-                        let priority = document.data()["Priority"] as? String ?? ""
-                        let documentID = document.documentID as String
-                        
-                        let prayerRequest = PrayerRequest(id: documentID, userID: userID, date: datePosted, prayerRequestText: prayerRequestText, status: status, firstName: firstName, lastName: lastName, priority: priority)
-                        
-                        PrayerRequestHelper().updatePrayerRequest(prayerRequest: prayerRequest, userID: userID, friendsList: friendsList)
-                    }
-                  } catch {
-                    print("Error getting prayerListPeople: \(error)")
-                  }
+                    let datePosted = timestamp.dateValue()
+                    let firstName = document.data()["FirstName"] as? String ?? ""
+                    let lastName = document.data()["LastName"] as? String ?? ""
+                    let prayerRequestText = document.data()["PrayerRequestText"] as? String ?? ""
+                    let status = document.data()["Status"] as? String ?? ""
+                    let userID = document.data()["userID"] as? String ?? ""
+                    let priority = document.data()["Priority"] as? String ?? ""
+                    let documentID = document.documentID as String
+                    
+                    let prayerRequest = PrayerRequest(id: documentID, userID: userID, date: datePosted, prayerRequestText: prayerRequestText, status: status, firstName: firstName, lastName: lastName, priority: priority)
+                    
+                    print("user: \(user), prayerRequest: \(prayerRequest.id)")
+                    PrayerRequestHelper().updatePrayerRequest(prayerRequest: prayerRequest, userID: userID, friendsList: friendsList)
+                }
             }
         }
     }
-    
 }
