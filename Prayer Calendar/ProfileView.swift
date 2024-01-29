@@ -40,6 +40,15 @@ struct ProfileView: View {
                                             .foregroundColor(.white)
                                     }
                                 }
+                                ToolbarItem(){
+                                    Button(action: {
+                                        Task {
+                                            await ReloadPrayerRequests().updateRequests()
+                                        }
+                                    }) {Text("Run Data Migration")
+                                    }
+                                    .padding(.top, 10)
+                                }
                             }
                         }
                     

@@ -12,17 +12,17 @@ import SwiftData
 struct ContentView: View {
     @Environment(UserProfileHolder.self) var userHolder
     @Environment(PrayerListHolder.self) var prayerListHolder
-    @State var selection = 2
+    @State var selection = 1
 //    @Environment(DateHolder.self) var dateHolder
     
     var body: some View {
         //Tabs for each view. Adds bottom icons.
         TabView(selection: $selection) {
-            PrayerNameInputView(dataHolder: prayerListHolder)
+            PrayerFeedView()
                 .tabItem {
-                    Image(systemName: "list.bullet.rectangle")
+                    Image(systemName: "house.fill")
                         .imageScale(.large)
-                    Text("People List")
+                    Text("Prayer Feed")
                 }.tag(1)
             PrayerCalendarView()
                 .tabItem {

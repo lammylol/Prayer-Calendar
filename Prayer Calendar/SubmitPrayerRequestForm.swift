@@ -67,7 +67,7 @@ struct SubmitPrayerRequestForm: View {
     }
         
     func submitList() {
-        PrayerRequestHelper().addPrayerRequest(userID: userHolder.person.userID, person: person, prayerRequestText: prayerRequestText, priority: priority, userHolder: userHolder)
+        PrayerRequestHelper().addPrayerRequest(userID: userHolder.person.userID, datePosted: Date(), person: person, prayerRequestText: prayerRequestText, priority: priority, friendsList: userHolder.friendsList)
 
         print("Saved")
         dismiss()

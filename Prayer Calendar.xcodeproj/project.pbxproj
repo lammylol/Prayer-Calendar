@@ -43,6 +43,8 @@
 		7AE46BD52B10100D0034DAD6 /* PrayerPerson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE46BD42B10100D0034DAD6 /* PrayerPerson.swift */; };
 		7AE46BD82B1010E80034DAD6 /* PrayerPersonHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE46BD72B1010E80034DAD6 /* PrayerPersonHelper.swift */; };
 		7AF1E9F02B145848007E3303 /* UserProfileHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF1E9EF2B145848007E3303 /* UserProfileHolder.swift */; };
+		7AF4CF422B66F9370068908E /* PrayerFeedHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF4CF412B66F9370068908E /* PrayerFeedHelper.swift */; };
+		7AF4CF452B670D400068908E /* ReloadPrayerRequests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF4CF442B670D400068908E /* ReloadPrayerRequests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -96,6 +98,8 @@
 		7AE46BD42B10100D0034DAD6 /* PrayerPerson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerPerson.swift; sourceTree = "<group>"; };
 		7AE46BD72B1010E80034DAD6 /* PrayerPersonHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerPersonHelper.swift; sourceTree = "<group>"; };
 		7AF1E9EF2B145848007E3303 /* UserProfileHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileHolder.swift; sourceTree = "<group>"; };
+		7AF4CF412B66F9370068908E /* PrayerFeedHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerFeedHelper.swift; sourceTree = "<group>"; };
+		7AF4CF442B670D400068908E /* ReloadPrayerRequests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReloadPrayerRequests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -159,6 +163,7 @@
 				7A4F25FE2AD0D23B00FB086C /* Assets.xcassets */,
 				7A4F26002AD0D23B00FB086C /* Prayer_Calendar.entitlements */,
 				7A77CD822AEF8F7900A19ACE /* GoogleService-Info.plist */,
+				7AF4CF432B670D0C0068908E /* Scripts */,
 				7A4F26012AD0D23B00FB086C /* Preview Content */,
 				7A416B7A2AFC71CA00249BB3 /* UIHelper.swift */,
 			);
@@ -208,6 +213,7 @@
 				7AD808D02AD6F9E000A0ECA6 /* ContentView.swift */,
 				7A4F262A2AD0D2B100FB086C /* ProfileView.swift */,
 				7A8D40B42B44A9CF00B029E6 /* PrayerFeedView.swift */,
+				7A5C72302AFEBADE00A75636 /* PrayerRequestsView.swift */,
 				7A4F26292AD0D2B000FB086C /* PrayerNameInputView.swift */,
 				7ADE4C512B046C6600CE6B33 /* Calendar */,
 				7ADE4C502B046C3600CE6B33 /* PrayerRequest */,
@@ -221,6 +227,7 @@
 				7A4F262E2AD0D2B500FB086C /* CalendarHelper.swift */,
 				7A66A0C42B0B24BC000CA93E /* PrayerRequestHelper.swift */,
 				7AE46BD72B1010E80034DAD6 /* PrayerPersonHelper.swift */,
+				7AF4CF412B66F9370068908E /* PrayerFeedHelper.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -228,7 +235,6 @@
 		7ADE4C502B046C3600CE6B33 /* PrayerRequest */ = {
 			isa = PBXGroup;
 			children = (
-				7A5C72302AFEBADE00A75636 /* PrayerRequestsView.swift */,
 				7A5C72322AFF5D9E00A75636 /* PrayerRequestRow.swift */,
 				7ADE4C522B046CD400CE6B33 /* SubmitPrayerRequestForm.swift */,
 				7ADE4C542B0811AC00CE6B33 /* EditPrayerRequestForm.swift */,
@@ -253,6 +259,14 @@
 				7AF1E9EF2B145848007E3303 /* UserProfileHolder.swift */,
 			);
 			name = "Data Holders";
+			sourceTree = "<group>";
+		};
+		7AF4CF432B670D0C0068908E /* Scripts */ = {
+			isa = PBXGroup;
+			children = (
+				7AF4CF442B670D400068908E /* ReloadPrayerRequests.swift */,
+			);
+			path = Scripts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -326,7 +340,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1500;
-				LastUpgradeCheck = 1500;
+				LastUpgradeCheck = 1520;
 				TargetAttributes = {
 					7A4F25F42AD0D23900FB086C = {
 						CreatedOnToolsVersion = 15.0;
@@ -401,6 +415,7 @@
 				7A416B7B2AFC71CB00249BB3 /* UIHelper.swift in Sources */,
 				7A5C72312AFEBADE00A75636 /* PrayerRequestsView.swift in Sources */,
 				7A4F26352AD0D2B600FB086C /* ProfileView.swift in Sources */,
+				7AF4CF452B670D400068908E /* ReloadPrayerRequests.swift in Sources */,
 				7AD808D12AD6F9E000A0ECA6 /* ContentView.swift in Sources */,
 				7A66A0C52B0B24BC000CA93E /* PrayerRequestHelper.swift in Sources */,
 				7A4F26342AD0D2B600FB086C /* PrayerNameInputView.swift in Sources */,
@@ -409,6 +424,7 @@
 				7A4F26302AD0D2B600FB086C /* DateScroller.swift in Sources */,
 				7A3158ED2AF357F5009B6E59 /* SignInView.swift in Sources */,
 				7AE46BD52B10100D0034DAD6 /* PrayerPerson.swift in Sources */,
+				7AF4CF422B66F9370068908E /* PrayerFeedHelper.swift in Sources */,
 				7A5C72352AFF5E3100A75636 /* PrayerRequest.swift in Sources */,
 				7A4F26372AD0D2B600FB086C /* PrayerCalendarView.swift in Sources */,
 				7A4F26392AD0D2B600FB086C /* CalendarHelper.swift in Sources */,
@@ -491,6 +507,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -553,6 +570,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -581,6 +599,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Prayer Calendar/Prayer_Calendar.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Prayer Calendar/Preview Content\"";
 				DEVELOPMENT_TEAM = 2L362X7NU4;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -621,6 +640,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Prayer Calendar/Prayer_Calendar.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Prayer Calendar/Preview Content\"";
 				DEVELOPMENT_TEAM = 2L362X7NU4;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -660,6 +680,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 2L362X7NU4;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
@@ -683,6 +704,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 2L362X7NU4;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
@@ -705,6 +727,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 2L362X7NU4;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
@@ -727,6 +750,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 2L362X7NU4;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;

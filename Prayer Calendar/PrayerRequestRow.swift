@@ -13,7 +13,6 @@ struct PrayerRequestRow: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-//            Text(prayerRequest.firstName + " " + prayerRequest.lastName)
             HStack() {
                 Text("status: ")+Text(prayerRequest.status.capitalized).bold()+Text(", priority: ")+Text(prayerRequest.priority.capitalized).bold()
                 Spacer()
