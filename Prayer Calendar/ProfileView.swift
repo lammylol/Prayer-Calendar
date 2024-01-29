@@ -40,15 +40,15 @@ struct ProfileView: View {
                                             .foregroundColor(.white)
                                     }
                                 }
-                                ToolbarItem(){
-                                    Button(action: {
-                                        Task {
-                                            await ReloadPrayerRequests().updateRequests()
-                                        }
-                                    }) {Text("Run Data Migration")
-                                    }
-                                    .padding(.top, 10)
-                                }
+//                                ToolbarItem(){
+//                                    Button(action: {
+//                                        Task {
+//                                            await ReloadPrayerRequests().updateRequests()
+//                                        }
+//                                    }) {Text("Run Data Migration")
+//                                    }
+//                                    .padding(.top, 10)
+//                                }
                             }
                         }
                     
@@ -75,11 +75,14 @@ struct ProfileView: View {
     func signOut() {
         // Sign out from firebase and change loggedIn to return to SignInView.
         try? Auth.auth().signOut()
-        dataHolder.prayerList = ""
-        userHolder.isLoggedIn = false
+        resetInfo()
     }
                     
     func resetInfo() {
+        userHolder.friendsList = []
+        userHolder.isLoggedIn = false
+        
+        dataHolder.userID = ""
         dataHolder.prayerList = ""
         dataHolder.prayStartDate = Date()
     }

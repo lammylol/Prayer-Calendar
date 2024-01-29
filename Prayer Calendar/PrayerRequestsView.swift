@@ -110,7 +110,7 @@ struct PrayerRequestsView: View {
                 }
             }
         }, content: {
-            EditPrayerRequestForm(prayerRequest: prayerRequestVar)
+            EditPrayerRequestForm(person: person, prayerRequest: prayerRequestVar)
         })
         
         .sheet(isPresented: $showSubmit, onDismiss: {

@@ -147,43 +147,5 @@ class PrayerPersonHelper {
 //        }
     }
     
-    //  This function retrieves Userinfo data from Firestore.
-    func getUserInfo(userID: String, email: String, userHolder: UserProfileHolder) async {
-        
-        userHolder.person.userID = userID
-        userHolder.person.email = email
-        
-        let db = Firestore.firestore()
-        
-        let ref = db.collection("users").document(userID)
-        
-        ref.getDocument{(document, error) in
-            if let document = document, document.exists {
-                
-                let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
-                print("Document data: " + dataDescription)
-                
-                userHolder.person.firstName = document.get("firstName") as! String
-                userHolder.person.lastName = document.get("lastName") as! String
-                userHolder.person.username = document.get("username") as! String
-                
-            } else {
-                print("Error retrieving user info. Some user info is passed as blank")
-//                        userHolder.prayerList = ""
-            }
-        }
-        
-        do {
-            let friendsListRef = db.collection("users").document(userID).collection("friendsList")
-            let querySnapshot = try await friendsListRef.getDocuments()
-    
-            //append FriendsListArray in userHolder
-            for document in querySnapshot.documents {
-              print("\(document.documentID) => \(document.data())")
-              userHolder.friendsList.append(document.documentID)
-            }
-        } catch {
-          print("Error getting documents: \(error)")
-        }
-    }
+
 }

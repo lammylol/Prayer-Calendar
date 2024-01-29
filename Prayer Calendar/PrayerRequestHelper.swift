@@ -32,7 +32,7 @@ class PrayerRequestHelper {
             let querySnapshot = try await profiles.getDocuments()
             
             for document in querySnapshot.documents {
-                print("\(document.documentID) => \(document.data())")
+//                print("\(document.documentID) => \(document.data())")
                 let timestamp = document.data()["datePosted"] as? Timestamp ?? Timestamp()
                 //              let timestamp = document.data()["DatePosted"]/* as? ip_timestamp ?? ip_timestamp()*/
                 let datePosted = timestamp.dateValue()
@@ -58,17 +58,17 @@ class PrayerRequestHelper {
     }
     
     // Update Prayer Requests off of given request from row selection
-    func updatePrayerRequest(prayerRequest: PrayerRequest, userID: String, friendsList: [String]) {
+    func updatePrayerRequest(prayerRequest: PrayerRequest, person: PrayerPerson, friendsList: [String]) {
         let db = Firestore.firestore()
         
         var isMyProfile: Bool
-        if userID == prayerRequest.userID {
+        if person.username != "" && person.userID == prayerRequest.userID {
             isMyProfile = true
         } else {
             isMyProfile = false
         }
         
-        let ref = db.collection("users").document(userID).collection("prayerList").document("\(prayerRequest.firstName.lowercased())_\(prayerRequest.lastName.lowercased())").collection("prayerRequests").document(prayerRequest.id)
+        let ref = db.collection("users").document(person.userID).collection("prayerList").document("\(prayerRequest.firstName.lowercased())_\(prayerRequest.lastName.lowercased())").collection("prayerRequests").document(prayerRequest.id)
         
         ref.setData([
             "datePosted": prayerRequest.date,
@@ -97,7 +97,7 @@ class PrayerRequestHelper {
                 }
             }
         } else {
-            let ref2 = db.collection("prayerFeed").document(userID).collection("prayerRequests").document(prayerRequest.id)
+            let ref2 = db.collection("prayerFeed").document(person.userID).collection("prayerRequests").document(prayerRequest.id)
             ref2.setData([
                 "datePosted": prayerRequest.date,
                 "firstName": prayerRequest.firstName,
@@ -126,17 +126,17 @@ class PrayerRequestHelper {
         print(prayerRequest.prayerRequestText)
     }
     
-    func deletePrayerRequest(prayerRequest: PrayerRequest, userID: String, friendsList: [String]) {
+    func deletePrayerRequest(prayerRequest: PrayerRequest, person: PrayerPerson, friendsList: [String]) {
         let db = Firestore.firestore()
         
         var isMyProfile: Bool
-        if userID == prayerRequest.userID {
+        if person.username != "" && person.userID == prayerRequest.userID {
             isMyProfile = true
         } else {
             isMyProfile = false
         }
         
-        let ref = db.collection("users").document(userID).collection("prayerList").document("\(prayerRequest.firstName.lowercased())_\(prayerRequest.lastName.lowercased())").collection("prayerRequests").document(prayerRequest.id)
+        let ref = db.collection("users").document(person.userID).collection("prayerList").document("\(prayerRequest.firstName.lowercased())_\(prayerRequest.lastName.lowercased())").collection("prayerRequests").document(prayerRequest.id)
         
         ref.delete() { err in
             if let err = err {
@@ -165,7 +165,7 @@ class PrayerRequestHelper {
                 }
             }
         } else {
-            let ref2 = db.collection("prayerFeed").document(userID).collection("prayerRequests").document(prayerRequest.id)
+            let ref2 = db.collection("prayerFeed").document(person.userID).collection("prayerRequests").document(prayerRequest.id)
             ref2.delete() { err in
                 if let err = err {
                     print("Error removing document: \(err)")
@@ -188,7 +188,7 @@ class PrayerRequestHelper {
         let db = Firestore.firestore()
         
         var isMyProfile: Bool
-        if person.userID == userID {
+        if person.username != "" && person.userID == userID {
             isMyProfile = true
         } else {
             isMyProfile = false

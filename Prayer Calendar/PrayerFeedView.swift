@@ -46,7 +46,7 @@ struct PrayerFeedView: View {
                     }
                 }
             }
-            .navigationTitle("Sheep Feed")
+            .navigationTitle("prayer feed")
             .navigationBarTitleDisplayMode(.automatic)
             .task {
                 do {
@@ -67,7 +67,7 @@ struct PrayerFeedView: View {
                     }
                 }
             }, content: {
-                EditPrayerRequestForm(prayerRequest: prayerRequestVar)
+                EditPrayerRequestForm(person: userHolder.person, prayerRequest: prayerRequestVar)
             })
         }
     }

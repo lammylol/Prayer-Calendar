@@ -12,6 +12,7 @@ struct EditPrayerRequestForm: View {
     @Environment(UserProfileHolder.self) var userHolder
     @Environment(\.dismiss) var dismiss
     
+    var person: PrayerPerson
     @State var prayerRequest: PrayerRequest
     
     var body: some View {
@@ -92,14 +93,14 @@ struct EditPrayerRequestForm: View {
     }
     
     func updatePrayerRequest(prayerRequestVar: PrayerRequest) {
-        PrayerRequestHelper().updatePrayerRequest(prayerRequest: prayerRequestVar, userID: userHolder.person.userID, friendsList: userHolder.friendsList)
+        PrayerRequestHelper().updatePrayerRequest(prayerRequest: prayerRequestVar, person: person, friendsList: userHolder.friendsList)
 
         print("Saved")
         dismiss()
     }
     
     func deletePrayerRequest() {
-        PrayerRequestHelper().deletePrayerRequest(prayerRequest: prayerRequest, userID: userHolder.person.userID, friendsList: userHolder.friendsList)
+        PrayerRequestHelper().deletePrayerRequest(prayerRequest: prayerRequest, person: person, friendsList: userHolder.friendsList)
 
         print("Deleted")
         dismiss()
@@ -107,6 +108,6 @@ struct EditPrayerRequestForm: View {
 }
 
 #Preview {
-    EditPrayerRequestForm(prayerRequest: PrayerRequest.preview)
+    EditPrayerRequestForm(person: PrayerPerson(username: ""), prayerRequest: PrayerRequest.preview)
         .environment(UserProfileHolder())
 }

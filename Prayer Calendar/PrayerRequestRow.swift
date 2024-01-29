@@ -10,17 +10,27 @@ import SwiftUI
 
 struct PrayerRequestRow: View {
     let prayerRequest: PrayerRequest
+    var profileOrPrayerFeed = ""
     
     var body: some View {
         VStack(alignment: .leading) {
-            HStack() {
-                Text("status: ")+Text(prayerRequest.status.capitalized).bold()+Text(", priority: ")+Text(prayerRequest.priority.capitalized).bold()
-                Spacer()
-                Text(prayerRequest.date, style: .date)
-                Text(prayerRequest.date, style: .time)
-            }.font(.system(size: 12))
-            HStack() {
-
+            if profileOrPrayerFeed == "feed" {
+                HStack() {
+                    Text(prayerRequest.firstName + " " + prayerRequest.lastName)
+                    Text("status: ")+Text(prayerRequest.status.capitalized).bold()
+                    Spacer()
+                    Text(prayerRequest.date, style: .date)
+                    Text(prayerRequest.date, style: .time)
+                }.font(.system(size: 12))
+            } else {
+                HStack() {
+                    Text("status: ")+Text(prayerRequest.status.capitalized).bold()+Text(", priority: ")+Text(prayerRequest.priority.capitalized).bold()
+                    Spacer()
+                    Text(prayerRequest.date, style: .date)
+                    Text(prayerRequest.date, style: .time)
+                }.font(.system(size: 12))
+                HStack() {
+            }
                 Spacer()
             }
 

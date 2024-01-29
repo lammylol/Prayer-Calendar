@@ -32,7 +32,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "129"
             endingLineNumber = "129"
-            landmarkName = "deletePrayerRequest(prayerRequest:userID:friendsList:)"
+            landmarkName = "deletePrayerRequest(prayerRequest:person:friendsList:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

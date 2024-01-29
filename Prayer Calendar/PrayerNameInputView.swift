@@ -55,7 +55,6 @@ struct PrayerNameInputView: View {
             }
             .navigationTitle("List of People to Pray For")
             .navigationBarTitleDisplayMode(.inline)
-            .navigationBarBackButtonHidden(true)
             .toolbar {
                 if self.isFocused == true {
                     ToolbarItem(placement: .topBarLeading) {

@@ -46,7 +46,14 @@ struct SignInView: View {
                         .frame(width: 310, height: 1)
                 
                     Button(action: {
-                        self.signIn()
+                        Task {
+                            do {
+                                try await self.signIn()
+                            }
+                            catch {
+                                print("issue with login")
+                            }
+                        }
                     }) {Text("Login")
                             .bold()
                             .frame(width: 150, height: 35)
@@ -74,7 +81,7 @@ struct SignInView: View {
         }
     }
     
-    func signIn() {
+    func signIn() async {
         Auth.auth().signIn(withEmail: email, password: password) { result, error in
             if error != nil {
                 print("no account found")
@@ -82,17 +89,62 @@ struct SignInView: View {
             } else {
                 Task {
                     let userID = Auth.auth().currentUser!.uid
-                    await PrayerPersonHelper().getUserInfo(userID: userID, email: email, userHolder: userHolder)
-                    print("username: " + userHolder.person.username)
-                    userHolder.isLoggedIn = true
-                    email = ""
-                    password = ""
-                    username = ""
+                    await getUserInfo(userID: userID, email: email)
+                }
+                print("//GETUSERINFO: username: " + userHolder.person.username + " userID: " + userHolder.person.userID)
+                print(userHolder.friendsList)
+                userHolder.isLoggedIn = true
+                email = ""
+                password = ""
+                username = ""
                 }
             }
+    }
+    
+        //  This function retrieves Userinfo data from Firestore.
+    func getUserInfo(userID: String, email: String) async {
+            
+    //        userHolder.person.userID = userID
+    //        userHolder.person.email = email
+        
+        let db = Firestore.firestore()
+        let ref = db.collection("users").document(userID)
+        
+        ref.getDocument{(document, error) in
+            if let document = document, document.exists {
+                
+                let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
+                print("Document data: " + dataDescription)
+                
+                let firstName = document.get("firstName") as! String
+                let lastName = document.get("lastName") as! String
+                let username = document.get("username") as! String
+                let userID = document.get("userID") as! String
+                
+                let prayerPerson = PrayerPerson(userID: userID, username: username, email: email, firstName: firstName, lastName: lastName)
+                print("/username: " + prayerPerson.username)
+                
+                userHolder.person = prayerPerson
+                print("//username: " + userHolder.person.username)
+            } else {
+                print("Error retrieving user info. Some user info is passed as blank")
+            }
+        }
+        do {
+            let friendsListRef = db.collection("users").document(userID).collection("friendsList")
+            let querySnapshot = try await friendsListRef.getDocuments()
+
+            //append FriendsListArray in userHolder
+            for document in querySnapshot.documents {
+              print("\(document.documentID) => \(document.data())")
+              userHolder.friendsList.append(document.documentID)
+            }
+        } catch {
+          print("Error getting documents: \(error)")
         }
     }
 }
+
 
 struct MyTextView: View {
     var placeholder: String = ""

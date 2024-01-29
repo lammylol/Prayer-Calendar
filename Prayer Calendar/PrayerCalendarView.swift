@@ -35,6 +35,7 @@ struct PrayerCalendarView: View {
                             Text("")
                                 .toolbar() {
                                     NavigationLink(destination: PrayerNameInputView(dataHolder: prayerListHolder)){
+                                        Text("input list")
                                         Image(systemName: "list.bullet.rectangle")
                                     }
                                 }
