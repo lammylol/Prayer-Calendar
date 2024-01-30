@@ -23,10 +23,10 @@ class PrayerFeedHelper {
 
             let querySnapshot = try await prayerFeed.getDocuments()
             
-          for document in querySnapshot.documents {
+            for document in querySnapshot.documents {
               print("\(document.documentID) => \(document.data())")
               let timestamp = document.data()["datePosted"] as? Timestamp ?? Timestamp()
-    //              let timestamp = document.data()["DatePosted"]/* as? ip_timestamp ?? ip_timestamp()*/
+            //              let timestamp = document.data()["DatePosted"]/* as? ip_timestamp ?? ip_timestamp()*/
               let datePosted = timestamp.dateValue()
 
               let firstName = document.data()["firstName"] as? String ?? ""
@@ -40,10 +40,10 @@ class PrayerFeedHelper {
               let prayerRequest = PrayerRequest(id: documentID, userID: userID, date: datePosted, prayerRequestText: prayerRequestText, status: status, firstName: firstName, lastName: lastName, priority: priority)
               
               prayerRequests.append(prayerRequest)
-          }
-        } catch {
-          print("Error getting documents: \(error)")
-        }
+            }
+            } catch {
+            print("Error getting documents: \(error)")
+            }
         
         print(prayerRequests)
         return prayerRequests

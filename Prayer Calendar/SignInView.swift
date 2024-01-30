@@ -47,12 +47,7 @@ struct SignInView: View {
                 
                     Button(action: {
                         Task {
-                            do {
-                                try await self.signIn()
-                            }
-                            catch {
-                                print("issue with login")
-                            }
+                            await signIn()
                         }
                     }) {Text("Login")
                             .bold()
@@ -76,7 +71,7 @@ struct SignInView: View {
                 }
             }
             else {
-                ContentView()
+                ContentView(selection: 1)
             }
         }
     }
@@ -90,15 +85,15 @@ struct SignInView: View {
                 Task {
                     let userID = Auth.auth().currentUser!.uid
                     await getUserInfo(userID: userID, email: email)
+                    userHolder.isLoggedIn = true
+                    email = ""
+                    password = ""
+                    username = ""
                 }
-                print("//GETUSERINFO: username: " + userHolder.person.username + " userID: " + userHolder.person.userID)
-                print(userHolder.friendsList)
-                userHolder.isLoggedIn = true
-                email = ""
-                password = ""
-                username = ""
-                }
+//                print("//GETUSERINFO: username: " + userHolder.person.username + " userID: " + userHolder.person.userID)
+//                print(userHolder.friendsList)
             }
+        }
     }
     
         //  This function retrieves Userinfo data from Firestore.

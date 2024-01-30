@@ -46,16 +46,16 @@ struct PrayerFeedView: View {
                             }
                     }
                 }
+                .task {
+                    do {
+                        prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID)
+                    } catch {
+                        print("error retrieving prayerfeed")
+                    }
+                }
             }
             .navigationTitle("prayer feed")
             .navigationBarTitleDisplayMode(.automatic)
-            .task {
-                do {
-                    prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID)
-                } catch {
-                    print("error retrieving prayerfeed")
-                }
-            }
             
             .sheet(isPresented: $showSubmit, onDismiss: {
             }, content: {

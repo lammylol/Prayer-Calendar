@@ -66,6 +66,11 @@ struct ProfileView: View {
                         .frame(maxHeight: .infinity)
                         .padding(.top, 20)
                 }
+//                .overlay(
+//                    ProfilePictureAvatar(firstName: person.firstName, lastName: person.lastName, imageSize: 50, fontSize: 23)
+//                        .padding(.trailing, 20)
+//                        .offset(x: 0, y: -30)
+//                    ,alignment: .topTrailing)
             }
             .navigationTitle(person.firstName + " " + person.lastName)
             .navigationBarTitleDisplayMode(.automatic)

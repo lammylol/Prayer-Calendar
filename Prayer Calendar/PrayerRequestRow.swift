@@ -17,7 +17,7 @@ struct PrayerRequestRow: View {
             HStack() {
                 if profileOrPrayerFeed == "feed" {
                     VStack() {
-                        ProfilePictureAvatar(firstName: prayerRequest.firstName, lastName: prayerRequest.lastName, size: 50)
+                        ProfilePictureAvatar(firstName: prayerRequest.firstName, lastName: prayerRequest.lastName, imageSize: 50, fontSize: 20)
                         Spacer()
                     }
                     .padding(.trailing, 10)
@@ -29,7 +29,7 @@ struct PrayerRequestRow: View {
                             Spacer()
                             Text(prayerRequest.date, style: .date)
                         }.font(.system(size: 12))
-                        Text("status: ")+Text(prayerRequest.status.capitalized).font(.system(size: 12))
+                        Text("status: ").font(.system(size: 12))+Text(prayerRequest.status.capitalized).font(.system(size: 12))
                         
                         Spacer()
                         
@@ -56,6 +56,7 @@ struct PrayerRequestRow: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding([.leading, .trailing], 20)
+        .padding(.bottom, 10)
     }
 }
 

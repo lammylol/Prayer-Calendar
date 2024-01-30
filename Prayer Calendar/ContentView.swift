@@ -12,7 +12,7 @@ import SwiftData
 struct ContentView: View {
     @Environment(UserProfileHolder.self) var userHolder
     @Environment(PrayerListHolder.self) var prayerListHolder
-    @State var selection = 1
+    @State var selection: Int
 //    @Environment(DateHolder.self) var dateHolder
     
     var body: some View {
@@ -29,9 +29,6 @@ struct ContentView: View {
                     Image(systemName: "calendar.circle")
                         .imageScale(.large)
                     Text("Calendar")
-//                        .onTapGesture {
-//                            dateHolder.date = Date()
-//                        }
                 }.tag(2)
             ProfileView(person: userHolder.person)
                 .tabItem {
@@ -44,7 +41,7 @@ struct ContentView: View {
 }
 
 #Preview("Content View") {
-    ContentView()
+    ContentView(selection: 1)
         .environment(PrayerListHolder())
         .environment(UserProfileHolder())
 //        .environment(PrayerRequestsHolder())

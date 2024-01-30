@@ -10,7 +10,8 @@ import SwiftUI
 struct ProfilePictureAvatar: View {
     let firstName: String
     let lastName: String
-    let size: CGFloat
+    let imageSize: CGFloat
+    let fontSize: CGFloat
 
     var body: some View {
         HStack {
@@ -18,8 +19,8 @@ struct ProfilePictureAvatar: View {
             ZStack {
                 Circle()
 //                    .stroke(Color.black, lineWidth: 4)
-                    .frame(width: size, height: size)
-                Text(name).foregroundStyle(.white).font(.system(size: 20))
+                    .frame(width: imageSize, height: imageSize)
+                Text(name).foregroundStyle(.white).font(.system(size: fontSize))
             }
         }
 //        .shadow(radius: 10)
@@ -27,7 +28,7 @@ struct ProfilePictureAvatar: View {
 }
 
 #Preview {
-    ProfilePictureAvatar(firstName: "Matt", lastName: "Lam", size: 200)
+    ProfilePictureAvatar(firstName: "Matt", lastName: "Lam", imageSize: 200, fontSize: 20)
 }
 
 
