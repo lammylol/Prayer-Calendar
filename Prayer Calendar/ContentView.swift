@@ -18,7 +18,7 @@ struct ContentView: View {
     var body: some View {
         //Tabs for each view. Adds bottom icons.
         TabView(selection: $selection) {
-            PrayerFeedView()
+            PrayerFeedView(person: userHolder.person)
                 .tabItem {
                     Image(systemName: "house.fill")
                         .imageScale(.large)

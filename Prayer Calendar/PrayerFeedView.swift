@@ -15,6 +15,7 @@ struct PrayerFeedView: View {
     @State var prayerRequestVar: PrayerRequest = PrayerRequest.preview
     
     @Environment(UserProfileHolder.self) var userHolder
+    var person: PrayerPerson
     
     func handleTap(prayerRequest: PrayerRequest) async {
         prayerRequestVar = prayerRequest
@@ -36,7 +37,7 @@ struct PrayerFeedView: View {
                         }
                     Spacer()
                     ForEach(prayerRequests) { prayerRequest in
-                        PrayerRequestRow(prayerRequest: prayerRequest)
+                        PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "feed")
                             .onTapGesture {
                                 Task {
                                     await handleTap(prayerRequest: prayerRequest)
@@ -50,29 +51,30 @@ struct PrayerFeedView: View {
             .navigationBarTitleDisplayMode(.automatic)
             .task {
                 do {
-                    prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: userHolder.person.userID)
+                    prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID)
                 } catch {
-                    
+                    print("error retrieving prayerfeed")
                 }
             }
             
             .sheet(isPresented: $showSubmit, onDismiss: {
             }, content: {
-                SubmitPrayerRequestForm(person: userHolder.person)
+                SubmitPrayerRequestForm(person: person)
             })
             .sheet(isPresented: $showEdit, onDismiss: {
                 Task {
                     do {
-                        prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: userHolder.person.userID)
+                        prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID)
                     }
                 }
             }, content: {
                 EditPrayerRequestForm(person: userHolder.person, prayerRequest: prayerRequestVar)
             })
         }
+
     }
 }
 
 #Preview {
-    PrayerFeedView()
+    PrayerFeedView(person: PrayerPerson(username: ""))
 }
