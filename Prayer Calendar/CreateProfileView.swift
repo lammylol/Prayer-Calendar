@@ -49,7 +49,6 @@ struct CreateProfileView: View {
                     Text("Email: ")
                         .padding(.leading, 40)
                     MyTextView(placeholder: "", text: $email, textPrompt: "enter email", textFieldType: "text")
-//                        .keyboardType(.emailAddress)
                 }
                 
                 Rectangle()

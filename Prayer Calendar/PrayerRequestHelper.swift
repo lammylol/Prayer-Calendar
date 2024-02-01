@@ -84,21 +84,36 @@ class PrayerRequestHelper {
         if isMyProfile == true {
             if friendsList.isEmpty == false {
                 for friendID in friendsList {
-                    let ref2 = db.collection("prayerFeed").document(friendID).collection("prayerRequests").document(prayerRequest.id)
-                    ref2.setData([
-                        "datePosted": prayerRequest.date,
-                        "firstName": prayerRequest.firstName,
-                        "lastName": prayerRequest.lastName,
-                        "status": prayerRequest.status,
-                        "prayerRequestText": prayerRequest.prayerRequestText,
-                        "userID": prayerRequest.userID,
-                        "priority": prayerRequest.priority
-                    ])
+                    updatePrayerFeed(prayerRequest: prayerRequest, person: person, friendID: friendID, updateFriend: true)
                 }
             }
         } else {
-            let ref2 = db.collection("prayerFeed").document(person.userID).collection("prayerRequests").document(prayerRequest.id)
-            ref2.setData([
+            updatePrayerFeed(prayerRequest: prayerRequest, person: person, friendID: "", updateFriend: false)
+        }
+        
+        // Add PrayerRequestID and Data to prayerRequests/{prayerRequestID}
+        updatePrayerRequestsDataCollection(prayerRequest: prayerRequest)
+        print(prayerRequest.prayerRequestText)
+    }
+    
+    // Update only prayer feed of all users who are friends.
+    func updatePrayerFeed(prayerRequest: PrayerRequest, person: PrayerPerson, friendID: String, updateFriend: Bool) {
+        let db = Firestore.firestore()
+        
+        if updateFriend == true {
+            let ref = db.collection("prayerFeed").document(friendID).collection("prayerRequests").document(prayerRequest.id)
+            ref.setData([
+                "datePosted": prayerRequest.date,
+                "firstName": prayerRequest.firstName,
+                "lastName": prayerRequest.lastName,
+                "status": prayerRequest.status,
+                "prayerRequestText": prayerRequest.prayerRequestText,
+                "userID": prayerRequest.userID,
+                "priority": prayerRequest.priority
+            ])
+        } else {
+            let ref = db.collection("prayerFeed").document(person.userID).collection("prayerRequests").document(prayerRequest.id)
+            ref.setData([
                 "datePosted": prayerRequest.date,
                 "firstName": prayerRequest.firstName,
                 "lastName": prayerRequest.lastName,
@@ -108,12 +123,15 @@ class PrayerRequestHelper {
                 "priority": prayerRequest.priority
             ])
         }
+    }
+    
+    func updatePrayerRequestsDataCollection(prayerRequest: PrayerRequest) {
+        let db = Firestore.firestore()
         
-        // Add PrayerRequestID and Data to prayerRequests/{prayerRequestID}
-        let ref3 =
+        let ref =
         db.collection("prayerRequests").document(prayerRequest.id)
         
-        ref3.setData([
+        ref.setData([
             "datePosted": prayerRequest.date,
             "firstName": prayerRequest.firstName,
             "lastName": prayerRequest.lastName,
@@ -122,8 +140,6 @@ class PrayerRequestHelper {
             "userID": prayerRequest.userID,
             "priority": prayerRequest.priority
         ])
-        
-        print(prayerRequest.prayerRequestText)
     }
     
     func deletePrayerRequest(prayerRequest: PrayerRequest, person: PrayerPerson, friendsList: [String]) {

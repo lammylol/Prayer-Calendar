@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct ProfilePictureAvatar: View {
+    
+    @Environment(\.colorScheme) var colorScheme
+    
     let firstName: String
     let lastName: String
     let imageSize: CGFloat
@@ -18,12 +21,21 @@ struct ProfilePictureAvatar: View {
             let name = (firstName.first?.uppercased() ?? "") + (lastName.first?.uppercased() ?? "")
             ZStack {
                 Circle()
-//                    .stroke(Color.black, lineWidth: 4)
                     .frame(width: imageSize, height: imageSize)
-                Text(name).foregroundStyle(.white).font(.system(size: fontSize))
+                Text(name)
+                    .foregroundStyle(textColor())
+                    .font(.system(size: fontSize))
             }
         }
 //        .shadow(radius: 10)
+    }
+    
+    func textColor() -> Color {
+        if colorScheme == .light {
+            return Color.black
+        } else {
+            return Color.white
+        }
     }
 }
 

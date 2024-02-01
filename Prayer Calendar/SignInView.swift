@@ -131,8 +131,9 @@ struct SignInView: View {
 
             //append FriendsListArray in userHolder
             for document in querySnapshot.documents {
-              print("\(document.documentID) => \(document.data())")
-              userHolder.friendsList.append(document.documentID)
+                print("\(document.documentID) => \(document.data())")
+                userHolder.friendsList.append(document.documentID)
+//                if userHolder.friendsList
             }
         } catch {
           print("Error getting documents: \(error)")

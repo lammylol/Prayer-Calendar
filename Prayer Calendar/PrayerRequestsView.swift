@@ -54,7 +54,7 @@ struct PrayerRequestsView: View {
             Divider()
             
             ForEach(prayerRequests) { prayerRequest in
-                PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "profile")
+                PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "feed")
                     .onTapGesture {
                         Task {
                             await handleTap(prayerRequest: prayerRequest)

@@ -57,18 +57,18 @@ struct PrayerNameInputView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 if self.isFocused == true {
-                    ToolbarItem(placement: .topBarLeading) {
-                        Button("Cancel") {
-                            dismiss()
-                            prayerList = dataHolder.prayerList
-                            prayStartDate = dataHolder.prayStartDate
-                            self.isFocused = false
-                            saved = ""
-                        }
-                    }
+//                    ToolbarItem(placement: .topBarLeading) {
+//                        Button("Cancel") {
+//                            dismiss()
+//                            prayerList = dataHolder.prayerList
+//                            prayStartDate = dataHolder.prayStartDate
+//                            self.isFocused = false
+//                            saved = ""
+//                        }
+//                    }
                     ToolbarItem(placement: .topBarTrailing) {
                         Button(action: {
-                            submitList(inputText: prayerList)
+                            submitList(inputText: prayerList, userID: userHolder.person.userID)
                         }) {
                             Text("Save")
                                 .offset(x: -4)
@@ -88,7 +88,7 @@ struct PrayerNameInputView: View {
     }
     
     //function to submit prayer list to firestore. This will update users' prayer list for retrieval into prayer calendar and it will also tie a friend to this user if the username is linked.
-    func submitList(inputText: String) {
+    func submitList(inputText: String, userID: String) {
         let inputList = inputText.split(separator: "\n").map(String.init)
         dataHolder.prayerList = inputList.joined(separator: "\n")
         dataHolder.prayStartDate = prayStartDate
@@ -112,6 +112,7 @@ struct PrayerNameInputView: View {
             
             var linkedFriends = []
             
+            // for each person in prayerList who has a username (aka a linked account), check if the user already exists in the prayerList person's friendsList. If not, add their name and update all historical prayer feeds as well.
             for person in prayerNames {
                 if person.username != "" {
                     let personID = await PrayerPersonHelper().retrieveUserInfoFromUsername(person: person, userHolder: userHolder).userID
@@ -119,9 +120,13 @@ struct PrayerNameInputView: View {
                     let refFriends = db.collection("users").document(personID).collection("friendsList").document(userHolder.person.userID)
                     
                     do {
-                        try await refFriends.setData([
-                            "username": person.username
-                        ])} catch {
+                        if try await refFriends.getDocument().exists == false {
+                            try await refFriends.setData([
+                                "username": person.username
+                            ])
+                            await updateFriendHistoricalPrayersIntoFeed(userID: userID, person: person)
+                        }
+                    } catch {
                         print("error update friend: username")
                     }
                     
@@ -142,6 +147,22 @@ struct PrayerNameInputView: View {
             return ""
         } else {
             return saved
+        }
+    }
+    
+    //Adding a friend - this updates the historical prayer feed
+    func updateFriendHistoricalPrayersIntoFeed(userID: String, person: PrayerPerson) async {
+        //In this scenario, userID is the userID of the person retrieving data from the 'person'.
+        do {
+            let prayerRequests = try await PrayerRequestHelper().retrievePrayerRequest(userID: person.userID, person: person)
+            //user is retrieving prayer requests of the friend: person.userID and person: person.
+            
+            for prayer in prayerRequests {
+                PrayerRequestHelper().updatePrayerFeed(prayerRequest: prayer, person: person, friendID: userID, updateFriend: true)
+            }
+            //for each prayer request, user is taking the friend's prayer request and updating them to their own feed. The user becomes the 'friend' of the person.
+        } catch {
+            print("error retrieving and updating prayer requests from new friend.")
         }
     }
                            
