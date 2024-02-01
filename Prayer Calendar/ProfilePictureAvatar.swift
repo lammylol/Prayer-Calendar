@@ -32,9 +32,9 @@ struct ProfilePictureAvatar: View {
     
     func textColor() -> Color {
         if colorScheme == .light {
-            return Color.black
-        } else {
             return Color.white
+        } else {
+            return Color.black
         }
     }
 }

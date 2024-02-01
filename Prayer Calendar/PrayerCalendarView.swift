@@ -34,10 +34,20 @@ struct PrayerCalendarView: View {
                         VStack (spacing: 0) {
                             Text("")
                                 .toolbar() {
-                                    NavigationLink(destination: PrayerNameInputView(dataHolder: prayerListHolder)){
-                                        Text("input list")
-                                        Image(systemName: "list.bullet.rectangle")
-                                    }
+                                    ToolbarItem(placement: .automatic) {
+                                        NavigationLink(destination: PrayerNameInputView(dataHolder: prayerListHolder)){
+                                            Text("edit")
+                                                .bold()
+                                                .font(.system(size: 14))
+                                                .frame(width: 50, height: 25)
+                                                .background(
+                                                    RoundedRectangle(cornerRadius: 15)
+                                                        .fill(Color.blue)
+                                                )
+                                                .foregroundColor(.white)
+                                        }
+//                                            Image(systemName: "list.bullet.rectangle")
+                                        }
                                 }
                             DateScroller()
                                 .padding([.top, .bottom], 0)

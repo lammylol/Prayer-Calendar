@@ -60,7 +60,6 @@ struct CalendarCell: View {
                     Text(monthStruct().person.firstName)
                         .font(Font.system(size: 12))
                         .foregroundColor(textColor(type: monthStruct().monthType))
-                        .bold()
                     Spacer()
                 }
                 .frame(maxWidth: .infinity)

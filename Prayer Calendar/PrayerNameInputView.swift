@@ -53,7 +53,7 @@ struct PrayerNameInputView: View {
                     .font(Font.system(size: 12))
                 Spacer()
             }
-            .navigationTitle("List of People to Pray For")
+            .navigationTitle("Prayer Calendar List")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 if self.isFocused == true {

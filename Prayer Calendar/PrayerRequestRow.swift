@@ -28,13 +28,12 @@ struct PrayerRequestRow: View {
                             Text(prayerRequest.firstName + " " + prayerRequest.lastName).font(.system(size: 16)).bold()
                             Spacer()
                             Text(prayerRequest.date, style: .date)
-                        }.font(.system(size: 12))
-                        Text("status: ").font(.system(size: 12))+Text(prayerRequest.status.capitalized).font(.system(size: 12))
-                        
+                        }
+                        .font(.system(size: 12))
+                        .padding(.bottom, 2)
+                        Text("Prayer Status: ").font(.system(size: 12))+Text(prayerRequest.status.capitalized).font(.system(size: 12))
                         Spacer()
-                        
-                        Text("\(prayerRequest.prayerRequestText)")
-                        
+                        Text("\(prayerRequest.prayerRequestText)").font(.system(size: 16))
                         Spacer()
                     }
                 } else {
@@ -53,13 +52,13 @@ struct PrayerRequestRow: View {
                 //        .background(Color.gray.opacity(0.05))
             }
             Divider()
+                .padding([.top, .bottom], 10)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding([.leading, .trailing], 20)
-        .padding(.bottom, 10)
     }
 }
 
 #Preview {
-    PrayerRequestRow(prayerRequest: PrayerRequest(userID: "", date: Date(), prayerRequestText: "Prayers for this text to look beautiful. Prayers for this text to look beautiful.", status: "Current", firstName: "Matt", lastName: "Lam", priority: "high"), profileOrPrayerFeed: "feed").frame(maxHeight: 100)
+    PrayerRequestRow(prayerRequest: PrayerRequest(userID: "", date: Date(), prayerRequestText: "Prayers for this text to look beautiful. Prayers for this text to look beautiful.", status: "Current", firstName: "Matt", lastName: "Lam", priority: "high"), profileOrPrayerFeed: "feed").frame(maxHeight: 120)
 }

@@ -18,17 +18,17 @@ struct ContentView: View {
     var body: some View {
         //Tabs for each view. Adds bottom icons.
         TabView(selection: $selection) {
-            PrayerFeedView(person: userHolder.person)
+            PrayerCalendarView()
                 .tabItem {
                     Image(systemName: "house.fill")
                         .imageScale(.large)
-                    Text("Prayer Feed")
-                }.tag(1)
-            PrayerCalendarView()
-                .tabItem {
-                    Image(systemName: "calendar.circle")
-                        .imageScale(.large)
                     Text("Calendar")
+                }.tag(1)
+            PrayerFeedView(person: userHolder.person)
+                .tabItem {
+                    Image(systemName: "newspaper.fill")
+                        .imageScale(.large)
+                    Text("Feed")
                 }.tag(2)
             ProfileView(person: userHolder.person)
                 .tabItem {
