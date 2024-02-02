@@ -39,10 +39,10 @@ struct PrayerFeedView: View {
                     ForEach(prayerRequests) { prayerRequest in
                         PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "feed")
                             .onTapGesture {
-                                Task {
-                                    await handleTap(prayerRequest: prayerRequest)
-                                }
-                                self.showEdit.toggle()
+//                                Task {
+//                                    await handleTap(prayerRequest: prayerRequest)
+//                                }
+//                                self.showEdit.toggle()
                             }
                     }
                 }

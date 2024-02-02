@@ -103,28 +103,50 @@ struct SignInView: View {
     //        userHolder.person.email = email
         
         let db = Firestore.firestore()
-        let ref = db.collection("users").document(userID)
-        
-        ref.getDocument{(document, error) in
-            if let document = document, document.exists {
-                
-                let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
-                print("Document data: " + dataDescription)
-                
-                let firstName = document.get("firstName") as! String
-                let lastName = document.get("lastName") as! String
-                let username = document.get("username") as! String
-                let userID = document.get("userID") as! String
-                
-                let prayerPerson = PrayerPerson(userID: userID, username: username, email: email, firstName: firstName, lastName: lastName)
-                print("/username: " + prayerPerson.username)
-                
-                userHolder.person = prayerPerson
-                print("//username: " + userHolder.person.username)
-            } else {
-                print("Error retrieving user info. Some user info is passed as blank")
-            }
+//        let ref = db.collection("users").document(userID)
+//        
+        do {
+            let ref = db.collection("users").document(userID)
+            
+            let document = try await ref.getDocument()
+                    
+            let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
+            print("Document data: " + dataDescription)
+            
+            let firstName = document.get("firstName") as! String
+            let lastName = document.get("lastName") as! String
+            let username = document.get("username") as! String
+            let userID = document.get("userID") as! String
+            
+            let prayerPerson = PrayerPerson(userID: userID, username: username, email: email, firstName: firstName, lastName: lastName)
+            print("/username: " + prayerPerson.username)
+            
+            userHolder.person = prayerPerson
+            print("//username: " + userHolder.person.username)
+        } catch {
+            print("Error retrieving user info.")
         }
+                
+//        ref.getDocument{(document, error) in
+//            if let document = document, document.exists {
+//                
+//                let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
+//                print("Document data: " + dataDescription)
+//                
+//                let firstName = document.get("firstName") as! String
+//                let lastName = document.get("lastName") as! String
+//                let username = document.get("username") as! String
+//                let userID = document.get("userID") as! String
+//                
+//                let prayerPerson = PrayerPerson(userID: userID, username: username, email: email, firstName: firstName, lastName: lastName)
+//                print("/username: " + prayerPerson.username)
+//                
+//                userHolder.person = prayerPerson
+//                print("//username: " + userHolder.person.username)
+//            } else {
+//                print("Error retrieving user info. Some user info is passed as blank")
+//            }
+//        }
         do {
             let friendsListRef = db.collection("users").document(userID).collection("friendsList")
             let querySnapshot = try await friendsListRef.getDocuments()

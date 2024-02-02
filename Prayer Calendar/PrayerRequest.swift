@@ -10,6 +10,7 @@ import Foundation
 struct PrayerRequest : Identifiable {
     var id: String = ""
     var userID: String
+    var username: String
     var date: Date
     var prayerRequestText: String
     var status: String
@@ -23,6 +24,7 @@ extension PrayerRequest {
         let item =
         PrayerRequest(
             userID: "Matt",
+            username: "lammylol",
             date: Date(),
             prayerRequestText: "Hello, World",
             status: "Current",

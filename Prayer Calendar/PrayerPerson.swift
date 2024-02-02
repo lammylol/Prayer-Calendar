@@ -9,7 +9,7 @@ import Foundation
 
 struct PrayerPerson {
     var userID: String = ""
-    var username: String
+    var username: String = ""
     var email: String = ""
     var firstName: String = ""
     var lastName: String = ""

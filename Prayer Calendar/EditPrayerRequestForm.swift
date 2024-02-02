@@ -47,7 +47,7 @@ struct EditPrayerRequestForm: View {
                     }
                 }
                 .onAppear() {
-                    prayerRequest = PrayerRequest(id: prayerRequest.id, userID: prayerRequest.userID, date: prayerRequest.date, prayerRequestText: prayerRequest.prayerRequestText, status: prayerRequest.status, firstName: prayerRequest.firstName, lastName: prayerRequest.lastName, priority: prayerRequest.priority)
+                    prayerRequest = PrayerRequest(id: prayerRequest.id, userID: prayerRequest.userID, username: prayerRequest.username, date: prayerRequest.date, prayerRequestText: prayerRequest.prayerRequestText, status: prayerRequest.status, firstName: prayerRequest.firstName, lastName: prayerRequest.lastName, priority: prayerRequest.priority)
                     
                     print(prayerRequest.date)
                 }
@@ -75,17 +75,19 @@ struct EditPrayerRequestForm: View {
                     )
                     .foregroundStyle(.white)
                 }
-                ToolbarItemGroup(placement: .bottomBar) {
-                    Button(action: {deletePrayerRequest()}) {
-                        Text("Delete Prayer Request")
-                            .font(.system(size: 14))
-                            .padding([.leading, .trailing], 5)
-                    }
+                if person.username == "" || (person.userID == userHolder.person.userID) {
+                    ToolbarItemGroup(placement: .bottomBar) {
+                        Button(action: {deletePrayerRequest()}) {
+                            Text("Delete Prayer Request")
+                                .font(.system(size: 14))
+                                .padding([.leading, .trailing], 5)
+                        }
                         .background(
                             RoundedRectangle(cornerRadius: 15)
                                 .fill(.red)
                         )
                         .foregroundStyle(.white)
+                    }
                 }
             }
             .navigationBarBackButtonHidden(true)

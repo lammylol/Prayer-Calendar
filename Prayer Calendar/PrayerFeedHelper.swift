@@ -34,10 +34,11 @@ class PrayerFeedHelper {
               let prayerRequestText = document.data()["prayerRequestText"] as? String ?? ""
               let status = document.data()["status"] as? String ?? ""
               let userID = document.data()["userID"] as? String ?? ""
+              let username = document.data()["username"] as? String ?? ""
               let priority = document.data()["priority"] as? String ?? ""
               let documentID = document.documentID as String
 
-              let prayerRequest = PrayerRequest(id: documentID, userID: userID, date: datePosted, prayerRequestText: prayerRequestText, status: status, firstName: firstName, lastName: lastName, priority: priority)
+                let prayerRequest = PrayerRequest(id: documentID, userID: userID, username: username, date: datePosted, prayerRequestText: prayerRequestText, status: status, firstName: firstName, lastName: lastName, priority: priority)
               
               prayerRequests.append(prayerRequest)
             }
