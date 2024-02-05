@@ -108,21 +108,22 @@ struct PrayerNameInputView: View {
         
         //Add user as friend to the friend's list.
         Task {
-            let prayerNames = PrayerPersonHelper().retrievePrayerPersonArray(prayerList: prayerList)
+            let prayerNamesOld = PrayerPersonHelper().retrievePrayerPersonArray(prayerList: dataHolder.prayerList) // reference to initial state of prayer list
+            let prayerNames = PrayerPersonHelper().retrievePrayerPersonArray(prayerList: prayerList) // reference to new state of prayer list.
             
             var linkedFriends = []
             
             // for each person in prayerList who has a username (aka a linked account), check if the user already exists in the prayerList person's friendsList. If not, add their name and update all historical prayer feeds as well.
             for person in prayerNames {
                 if person.username != "" {
-                    let personID = await PrayerPersonHelper().retrieveUserInfoFromUsername(person: person, userHolder: userHolder).userID
+                    let person = await PrayerPersonHelper().retrieveUserInfoFromUsername(person: person, userHolder: userHolder)
                     
-                    let refFriends = db.collection("users").document(personID).collection("friendsList").document(userHolder.person.userID)
+                    let refFriends = db.collection("users").document(person.userID).collection("friendsList").document(userHolder.person.userID)
                     
                     do {
                         if try await refFriends.getDocument().exists == false {
                             try await refFriends.setData([
-                                "username": person.username
+                                "username": userHolder.person.username
                             ])
                             await updateFriendHistoricalPrayersIntoFeed(userID: userID, person: person)
                         }
@@ -153,16 +154,21 @@ struct PrayerNameInputView: View {
     //Adding a friend - this updates the historical prayer feed
     func updateFriendHistoricalPrayersIntoFeed(userID: String, person: PrayerPerson) async {
         //In this scenario, userID is the userID of the person retrieving data from the 'person'.
-        do {
-            let prayerRequests = try await PrayerRequestHelper().retrievePrayerRequest(userID: person.userID, person: person)
-            //user is retrieving prayer requests of the friend: person.userID and person: person.
-            
-            for prayer in prayerRequests {
-                PrayerRequestHelper().updatePrayerFeed(prayerRequest: prayer, person: person, friendID: userID, updateFriend: true)
+        Task{
+            do {
+                let prayerRequests = try await PrayerRequestHelper().retrievePrayerRequest(userID: person.userID, person: person)
+                
+                //user is retrieving prayer requests of the friend: person.userID and person: person.
+                
+                for prayer in prayerRequests {
+                    PrayerRequestHelper().updatePrayerFeed(prayerRequest: prayer, person: person, friendID: userID, updateFriend: true)
+                }
+                //for each prayer request, user is taking the friend's prayer request and updating them to their own feed. The user becomes the 'friend' of the person.
+                
+                print(prayerRequests)
+            } catch {
+                print(error)
             }
-            //for each prayer request, user is taking the friend's prayer request and updating them to their own feed. The user becomes the 'friend' of the person.
-        } catch {
-            print("error retrieving and updating prayer requests from new friend.")
         }
     }
                            

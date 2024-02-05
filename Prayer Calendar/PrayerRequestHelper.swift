@@ -53,8 +53,6 @@ class PrayerRequestHelper {
         } catch {
             print("Error getting documents: \(error)")
         }
-        
-        print(prayerRequests)
         return prayerRequests
     }
     

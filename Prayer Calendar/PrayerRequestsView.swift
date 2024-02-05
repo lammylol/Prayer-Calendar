@@ -89,7 +89,6 @@ struct PrayerRequestsView: View {
                 person = await PrayerPersonHelper().retrieveUserInfoFromUsername(person: person, userHolder: userHolder)
                 prayerRequests = try await PrayerRequestHelper().retrievePrayerRequest(userID: person.userID, person: person)
                 print("Success retrieving prayer requests for \(person.userID)")
-                print(prayerRequests)
             } catch PrayerRequestRetrievalError.noUserID {
                 print("No User ID to retrieve prayer requests with.")
             } catch {
@@ -102,7 +101,6 @@ struct PrayerRequestsView: View {
                 do {
                     prayerRequests = try await PrayerRequestHelper().retrievePrayerRequest(userID: person.userID, person: person)
                     print("Success retrieving prayer requests for \(person.userID)")
-                    print(prayerRequests)
                 } catch PrayerRequestRetrievalError.noUserID {
                     print("No User ID to retrieve prayer requests with.")
                 } catch {
@@ -118,7 +116,6 @@ struct PrayerRequestsView: View {
                 do {
                     prayerRequests = try await PrayerRequestHelper().retrievePrayerRequest(userID: person.userID, person: person)
                     print("Success retrieving prayer requests for \(person.userID)")
-                    print(prayerRequests)
                 } catch PrayerRequestRetrievalError.noUserID {
                     print("No User ID to retrieve prayer requests with.")
                 } catch {
