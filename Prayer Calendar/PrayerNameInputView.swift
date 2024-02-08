@@ -13,7 +13,7 @@ struct PrayerNameInputView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(UserProfileHolder.self) var userHolder
     
-    @Bindable var dataHolder: PrayerListHolder
+    @Bindable var dataHolder: PrayerListHolder // This holds things necessary for prayer list.
 
     @State var prayStartDate: Date = Date()
     @State var prayerList: String = ""
@@ -28,7 +28,6 @@ struct PrayerNameInputView: View {
     }
     
     var body: some View {
-        
         NavigationStack {
             VStack{
                 DatePicker(

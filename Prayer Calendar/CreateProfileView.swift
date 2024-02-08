@@ -97,18 +97,25 @@ struct CreateProfileView: View {
         }
     }
     
+    //Scans for special characters in username.
     func specialCharacterTest(username: String) -> Bool {
         return username.range(of: "[ !\"#$%&'()*+,-./:;<=>?@\\[\\\\\\]^_`{|}~]+", options: .regularExpression) != nil
     }
     
     func createAccount() {
         Task {
+            // Ensure username does not exist.
             if await PrayerPersonHelper().checkIfUsernameExists(username: username) == true {
                 usernameCheck = "Username already taken. Please submit a new username."
-            } else if specialCharacterTest(username: username) {
+            } 
+            // Ensure username does not have special characters. This will affect assessment of 'username' or 'name' in prayerNameInputView().
+            else if specialCharacterTest(username: username) {
                 usernameCheck = "Username cannot contain special characters. Please submit a new username."
                 print("Username cannot contain special characters. Please submit a new username.")
-            } else {
+            } 
+            
+            // Task to set data.
+            else {
                 Auth.auth().createUser(withEmail: email, password: password) { result, error in
                     
                     if error != nil {

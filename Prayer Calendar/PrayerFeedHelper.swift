@@ -35,7 +35,7 @@ class PrayerFeedHelper {
               let userID = document.data()["userID"] as? String ?? ""
               let username = document.data()["username"] as? String ?? ""
               let priority = document.data()["priority"] as? String ?? ""
-              let prayerRequestTitle = document.data()["prayerRequesetTitle"] as? String ?? ""
+              let prayerRequestTitle = document.data()["prayerRequestTitle"] as? String ?? ""
               let documentID = document.documentID as String
 
                 let prayerRequest = PrayerRequest(id: documentID, userID: userID, username: username, date: datePosted, prayerRequestText: prayerRequestText, status: status, firstName: firstName, lastName: lastName, priority: priority, prayerRequestTitle: prayerRequestTitle)

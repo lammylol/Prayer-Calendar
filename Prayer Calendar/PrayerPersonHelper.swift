@@ -20,10 +20,6 @@ class PrayerPersonHelper {
     func getPrayerList(userHolder: UserProfileHolder, prayerListHolder: PrayerListHolder) async {
             let ref = Firestore.firestore()
             .collection("users").document(userHolder.person.userID)
-        
-//            //old data structure
-//            let ref = Firestore.firestore()
-//            .collection("prayerlists").document(userHolder.person.userID)
             
             ref.getDocument{(document, error) in
                 if let document = document, document.exists {
@@ -31,7 +27,7 @@ class PrayerPersonHelper {
                     let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
 //                    print("Document data: " + dataDescription)
                     
-                        //Update Dataholder with PrayStartDate from Firestore
+                    //Update Dataholder with PrayStartDate from Firestore
                     let startDateTimeStamp = document.get("prayStartDate") as? Timestamp ?? Timestamp(date: Date())
                     prayerListHolder.prayStartDate = startDateTimeStamp.dateValue()
                         
@@ -91,9 +87,6 @@ class PrayerPersonHelper {
         } else {
             do {
                 let db = Firestore.firestore()
-                
-                //                //old data structure
-                //                let ref = db.collection("usernames").document(person.username)
                 
                 let ref = try await db.collection("users").whereField("username", isEqualTo: person.username).getDocuments()
                 
