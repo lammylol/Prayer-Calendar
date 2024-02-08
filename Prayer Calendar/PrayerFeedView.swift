@@ -12,7 +12,7 @@ struct PrayerFeedView: View {
     @State private var showEdit: Bool = false
     
     @State var prayerRequests: [PrayerRequest] = []
-    @State var prayerRequestVar: PrayerRequest = PrayerRequest.preview
+    @State var prayerRequestVar: PrayerRequest = PrayerRequest.blank
     
     @Environment(UserProfileHolder.self) var userHolder
     var person: PrayerPerson

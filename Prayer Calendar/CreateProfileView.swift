@@ -97,10 +97,17 @@ struct CreateProfileView: View {
         }
     }
     
+    func specialCharacterTest(username: String) -> Bool {
+        return username.range(of: "[ !\"#$%&'()*+,-./:;<=>?@\\[\\\\\\]^_`{|}~]+", options: .regularExpression) != nil
+    }
+    
     func createAccount() {
         Task {
             if await PrayerPersonHelper().checkIfUsernameExists(username: username) == true {
                 usernameCheck = "Username already taken. Please submit a new username."
+            } else if specialCharacterTest(username: username) {
+                usernameCheck = "Username cannot contain special characters. Please submit a new username."
+                print("Username cannot contain special characters. Please submit a new username.")
             } else {
                 Auth.auth().createUser(withEmail: email, password: password) { result, error in
                     

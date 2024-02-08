@@ -109,8 +109,20 @@ struct PrayerNameInputView: View {
             print("Prayer List Old: " + dataHolder.prayerList)
             print("Prayer List New: " + inputText)
 
-            let prayerNamesOld = PrayerPersonHelper().retrievePrayerPersonArray(prayerList: existingInput).map { $0.username } // reference to initial state of prayer list
-            let prayerNamesNew = PrayerPersonHelper().retrievePrayerPersonArray(prayerList: inputText).map { $0.username } // reference to new state of prayer list.
+            let prayerNamesOld = PrayerPersonHelper().retrievePrayerPersonArray(prayerList: existingInput).map {
+                if $0.username == "" {
+                    $0.firstName + "/" + $0.lastName
+                } else {
+                    $0.username
+                }
+            } // reference to initial state of prayer list
+            let prayerNamesNew = PrayerPersonHelper().retrievePrayerPersonArray(prayerList: inputText).map {
+                if $0.username == "" {
+                    $0.firstName + "/" + $0.lastName
+                } else {
+                    $0.username
+                }
+            } // reference to new state of prayer list.
             var linkedFriends = []
             
             print(prayerNamesOld)
@@ -126,9 +138,9 @@ struct PrayerNameInputView: View {
             
             // for each person in prayerList who has a username (aka a linked account), check if the user already exists in the prayerList person's friendsList. If not, add their name and update all historical prayer feeds as well.
             
-            for username in insertions {
-                if username != "" {
-                    let person = await PrayerPersonHelper().retrieveUserInfoFromUsername(person: PrayerPerson(username: username), userHolder: userHolder)
+            for usernameOrName in insertions {
+                if usernameOrName.contains("/") == false { // This checks if the person is a linked account or not. If it was linked, usernameOrName would be a username. Usernames cannot have special characters in them.
+                    let person = await PrayerPersonHelper().retrieveUserInfoFromUsername(person: PrayerPerson(username: usernameOrName), userHolder: userHolder)
                     let refFriends = db.collection("users").document(person.userID).collection("friendsList").document(userHolder.person.userID)
                     do {
                         if try await refFriends.getDocument().exists == false {
@@ -140,31 +152,47 @@ struct PrayerNameInputView: View {
                     } catch {
                         print("error update friend: username")
                     }
-                    
                     linkedFriends.append(person.firstName + " " + person.lastName)
+                } else { //else is for any names you add which are under your account; not linked.
+                    await updateFriendHistoricalPrayersIntoFeed(userID: userID, person: PrayerPerson(userID: userID, firstName: String(usernameOrName.split(separator: "/").first ?? ""), lastName: String(usernameOrName.split(separator: "/").last ?? "")))
+                    //pass in your own userID in person for function to retrieve.
                 }
             }
-            for username in removals {
-                let person = await PrayerPersonHelper().retrieveUserInfoFromUsername(person: PrayerPerson(username: username), userHolder: userHolder)
-                
-                let refFriends = db.collection("users").document(person.userID).collection("friendsList").document(userHolder.person.userID)
-                
-                try await refFriends.delete()
-                
-                let refDelete = try await db.collection("prayerFeed").document(userID).collection("prayerRequests").whereField("userID", isEqualTo: person.userID).getDocuments()
-                
-                for document in refDelete.documents {
-                    try await document.reference.delete()
+            for usernameOrName in removals {
+                if usernameOrName.contains("/") == false { // This checks if the person is a linked account or not. If it was linked, usernameOrName would be a username. Usernames cannot have special characters in them.
+                    
+                    let person = await PrayerPersonHelper().retrieveUserInfoFromUsername(person: PrayerPerson(username: usernameOrName), userHolder: userHolder)
+                    
+                    let refFriends = db.collection("users").document(person.userID).collection("friendsList").document(userHolder.person.userID)
+                    
+                    try await refFriends.delete()
+                    
+                    let refDelete = try await db.collection("prayerFeed").document(userID).collection("prayerRequests").whereField("userID", isEqualTo: person.userID).getDocuments()
+                    
+                    for document in refDelete.documents {
+                        try await document.reference.delete()
+                    }
+                } else { //else is for any names you add which are under your account; not linked.
+                    let refDelete = try await db.collection("prayerFeed").document(userHolder.person.userID).collection("prayerRequests")
+                        .whereField("firstName", isEqualTo: String(usernameOrName.split(separator: "/").first ?? ""))
+                        .whereField("lastName", isEqualTo: String(usernameOrName.split(separator: "/").last ?? ""))
+                        .getDocuments()
+                    
+                    for document in refDelete.documents {
+                        try await document.reference.delete()
+                    }
                 }
             }
             print("Profiles linked: \(linkedFriends)")
         }
         
+        //reset local dataHolder
         dataHolder.prayerList = inputList.joined(separator: "\n")
         dataHolder.prayStartDate = prayStartDate
+        
         saved = "Saved"
-        self.isFocused = false
-        dismiss()
+        self.isFocused = false // removes focus so keyboard disappears
+        dismiss() //dismiss view
     }
     
     //Function to changed "saved" text. When user saves textEditor, saved will appear until the user clicks back into textEditor, then the words "saved" should disappear. This will also occur when cancel is selected.

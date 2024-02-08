@@ -15,6 +15,7 @@ struct CalendarCell: View {
     let startingSpaces: Int
     let daysInMonth: Int
     let daysInPrevMonth: Int
+    let date: Date
     
     let prayerStartingSpaces: Int
     let prayerList: String
@@ -23,11 +24,12 @@ struct CalendarCell: View {
     
     var prayerName: String = ""
     
-    init(count: Int, startingSpaces: Int, daysInMonth: Int, daysInPrevMonth: Int, prayerStartingSpaces: Int, prayerList: String, prayerRange: Int) {
+    init(count: Int, startingSpaces: Int, daysInMonth: Int, daysInPrevMonth: Int, date: Date, prayerStartingSpaces: Int, prayerList: String, prayerRange: Int) {
         self.count = count
         self.startingSpaces = startingSpaces
         self.daysInMonth = daysInMonth
         self.daysInPrevMonth = daysInPrevMonth
+        self.date = date
         self.prayerStartingSpaces = prayerStartingSpaces
         self.prayerList = prayerList
         self.prayerRange = prayerRange
@@ -51,19 +53,46 @@ struct CalendarCell: View {
             .frame(height: 95)
         } else {
             NavigationLink(destination: ProfileView(person: PrayerPerson(username: monthStruct().person.username, firstName: monthStruct().person.firstName, lastName: monthStruct().person.lastName))) {
-                VStack {
-                    Text(monthStruct().day())
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                        .foregroundColor(textColor(type: monthStruct().monthType))
-                    Spacer()
-                    Text(monthStruct().person.firstName)
-                        .font(Font.system(size: 12))
-                        .foregroundColor(textColor(type: monthStruct().monthType))
-                    Spacer()
+                
+                if (monthStruct().day() == Date.now.formatted(.dateTime.day()) &&
+                    date.formatted(date: .abbreviated, time: .omitted) == Date().formatted(date: .abbreviated, time: .omitted)) {
+                    ZStack{
+                            VStack{
+                                Circle()
+                                    .foregroundStyle(.blue)
+                                    .frame(width: 30, height: 30)
+                                    .offset(y: -4)
+                                Spacer()
+                            }
+                            VStack {
+                                Text(monthStruct().day())
+                                    .font(.title3)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.white)
+                                Spacer()
+                                Text(monthStruct().person.firstName)
+                                    .font(Font.system(size: 12))
+                                    .foregroundColor(textColor(type: monthStruct().monthType))
+                                Spacer()
+                            }
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 95)
+                } else {
+                    VStack {
+                        Text(monthStruct().day())
+                            .font(.title3)
+                            .fontWeight(.semibold)
+                            .foregroundColor(textColor(type: monthStruct().monthType))
+                        Spacer()
+                        Text(monthStruct().person.firstName)
+                            .font(Font.system(size: 12))
+                            .foregroundColor(textColor(type: monthStruct().monthType))
+                        Spacer()
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 95)
                 }
-                .frame(maxWidth: .infinity)
-                .frame(height: 95)
             }
         }
     }
@@ -112,6 +141,6 @@ struct CalendarCell: View {
 
 struct CalendarCell_Previews: PreviewProvider {
     static var previews: some View {
-       CalendarCell(count: 1, startingSpaces: 1, daysInMonth: 1, daysInPrevMonth: 1, prayerStartingSpaces: 1, prayerList: "Matt", prayerRange: 1)
+        CalendarCell(count: 1, startingSpaces: 1, daysInMonth: 1, daysInPrevMonth: 1, date: Date(), prayerStartingSpaces: 1, prayerList: "Matt", prayerRange: 1)
     }
 }

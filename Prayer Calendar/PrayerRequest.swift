@@ -35,4 +35,19 @@ extension PrayerRequest {
             prayerRequestTitle: "Test this is Title djaskldjklsajdklasjdklasjdklajsdlkasjdklajdklajdklajsdklasjdklasjdklasjdaklsdjaldjklad")
         return item
     }
+    
+    static var blank: PrayerRequest {
+        let item =
+        PrayerRequest(
+            userID: "",
+            username: "",
+            date: Date(),
+            prayerRequestText: "",
+            status: "",
+            firstName: "",
+            lastName: "",
+            priority: "",
+            prayerRequestTitle: "")
+        return item
+    }
 }

@@ -107,7 +107,7 @@ struct PrayerCalendarView: View {
                         let prayerRange =
                         CalendarHelper().rangeOfPrayerStart(startDate: prayerListHolder.prayStartDate, firstDayOfMonth: firstDayofMonth) + count - startingSpaces - 1
                         
-                        CalendarCell(count: count, startingSpaces: startingSpaces, daysInMonth: daysInMonth, daysInPrevMonth: daysInPrevMonth, prayerStartingSpaces: prayerStartingSpaces, prayerList: prayerListHolder.prayerList, prayerRange: prayerRange)
+                        CalendarCell(count: count, startingSpaces: startingSpaces, daysInMonth: daysInMonth, daysInPrevMonth: daysInPrevMonth, date: dateHolder.date, prayerStartingSpaces: prayerStartingSpaces, prayerList: prayerListHolder.prayerList, prayerRange: prayerRange)
                     }
                 }
             }

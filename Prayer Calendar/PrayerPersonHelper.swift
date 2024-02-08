@@ -9,6 +9,11 @@ import Foundation
 import SwiftUI
 import FirebaseFirestore
 
+enum PrayerPersonRetrievalError: Error {
+    case noUsername
+//    case errorRetrievingFromFirebase
+}
+
 class PrayerPersonHelper {
     
 //    This function retrieves PrayerList data from Firestore.
