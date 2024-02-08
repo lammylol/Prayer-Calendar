@@ -17,6 +17,7 @@ struct SubmitPrayerRequestForm: View {
     @State var datePosted = Date()
     @State var status: String = "Current"
     @State var prayerRequestText: String = ""
+    @State var prayerRequestTitle: String = ""
     @State private var priority = "low"
     
     var body: some View {
@@ -29,15 +30,28 @@ struct SubmitPrayerRequestForm: View {
                         Text("high").tag("high")
                     }
                     ZStack(alignment: .topLeading) {
+                        if prayerRequestTitle.isEmpty {
+                            Text("Title")
+                                .padding(.leading, 0)
+                                .padding(.top, 8)
+                                .foregroundStyle(Color.gray)
+                        }
+                        
+                        TextEditor(text: $prayerRequestTitle)
+                            .frame(height: 35)
+                            .offset(x: -5, y: -1)
+                    }
+                    ZStack(alignment: .topLeading) {
                         if prayerRequestText.isEmpty {
                             Text("Enter text")
-                                .padding(.leading, 6)
+                                .padding(.leading, 0)
                                 .padding(.top, 8)
                                 .foregroundStyle(Color.gray)
                         }
                         
                         TextEditor(text: $prayerRequestText)
                             .frame(height: 300)
+                            .offset(x: -5)
                     }
                 }
             }
@@ -67,7 +81,7 @@ struct SubmitPrayerRequestForm: View {
     }
         
     func submitList() {
-        PrayerRequestHelper().addPrayerRequest(userID: userHolder.person.userID, datePosted: Date(), person: person, prayerRequestText: prayerRequestText, priority: priority, friendsList: userHolder.friendsList)
+        PrayerRequestHelper().addPrayerRequest(userID: userHolder.person.userID, datePosted: Date(), person: person, prayerRequestText: prayerRequestText, prayerRequestTitle: prayerRequestTitle, priority: priority, friendsList: userHolder.friendsList)
 
         print("Saved")
         dismiss()

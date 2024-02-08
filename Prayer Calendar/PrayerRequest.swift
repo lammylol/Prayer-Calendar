@@ -17,6 +17,7 @@ struct PrayerRequest : Identifiable {
     var firstName: String
     var lastName: String
     var priority: String
+    var prayerRequestTitle: String
 }
 
 extension PrayerRequest {
@@ -26,11 +27,12 @@ extension PrayerRequest {
             userID: "Matt",
             username: "lammylol",
             date: Date(),
-            prayerRequestText: "Hello, World",
+            prayerRequestText: "Hello, World ajsdklasjdklasjdklasjdklasjdklasjdklasjdklasjdklasjdklasjdklasjdklasjdklasjdklasjdklasjldkjas",
             status: "Current",
             firstName: "Matt",
             lastName: "Lam",
-            priority: "high")
+            priority: "high",
+            prayerRequestTitle: "Test this is Title djaskldjklsajdklasjdklasjdklajsdlkasjdklajdklajdklajsdklasjdklasjdklasjdaklsdjaldjklad")
         return item
     }
 }

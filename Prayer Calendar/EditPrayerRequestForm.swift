@@ -19,35 +19,46 @@ struct EditPrayerRequestForm: View {
         NavigationView{
             VStack{
                 Form {
-                    Section(header: Text("Share a Prayer Request")) {
+                    Section(header: Text("Prayer Request title")) {
+                        ZStack(alignment: .topLeading) {
+                            if prayerRequest.prayerRequestTitle.isEmpty {
+                                Text("Title")
+                                    .padding(.leading, 0)
+                                    .padding(.top, 8)
+                                    .foregroundStyle(Color.gray)
+                            }
+                            Text(prayerRequest.prayerRequestTitle).foregroundColor(Color.clear)//this is a swift workaround to dynamically expand textEditor.
+                            TextEditor(text: $prayerRequest.prayerRequestTitle)
+                                .offset(x: -5, y: -1)
+
+                        }
+                    }
+                    Section(header: Text("Edit Prayer Request")) {
+                        ZStack(alignment: .topLeading) {
+                            if prayerRequest.prayerRequestText.isEmpty {
+                                Text("Enter text")
+                                    .padding(.leading, 0)
+                                    .padding(.top, 8)
+                                    .foregroundStyle(Color.gray)
+                            }
+                            Text(prayerRequest.prayerRequestText).foregroundColor(Color.clear)//this is a swift workaround to dynamically expand textEditor.
+                            TextEditor(text: $prayerRequest.prayerRequestText)
+                                .offset(x: -5)
+                        }
                         Picker("Priority", selection: $prayerRequest.priority) {
                             Text("low").tag("low")
                             Text("med").tag("med")
                             Text("high").tag("high")
                         }
-                        
-                        ZStack(alignment: .topLeading) {
-                            if prayerRequest.prayerRequestText.isEmpty {
-                                Text("Enter text")
-                                    .padding(.leading, 6)
-                                    .padding(.top, 8)
-                                    .foregroundStyle(Color.gray)
-                            }
-                            
-                            TextEditor(text: $prayerRequest.prayerRequestText)
-                                .frame(height: 300)
-                        }
-                    }
-                    Section(header: Text("Update Status")) {
                         Picker("Status", selection: $prayerRequest.status) {
                             Text("Current").tag("Current")
                             Text("Answered").tag("Answered")
                             Text("No Longer Needed").tag("No Longer Needed")
                         }
                     }
-                }
+                }.frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: .infinity)
                 .onAppear() {
-                    prayerRequest = PrayerRequest(id: prayerRequest.id, userID: prayerRequest.userID, username: prayerRequest.username, date: prayerRequest.date, prayerRequestText: prayerRequest.prayerRequestText, status: prayerRequest.status, firstName: prayerRequest.firstName, lastName: prayerRequest.lastName, priority: prayerRequest.priority)
+                    prayerRequest = PrayerRequest(id: prayerRequest.id, userID: prayerRequest.userID, username: prayerRequest.username, date: prayerRequest.date, prayerRequestText: prayerRequest.prayerRequestText, status: prayerRequest.status, firstName: prayerRequest.firstName, lastName: prayerRequest.lastName, priority: prayerRequest.priority, prayerRequestTitle: prayerRequest.prayerRequestTitle)
                     
                     print(prayerRequest.date)
                 }

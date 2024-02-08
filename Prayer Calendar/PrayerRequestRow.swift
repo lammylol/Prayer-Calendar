@@ -33,8 +33,14 @@ struct PrayerRequestRow: View {
                         }
                         .font(.system(size: 12))
                         .padding(.bottom, 2)
-                        Text("Prayer Status: ").font(.system(size: 12))+Text(prayerRequest.status.capitalized).font(.system(size: 12))
+                        Text("Prayer Status: ").font(.system(size: 12)).italic() + Text(prayerRequest.status.capitalized).font(.system(size: 12)).italic()
                         Spacer()
+                        
+                        if prayerRequest.prayerRequestTitle != "" {
+                            Text(prayerRequest.prayerRequestTitle).font(.system(size: 16)).bold()
+                            Spacer()
+                        }
+                        
                         Text("\(prayerRequest.prayerRequestText)").font(.system(size: 16))
                         Spacer()
                     }
@@ -51,7 +57,6 @@ struct PrayerRequestRow: View {
                         Text("\(prayerRequest.prayerRequestText)")
                     }
                 }
-                //        .background(Color.gray.opacity(0.05))
             }
             Divider()
                 .padding([.top, .bottom], 10)
@@ -62,5 +67,5 @@ struct PrayerRequestRow: View {
 }
 
 #Preview {
-    PrayerRequestRow(prayerRequest: PrayerRequest(userID: "", username: "lammylol", date: Date(), prayerRequestText: "Prayers for this text to look beautiful. Prayers for this text to look beautiful.", status: "Current", firstName: "Matt", lastName: "Lam", priority: "high"), profileOrPrayerFeed: "feed").frame(maxHeight: 120)
+    PrayerRequestRow(prayerRequest: PrayerRequest(userID: "", username: "lammylol", date: Date(), prayerRequestText: "Prayers for this text to look beautiful. Prayers for this text to look beautiful.", status: "Current", firstName: "Matt", lastName: "Lam", priority: "high", prayerRequestTitle: "Prayers for Text"), profileOrPrayerFeed: "feed").frame(maxHeight: 180)
 }

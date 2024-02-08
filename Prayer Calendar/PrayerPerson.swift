@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct PrayerPerson {
+struct PrayerPerson: Hashable {
     var userID: String = ""
     var username: String = ""
     var email: String = ""

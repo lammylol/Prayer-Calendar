@@ -45,8 +45,9 @@ class PrayerRequestHelper {
                 let username = document.data()["username"] as? String ?? ""
                 let priority = document.data()["priority"] as? String ?? ""
                 let documentID = document.documentID as String
+                let prayerRequestTitle = document.data()["prayerRequestTitle"] as? String ?? ""
                 
-                let prayerRequest = PrayerRequest(id: documentID, userID: userID, username: username, date: datePosted, prayerRequestText: prayerRequestText, status: status, firstName: firstName, lastName: lastName, priority: priority)
+                let prayerRequest = PrayerRequest(id: documentID, userID: userID, username: username, date: datePosted, prayerRequestText: prayerRequestText, status: status, firstName: firstName, lastName: lastName, priority: priority, prayerRequestTitle: prayerRequestTitle)
                 
                 prayerRequests.append(prayerRequest)
             }
@@ -77,7 +78,8 @@ class PrayerRequestHelper {
             "prayerRequestText": prayerRequest.prayerRequestText,
             "userID": person.userID,
             "username": person.username,
-            "priority": prayerRequest.priority
+            "priority": prayerRequest.priority,
+            "prayerRequestTitle": prayerRequest.prayerRequestTitle
         ])
         
         // Add PrayerRequestID to prayerFeed/{userID}
@@ -110,7 +112,8 @@ class PrayerRequestHelper {
                 "prayerRequestText": prayerRequest.prayerRequestText,
                 "userID": person.userID,
                 "username": person.username,
-                "priority": prayerRequest.priority
+                "priority": prayerRequest.priority,
+                "prayerRequestTitle": prayerRequest.prayerRequestTitle
             ])
         } else {
             let ref = db.collection("prayerFeed").document(person.userID).collection("prayerRequests").document(prayerRequest.id)
@@ -122,7 +125,8 @@ class PrayerRequestHelper {
                 "prayerRequestText": prayerRequest.prayerRequestText,
                 "userID": person.userID,
                 "username": person.username,
-                "priority": prayerRequest.priority
+                "priority": prayerRequest.priority,
+                "prayerRequestTitle": prayerRequest.prayerRequestTitle
             ])
         }
     }
@@ -141,7 +145,8 @@ class PrayerRequestHelper {
             "prayerRequestText": prayerRequest.prayerRequestText,
             "userID": person.userID,
             "username": person.username,
-            "priority": prayerRequest.priority
+            "priority": prayerRequest.priority,
+            "prayerRequestTitle": prayerRequest.prayerRequestTitle
         ])
     }
     
@@ -204,7 +209,7 @@ class PrayerRequestHelper {
         ref3.delete()
     }
     
-    func addPrayerRequest(userID: String, datePosted: Date, person: PrayerPerson, prayerRequestText: String, priority: String, friendsList: [String]) {
+    func addPrayerRequest(userID: String, datePosted: Date, person: PrayerPerson, prayerRequestText: String, prayerRequestTitle: String, priority: String, friendsList: [String]) {
         let db = Firestore.firestore()
         
         var isMyProfile: Bool
@@ -225,7 +230,8 @@ class PrayerRequestHelper {
             "prayerRequestText": prayerRequestText,
             "userID": userID,
             "username": person.username,
-            "priority": priority
+            "priority": priority,
+            "prayerRequestTitle": prayerRequestTitle
         ])
         
         let prayerRequestID = ref.documentID
@@ -243,7 +249,8 @@ class PrayerRequestHelper {
                         "prayerRequestText": prayerRequestText,
                         "userID": userID,
                         "username": person.username,
-                        "priority": priority
+                        "priority": priority,
+                        "prayerRequestTitle": prayerRequestTitle
                     ])
                 }
             }
@@ -257,7 +264,8 @@ class PrayerRequestHelper {
                     "prayerRequestText": prayerRequestText,
                     "userID": userID,
                     "username": person.username,
-                    "priority": priority
+                    "priority": priority,
+                    "prayerRequestTitle": prayerRequestTitle
                 ])
         }
         
@@ -273,7 +281,8 @@ class PrayerRequestHelper {
             "prayerRequestText": prayerRequestText,
             "userID": userID,
             "username": person.username,
-            "priority": priority
+            "priority": priority,
+            "prayerRequestTitle": prayerRequestTitle
         ])
     }
     

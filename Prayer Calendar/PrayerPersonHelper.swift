@@ -24,7 +24,7 @@ class PrayerPersonHelper {
                 if let document = document, document.exists {
                     
                     let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
-                    print("Document data: " + dataDescription)
+//                    print("Document data: " + dataDescription)
                     
                         //Update Dataholder with PrayStartDate from Firestore
                     let startDateTimeStamp = document.get("prayStartDate") as? Timestamp ?? Timestamp(date: Date())
@@ -133,18 +133,6 @@ class PrayerPersonHelper {
         }
         
         return check
-        
-//        let ref = Firestore.firestore()
-//            .collection("usernames")
-//            .document(username.lowercased())
-//        
-//        ref.getDocument{(document, error) in
-//            if let document = document, document.exists {
-//                check = true
-//            } else {
-//                check = false
-//            }
-//        }
     }
     
 
