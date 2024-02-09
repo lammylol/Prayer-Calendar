@@ -56,7 +56,7 @@ struct ProfileView: View {
                         Text(usernameDisplay())
                         Spacer()
                     }
-                    .padding(.leading, 20)
+                    .padding([.leading, .trailing], 20)
                     .font(.system(size: 14))
                     .italic()
                     

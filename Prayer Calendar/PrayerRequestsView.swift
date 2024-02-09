@@ -26,10 +26,9 @@ struct PrayerRequestsView: View {
     }
     
     var body: some View {
-        
         LazyVStack {
-    
-            HStack {
+            HStack{
+                // Only show this if you are the owner of profile.
                 if person.username == userHolder.person.username {
                     Text("My Prayer Requests")
                         .font(.title3)
@@ -43,12 +42,15 @@ struct PrayerRequestsView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.leading, 20)
                 }
-
-                Button(action: { showSubmit.toggle()
-                }) {
-                    Image(systemName: "plus")
+                
+                // Only show this if the account has been created under your userID. Aka, can be your profile or another that you have created for someone.
+                if person.userID == userHolder.person.userID {
+                    Button(action: { showSubmit.toggle()
+                    }) {
+                        Image(systemName: "plus")
+                    }
+                    .padding(.trailing, 15)
                 }
-                .padding(.trailing, 15)
             }
                 
             Divider()
@@ -65,21 +67,24 @@ struct PrayerRequestsView: View {
         }
         
         .overlay {
-            if prayerRequests.isEmpty {
-                VStack{
-                    ContentUnavailableView {
-                        Label("No Prayer Requests", systemImage: "list.bullet.rectangle.portrait")
-                    } description: {
-                        Text("Start adding prayer requests to your list")
-                    } actions: {
-                        Button(action: {showSubmit.toggle() })
-                        {
-                            Text("Add Prayer Request")
+            // Only show this if this account is saved under your userID.
+            if person.userID == userHolder.person.userID {
+                if prayerRequests.isEmpty {
+                    VStack{
+                        ContentUnavailableView {
+                            Label("No Prayer Requests", systemImage: "list.bullet.rectangle.portrait")
+                        } description: {
+                            Text("Start adding prayer requests to your list")
+                        } actions: {
+                            Button(action: {showSubmit.toggle() })
+                            {
+                                Text("Add Prayer Request")
+                            }
                         }
+                        .frame(height: 250)
+                        .offset(y: 120)
+                        Spacer()
                     }
-                    .frame(height: 250)
-                    .offset(y: 120)
-                    Spacer()
                 }
             }
         }
