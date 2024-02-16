@@ -13,7 +13,7 @@ struct SubmitPrayerRequestForm: View {
     @Environment(UserProfileHolder.self) var userHolder
     @Environment(\.dismiss) var dismiss
     
-    var person: PrayerPerson
+    var person: Person
     @State var datePosted = Date()
     @State var status: String = "Current"
     @State var prayerRequestText: String = ""
@@ -43,7 +43,7 @@ struct SubmitPrayerRequestForm: View {
                     }
                     ZStack(alignment: .topLeading) {
                         if prayerRequestText.isEmpty {
-                            Text("Enter text")
+                            Text("Enter text: suggestion - write your request in the form of a prayer, so that readers can join with you in prayer as they read it.")
                                 .padding(.leading, 0)
                                 .padding(.top, 8)
                                 .foregroundStyle(Color.gray)
@@ -81,7 +81,7 @@ struct SubmitPrayerRequestForm: View {
     }
         
     func submitList() {
-        PrayerRequestHelper().addPrayerRequest(userID: userHolder.person.userID, datePosted: Date(), person: person, prayerRequestText: prayerRequestText, prayerRequestTitle: prayerRequestTitle, priority: priority, friendsList: userHolder.friendsList)
+        PrayerRequestHelper().createPrayerRequest(userID: userHolder.person.userID, datePosted: Date(), person: person, prayerRequestText: prayerRequestText, prayerRequestTitle: prayerRequestTitle, priority: priority, friendsList: userHolder.friendsList)
 
         print("Saved")
         dismiss()
@@ -89,6 +89,6 @@ struct SubmitPrayerRequestForm: View {
 }
 
 #Preview {
-    SubmitPrayerRequestForm(person: PrayerPerson(username: "lammylol"))
+    SubmitPrayerRequestForm(person: Person(username: "lammylol"))
         .environment(UserProfileHolder())
 }

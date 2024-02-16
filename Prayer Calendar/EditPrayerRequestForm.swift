@@ -12,7 +12,7 @@ struct EditPrayerRequestForm: View {
     @Environment(UserProfileHolder.self) var userHolder
     @Environment(\.dismiss) var dismiss
     
-    var person: PrayerPerson
+    var person: Person
     @State var prayerRequest: PrayerRequest
     
     var body: some View {
@@ -58,10 +58,16 @@ struct EditPrayerRequestForm: View {
                     }
                 }.frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: .infinity)
                 .onAppear() {
-                    prayerRequest = PrayerRequest(id: prayerRequest.id, userID: prayerRequest.userID, username: prayerRequest.username, date: prayerRequest.date, prayerRequestText: prayerRequest.prayerRequestText, status: prayerRequest.status, firstName: prayerRequest.firstName, lastName: prayerRequest.lastName, priority: prayerRequest.priority, prayerRequestTitle: prayerRequest.prayerRequestTitle)
+                    prayerRequest = PrayerRequest(id: prayerRequest.id, userID: prayerRequest.userID, username: prayerRequest.username, date: prayerRequest.date, prayerRequestText: prayerRequest.prayerRequestText, status: prayerRequest.status, firstName: prayerRequest.firstName, lastName: prayerRequest.lastName, priority: prayerRequest.priority, prayerRequestTitle: prayerRequest.prayerRequestTitle, latestUpdateText: prayerRequest.latestUpdateText, latestUpdateDatePosted: prayerRequest.latestUpdateDatePosted)
                     
                     print(prayerRequest.date)
                 }
+                
+                //if list of prayer request updates >0, show list.
+                
+//                Button(action: {PrayerRequestHelper().addPrayerRequestUpdate(datePosted: Date(), prayerRequest: prayerRequest, prayerRequestUpdate: prayerRequestUpdate, person: person, friendsList: userHolder.friendsList)}) {
+//                    Text("Add Prayer Update")
+//                }
             }
             
             .toolbar {
@@ -106,7 +112,7 @@ struct EditPrayerRequestForm: View {
     }
     
     func updatePrayerRequest(prayerRequestVar: PrayerRequest) {
-        PrayerRequestHelper().updatePrayerRequest(prayerRequest: prayerRequestVar, person: person, friendsList: userHolder.friendsList)
+        PrayerRequestHelper().editPrayerRequest(prayerRequest: prayerRequestVar, person: person, friendsList: userHolder.friendsList)
 
         print("Saved")
         dismiss()
@@ -121,6 +127,6 @@ struct EditPrayerRequestForm: View {
 }
 
 #Preview {
-    EditPrayerRequestForm(person: PrayerPerson(username: ""), prayerRequest: PrayerRequest.preview)
+    EditPrayerRequestForm(person: Person(username: ""), prayerRequest: PrayerRequest.preview)
         .environment(UserProfileHolder())
 }

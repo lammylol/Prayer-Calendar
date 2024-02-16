@@ -15,7 +15,7 @@ struct PrayerFeedView: View {
     @State var prayerRequestVar: PrayerRequest = PrayerRequest.blank
     
     @Environment(UserProfileHolder.self) var userHolder
-    var person: PrayerPerson
+    var person: Person
     
     func handleTap(prayerRequest: PrayerRequest) async {
         prayerRequestVar = prayerRequest
@@ -76,5 +76,5 @@ struct PrayerFeedView: View {
 }
 
 #Preview {
-    PrayerFeedView(person: PrayerPerson(username: ""))
+    PrayerFeedView(person: Person(username: ""))
 }

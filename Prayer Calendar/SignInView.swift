@@ -86,6 +86,7 @@ struct SignInView: View {
                     let userID = Auth.auth().currentUser!.uid
                     await getUserInfo(userID: userID, email: email)
                     userHolder.isLoggedIn = true
+                    userHolder.userPassword = password
                     email = ""
                     password = ""
                     username = ""
@@ -118,7 +119,7 @@ struct SignInView: View {
             let username = document.get("username") as! String
             let userID = document.get("userID") as! String
             
-            let prayerPerson = PrayerPerson(userID: userID, username: username, email: email, firstName: firstName, lastName: lastName)
+            let prayerPerson = Person(userID: userID, username: username, email: email, firstName: firstName, lastName: lastName)
             print("/username: " + prayerPerson.username)
             
             userHolder.person = prayerPerson

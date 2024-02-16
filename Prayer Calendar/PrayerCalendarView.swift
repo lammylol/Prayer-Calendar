@@ -26,7 +26,9 @@ struct PrayerCalendarView: View {
                                 .padding(.horizontal, 10)
                                 .padding(.top, 20)
                                 .task {
-                                    await PrayerPersonHelper().getPrayerList(userHolder: userHolder, prayerListHolder: prayerListHolder)
+                                    if userHolder.isLoggedIn == true {
+                                        await PrayerPersonHelper().getPrayerList(userHolder: userHolder, prayerListHolder: prayerListHolder)
+                                    }
                                 }
                         }
                         .background(Color.gray.opacity(0.05))

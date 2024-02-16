@@ -42,9 +42,9 @@ class PrayerPersonHelper {
     }
 
     // The following function returns an array of PrayerPerson's so that the view can grab both the username or name.
-    func retrievePrayerPersonArray(prayerList: String) -> [PrayerPerson] {
+    func retrievePrayerPersonArray(prayerList: String) -> [Person] {
         let ref = prayerList.components(separatedBy: "\n")
-        var prayerArray: [PrayerPerson] = []
+        var prayerArray: [Person] = []
         var firstName = ""
         var lastName = ""
         var username = ""
@@ -69,7 +69,7 @@ class PrayerPersonHelper {
                 lastName = String(nameArray?.last ?? "").trimmingCharacters(in: .whitespaces)
             }
             
-            let prayerPerson = PrayerPerson(username: username, firstName: firstName, lastName: lastName)
+            let prayerPerson = Person(username: username, firstName: firstName, lastName: lastName)
             prayerArray.append(prayerPerson)
         }
         
@@ -77,7 +77,7 @@ class PrayerPersonHelper {
     }
     
     // Retrieve requested userID off of username
-    func retrieveUserInfoFromUsername(person: PrayerPerson, userHolder: UserProfileHolder) async -> PrayerPerson {
+    func retrieveUserInfoFromUsername(person: Person, userHolder: UserProfileHolder) async -> Person {
         var userID = ""
         var firstName = person.firstName
         var lastName = person.lastName
@@ -109,7 +109,7 @@ class PrayerPersonHelper {
         }
         
         print("username: \(person.username); userID: \(userID); firstName: \(firstName); lastName: \(lastName)")
-        return PrayerPerson(userID: userID, username: person.username, firstName: firstName, lastName: lastName)
+        return Person(userID: userID, username: person.username, firstName: firstName, lastName: lastName)
     }
     
     func checkIfUsernameExists(username: String) async -> Bool {

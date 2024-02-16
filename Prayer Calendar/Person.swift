@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct PrayerPerson: Hashable {
+struct Person: Hashable {
     var userID: String = ""
     var username: String = ""
     var email: String = ""
@@ -15,16 +15,16 @@ struct PrayerPerson: Hashable {
     var lastName: String = ""
 }
 
-extension PrayerPerson {
-    static var blank: PrayerPerson {
+extension Person {
+    static var blank: Person {
         let item =
-        PrayerPerson(username: "")
+        Person(username: "")
         return item
     }
     
-    static var preview: PrayerPerson {
+    static var preview: Person {
         let item =
-        PrayerPerson(username: "matthewthelam@gmail.com", firstName: "Matt", lastName: "Lam")
+        Person(username: "matthewthelam@gmail.com", firstName: "Matt", lastName: "Lam")
         return item
     }
 }

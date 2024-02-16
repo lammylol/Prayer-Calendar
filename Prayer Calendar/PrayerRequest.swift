@@ -18,6 +18,8 @@ struct PrayerRequest : Identifiable {
     var lastName: String
     var priority: String
     var prayerRequestTitle: String
+    var latestUpdateText: String
+    var latestUpdateDatePosted: Date
 }
 
 extension PrayerRequest {
@@ -32,7 +34,10 @@ extension PrayerRequest {
             firstName: "Matt",
             lastName: "Lam",
             priority: "high",
-            prayerRequestTitle: "Test this is Title djaskldjklsajdklasjdklasjdklajsdlkasjdklajdklajdklajsdklasjdklasjdklasjdaklsdjaldjklad")
+            prayerRequestTitle: "Test this is Title djaskldjklsajdklasjdklasjdklajsdlkasjdklajdklajdklajsdklasjdklasjdklasjdaklsdjaldjklad",
+            latestUpdateText: "Test Latest Update.",
+            latestUpdateDatePosted: Date()
+        )
         return item
     }
     
@@ -47,7 +52,25 @@ extension PrayerRequest {
             firstName: "",
             lastName: "",
             priority: "",
-            prayerRequestTitle: "")
+            prayerRequestTitle: "",
+            latestUpdateText: "",
+            latestUpdateDatePosted: Date())
+        return item
+    }
+}
+
+struct PrayerRequestUpdate : Identifiable {
+    var id: String = ""
+    var date: Date
+    var prayerUpdateText: String
+}
+
+extension PrayerRequestUpdate {
+    static var blank: PrayerRequestUpdate {
+        let item =
+        PrayerRequestUpdate(
+            date: Date(),
+            prayerUpdateText: "")
         return item
     }
 }

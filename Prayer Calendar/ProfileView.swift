@@ -14,7 +14,7 @@ import FirebaseFirestore
 struct ProfileView: View {
     @State private var showSubmit: Bool = false
     @State private var showEditView: Bool = false
-    @State var person: PrayerPerson
+    @State var person: Person
     
     @Environment(UserProfileHolder.self) var userHolder
     @Environment(PrayerListHolder.self) var dataHolder
@@ -25,21 +25,23 @@ struct ProfileView: View {
                 VStack {
                     Text("")
                         .toolbar {
-                            if person.username == userHolder.person.username {
+//                            if person.username == userHolder.person.username {
                                 ToolbarItem(placement: .topBarTrailing) {
-                                    Button(action: {
-                                        self.signOut()
-                                    }) {Text("logout")
-                                            .bold()
-                                            .font(.system(size: 14))
-                                            .frame(width: 60, height: 25)
-                                            .background(
-                                                RoundedRectangle(cornerRadius: 15)
-                                                    .fill(Color.blue)
-                                            )
-                                            .foregroundColor(.white)
-                                    }
-                                }
+                                    NavigationLink(destination: ProfileSettingsView()) {
+                                        Image(systemName: "line.horizontal.3")}
+//                                }
+//                                    Button(action: {
+//                                        self.signOut()
+//                                    }) {Text("logout")
+//                                            .bold()
+//                                            .font(.system(size: 14))
+//                                            .frame(width: 60, height: 25)
+//                                            .background(
+//                                                RoundedRectangle(cornerRadius: 15)
+//                                                    .fill(Color.blue)
+//                                            )
+//                                            .foregroundColor(.white)
+//                                    }
 //                                ToolbarItem(){
 //                                    Button(action: {
 //                                        Task {
@@ -72,20 +74,20 @@ struct ProfileView: View {
         }
     }
     
-    func signOut() {
-        // Sign out from firebase and change loggedIn to return to SignInView.
-        try? Auth.auth().signOut()
-        resetInfo()
-    }
-                    
-    func resetInfo() {
-        userHolder.friendsList = []
-        userHolder.isLoggedIn = false
-        
-        dataHolder.userID = ""
-        dataHolder.prayerList = ""
-        dataHolder.prayStartDate = Date()
-    }
+//    func signOut() {
+//        // Sign out from firebase and change loggedIn to return to SignInView.
+//        try? Auth.auth().signOut()
+//        resetInfo()
+//    }
+//                    
+//    func resetInfo() {
+//        userHolder.friendsList = []
+//        userHolder.isLoggedIn = false
+//        
+//        dataHolder.userID = ""
+//        dataHolder.prayerList = ""
+//        dataHolder.prayStartDate = Date()
+//    }
     
     func usernameDisplay() -> String {
         
@@ -98,7 +100,7 @@ struct ProfileView: View {
 }
 
 #Preview {
-    ProfileView(person: PrayerPerson(userID: "aMq0YdteGEbYXWlSgxehVy7Fyrl2", username: "lammylol"))
+    ProfileView(person: Person(userID: "aMq0YdteGEbYXWlSgxehVy7Fyrl2", username: "lammylol"))
         .environment(UserProfileHolder())
         .environment(PrayerListHolder())
 }

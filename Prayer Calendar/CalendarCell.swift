@@ -19,7 +19,7 @@ struct CalendarCell: View {
     
     let prayerStartingSpaces: Int
     let prayerList: String
-    let prayerListArray: [PrayerPerson]
+    let prayerListArray: [Person]
     let prayerRange: Int
     
     var prayerName: String = ""
@@ -52,7 +52,7 @@ struct CalendarCell: View {
             .frame(maxWidth: .infinity)
             .frame(height: 95)
         } else {
-            NavigationLink(destination: ProfileView(person: PrayerPerson(username: monthStruct().person.username, firstName: monthStruct().person.firstName, lastName: monthStruct().person.lastName))) {
+            NavigationLink(destination: ProfileView(person: Person(username: monthStruct().person.username, firstName: monthStruct().person.firstName, lastName: monthStruct().person.lastName))) {
                 
                 if (monthStruct().day() == Date.now.formatted(.dateTime.day()) &&
                     date.formatted(date: .abbreviated, time: .omitted) == Date().formatted(date: .abbreviated, time: .omitted)) {
@@ -116,21 +116,21 @@ struct CalendarCell: View {
         if (count <= start) {
             let day = daysInPrevMonth - (startingSpaces - count)
             let person = prayerNameFunc(count: count, prayerRange: prayerRange, prayerListArray: prayerListArray)
-            return MonthStruct(monthType: MonthType.Previous, dayInt: day, prayerRange: prayerRange, person: person ?? PrayerPerson.blank)
+            return MonthStruct(monthType: MonthType.Previous, dayInt: day, prayerRange: prayerRange, person: person ?? Person.blank)
         }
         
         else if ((count - startingSpaces) > daysInMonth) {
             let day = count - startingSpaces - daysInMonth
             let person = prayerNameFunc(count: count, prayerRange: prayerRange, prayerListArray: prayerListArray)
-            return MonthStruct(monthType: MonthType.Next, dayInt: day, prayerRange: prayerRange, person: person ?? PrayerPerson.blank)
+            return MonthStruct(monthType: MonthType.Next, dayInt: day, prayerRange: prayerRange, person: person ?? Person.blank)
         }
         
         let day = count-start
         let person = prayerNameFunc(count: count, prayerRange: prayerRange, prayerListArray: prayerListArray)
-        return MonthStruct(monthType: MonthType.Current, dayInt: day, /*prayerName: person?.name ?? "",*/ prayerRange: prayerRange, /*prayerUsername: person?.username ?? "", */person: person ?? PrayerPerson.blank)
+        return MonthStruct(monthType: MonthType.Current, dayInt: day, /*prayerName: person?.name ?? "",*/ prayerRange: prayerRange, /*prayerUsername: person?.username ?? "", */person: person ?? Person.blank)
     }
     
-    func prayerNameFunc(count: Int, prayerRange: Int, prayerListArray: [PrayerPerson]) -> PrayerPerson? {
+    func prayerNameFunc(count: Int, prayerRange: Int, prayerListArray: [Person]) -> Person? {
         if prayerRange < 0 || prayerListArray.isEmpty { //(count - startingSpaces)
             return nil
         }

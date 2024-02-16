@@ -17,7 +17,7 @@ struct PrayerRequestRow: View {
             HStack() {
                 if profileOrPrayerFeed == "feed" {
                     VStack() {
-                        NavigationLink(destination: ProfileView(person: PrayerPerson(userID: prayerRequest.userID, username: prayerRequest.username, firstName: prayerRequest.firstName, lastName: prayerRequest.lastName))){
+                        NavigationLink(destination: ProfileView(person: Person(userID: prayerRequest.userID, username: prayerRequest.username, firstName: prayerRequest.firstName, lastName: prayerRequest.lastName))){
                             ProfilePictureAvatar(firstName: prayerRequest.firstName, lastName: prayerRequest.lastName, imageSize: 50, fontSize: 20)
                         }.buttonStyle(.plain)
                         Spacer()
@@ -67,5 +67,5 @@ struct PrayerRequestRow: View {
 }
 
 #Preview {
-    PrayerRequestRow(prayerRequest: PrayerRequest(userID: "", username: "lammylol", date: Date(), prayerRequestText: "Prayers for this text to look beautiful. Prayers for this text to look beautiful.", status: "Current", firstName: "Matt", lastName: "Lam", priority: "high", prayerRequestTitle: "Prayers for Text"), profileOrPrayerFeed: "feed").frame(maxHeight: 180)
+    PrayerRequestRow(prayerRequest: PrayerRequest(userID: "", username: "lammylol", date: Date(), prayerRequestText: "Prayers for this text to look beautiful. Prayers for this text to look beautiful.", status: "Current", firstName: "Matt", lastName: "Lam", priority: "high", prayerRequestTitle: "Prayers for Text", latestUpdateText: "", latestUpdateDatePosted: Date()), profileOrPrayerFeed: "feed").frame(maxHeight: 180)
 }

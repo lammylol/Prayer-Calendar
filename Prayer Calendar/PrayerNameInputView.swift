@@ -130,7 +130,7 @@ struct PrayerNameInputView: View {
             
             for usernameOrName in insertions {
                 if usernameOrName.contains("/") == false { // This checks if the person is a linked account or not. If it was linked, usernameOrName would be a username. Usernames cannot have special characters in them.
-                    let person = await PrayerPersonHelper().retrieveUserInfoFromUsername(person: PrayerPerson(username: usernameOrName), userHolder: userHolder) // retrieve the "person" structure based on their username. Will return back user info.
+                    let person = await PrayerPersonHelper().retrieveUserInfoFromUsername(person: Person(username: usernameOrName), userHolder: userHolder) // retrieve the "person" structure based on their username. Will return back user info.
                     
                     // Update the friends list of the person who you have now added to your list. Their friends list is updated, so that when they post, it will add to your feed. At the same time, any of their existing requests will also populate into your feed.
                     let refFriends = db.collection("users").document(person.userID).collection("friendsList").document(userHolder.person.userID)
@@ -150,13 +150,13 @@ struct PrayerNameInputView: View {
                 } else { //else is for any names you have added which do not have a username; under your account and not linked.
                     
                     // Fetch all historical prayers from that person into your feed, noting that these do not have a linked username. So you need to pass in your own userID into that person for the function to retrieve out of your prayerFeed/youruserID.
-                    await updateFriendHistoricalPrayersIntoFeed(userID: userID, person: PrayerPerson(userID: userID, firstName: String(usernameOrName.split(separator: "/").first ?? ""), lastName: String(usernameOrName.split(separator: "/").last ?? "")))
+                    await updateFriendHistoricalPrayersIntoFeed(userID: userID, person: Person(userID: userID, firstName: String(usernameOrName.split(separator: "/").first ?? ""), lastName: String(usernameOrName.split(separator: "/").last ?? "")))
                 }
             }
             for usernameOrName in removals {
                 if usernameOrName.contains("/") == false { // This checks if the person is a linked account or not. If it was linked, usernameOrName would be a username. Usernames cannot have special characters in them.
                     
-                    let person = await PrayerPersonHelper().retrieveUserInfoFromUsername(person: PrayerPerson(username: usernameOrName), userHolder: userHolder) // retrieve the "person" structure based on their username. Will return back user info.
+                    let person = await PrayerPersonHelper().retrieveUserInfoFromUsername(person: Person(username: usernameOrName), userHolder: userHolder) // retrieve the "person" structure based on their username. Will return back user info.
                     
                     // Update the friends list of the person who you have now removed from your list. Their friends list is updated, so that when they post, it will not add to your feed.
                     let refFriends = db.collection("users").document(person.userID).collection("friendsList").document(userHolder.person.userID)
@@ -202,16 +202,16 @@ struct PrayerNameInputView: View {
     }
     
     //Adding a friend - this updates the historical prayer feed
-    func updateFriendHistoricalPrayersIntoFeed(userID: String, person: PrayerPerson) async {
+    func updateFriendHistoricalPrayersIntoFeed(userID: String, person: Person) async {
         //In this scenario, userID is the userID of the person retrieving data from the 'person'.
             Task{
                 do {
                     //user is retrieving prayer requests of the friend: person.userID and person: person.
-                    let prayerRequests = try await PrayerRequestHelper().retrievePrayerRequest(userID: person.userID, person: person)
+                    let prayerRequests = try await PrayerRequestHelper().getPrayerRequests(userID: person.userID, person: person)
                     
                     //for each prayer request, user is taking the friend's prayer request and updating them to their own feed. The user becomes the 'friend' of the person.
                     for prayer in prayerRequests {
-                        PrayerRequestHelper().updatePrayerFeed(prayerRequest: prayer, person: person, friendID: userID, updateFriend: true)
+                        PrayerRequestHelper().updatePrayerFeed(prayerRequest: prayer, person: person, friendID: userID, updateFriend: true, isOriginalPrayerRequest: true)
                     }
 //                    print(prayerRequests)
                 } catch {

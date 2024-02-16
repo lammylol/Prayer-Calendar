@@ -15,7 +15,7 @@ struct MonthStruct {
     var prayerRange: Int
 //    var prayerUsername: String
     
-    var person: PrayerPerson
+    var person: Person
     
     func day() -> String {
         return String(dayInt)

@@ -14,7 +14,7 @@ struct PrayerRequestsView: View {
     @Environment(UserProfileHolder.self) var userHolder
     @State private var showSubmit: Bool = false
     @State private var showEdit: Bool = false
-    @State var person: PrayerPerson
+    @State var person: Person
 
     @State var prayerRequestVar: PrayerRequest = PrayerRequest.preview
     @State var prayerRequests = [PrayerRequest]()
@@ -92,7 +92,7 @@ struct PrayerRequestsView: View {
         .task {
             do {
                 person = await PrayerPersonHelper().retrieveUserInfoFromUsername(person: person, userHolder: userHolder)
-                prayerRequests = try await PrayerRequestHelper().retrievePrayerRequest(userID: person.userID, person: person)
+                prayerRequests = try await PrayerRequestHelper().getPrayerRequests(userID: person.userID, person: person)
                 print("Success retrieving prayer requests for \(person.userID)")
             } catch PrayerRequestRetrievalError.noUserID {
                 print("No User ID to retrieve prayer requests with.")
@@ -104,7 +104,7 @@ struct PrayerRequestsView: View {
         .sheet(isPresented: $showEdit, onDismiss: {
             Task {
                 do {
-                    prayerRequests = try await PrayerRequestHelper().retrievePrayerRequest(userID: person.userID, person: person)
+                    prayerRequests = try await PrayerRequestHelper().getPrayerRequests(userID: person.userID, person: person)
                     print("Success retrieving prayer requests for \(person.userID)")
                 } catch PrayerRequestRetrievalError.noUserID {
                     print("No User ID to retrieve prayer requests with.")
@@ -119,7 +119,7 @@ struct PrayerRequestsView: View {
         .sheet(isPresented: $showSubmit, onDismiss: {
             Task {
                 do {
-                    prayerRequests = try await PrayerRequestHelper().retrievePrayerRequest(userID: person.userID, person: person)
+                    prayerRequests = try await PrayerRequestHelper().getPrayerRequests(userID: person.userID, person: person)
                     print("Success retrieving prayer requests for \(person.userID)")
                 } catch PrayerRequestRetrievalError.noUserID {
                     print("No User ID to retrieve prayer requests with.")
@@ -136,5 +136,5 @@ struct PrayerRequestsView: View {
 }
 
 #Preview {
-    PrayerRequestsView(person: PrayerPerson(userID: "aMq0YdteGEbYXWlSgxehVy7Fyrl2", username: "lammylol"))
+    PrayerRequestsView(person: Person(userID: "aMq0YdteGEbYXWlSgxehVy7Fyrl2", username: "lammylol"))
 }
