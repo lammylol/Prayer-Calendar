@@ -200,7 +200,7 @@ class PrayerUpdateHelper {
             latestUpdateText = updates.last?.prayerUpdateText ?? ""
         } else {
             // if either there are no updates, or there will be no updates after delete, then get datePosted of the original prayer request.
-            latestUpdateText = prayerRequest.prayerRequestText
+            latestUpdateText = ""
         }
         
         return latestUpdateText

@@ -35,8 +35,10 @@ class PrayerRequestHelper {
             for document in querySnapshot.documents {
 //                print("\(document.documentID) => \(document.data())")
                 let timestamp = document.data()["datePosted"] as? Timestamp ?? Timestamp()
-                //              let timestamp = document.data()["DatePosted"]/* as? ip_timestamp ?? ip_timestamp()*/
                 let datePosted = timestamp.dateValue()
+                
+                let latestTimestamp = document.data()["latestUpdateDatePosted"] as? Timestamp ?? Timestamp()
+                let latestUpdateDatePosted = latestTimestamp.dateValue()
                 
                 let firstName = document.data()["firstName"] as? String ?? ""
                 let lastName = document.data()["lastName"] as? String ?? ""
@@ -47,8 +49,9 @@ class PrayerRequestHelper {
                 let priority = document.data()["priority"] as? String ?? ""
                 let documentID = document.documentID as String
                 let prayerRequestTitle = document.data()["prayerRequestTitle"] as? String ?? ""
+                let latestUpdateText = document.data()["latestUpdateText"] as? String ?? ""
                 
-                let prayerRequest = PrayerRequest(id: documentID, userID: userID, username: username, date: datePosted, prayerRequestText: prayerRequestText, status: status, firstName: firstName, lastName: lastName, priority: priority, prayerRequestTitle: prayerRequestTitle, latestUpdateText: "", latestUpdateDatePosted: datePosted)
+                let prayerRequest = PrayerRequest(id: documentID, userID: userID, username: username, date: datePosted, prayerRequestText: prayerRequestText, status: status, firstName: firstName, lastName: lastName, priority: priority, prayerRequestTitle: prayerRequestTitle, latestUpdateText: latestUpdateText, latestUpdateDatePosted: latestUpdateDatePosted)
                 
                 prayerRequests.append(prayerRequest)
             }

@@ -13,54 +13,154 @@ struct PrayerRequestRow: View {
     let profileOrPrayerFeed: String
     
     var body: some View {
-        VStack(){
-            HStack() {
-                if profileOrPrayerFeed == "feed" {
-                    VStack() {
-                        NavigationLink(destination: ProfileView(person: Person(userID: prayerRequest.userID, username: prayerRequest.username, firstName: prayerRequest.firstName, lastName: prayerRequest.lastName))){
-                            ProfilePictureAvatar(firstName: prayerRequest.firstName, lastName: prayerRequest.lastName, imageSize: 50, fontSize: 20)
-                        }.buttonStyle(.plain)
-                        Spacer()
-                    }
-                    .padding(.trailing, 10)
-                } else {
-                    VStack() {
+        HStack {
+            if profileOrPrayerFeed == "feed" {
+                VStack() {
+                    NavigationLink(destination: ProfileView(person: Person(userID: prayerRequest.userID, username: prayerRequest.username, firstName: prayerRequest.firstName, lastName: prayerRequest.lastName))){
                         ProfilePictureAvatar(firstName: prayerRequest.firstName, lastName: prayerRequest.lastName, imageSize: 50, fontSize: 20)
-                            .buttonStyle(.plain)
-                            .foregroundStyle(Color.primary)
-                        Spacer()
-                    }.padding(.trailing, 10)
-                }
-                VStack(alignment: .leading) {
-                    HStack() {
-                        Text(prayerRequest.firstName + " " + prayerRequest.lastName).font(.system(size: 16)).bold()
-                        Spacer()
-                        Text(prayerRequest.date, style: .date)
-                    }
-                    .font(.system(size: 12))
-                    .padding(.bottom, 2)
-                    Text("Prayer Status: ").font(.system(size: 12)).italic() + Text(prayerRequest.status.capitalized).font(.system(size: 12)).italic()
-                    Spacer()
-                    
-                    if prayerRequest.prayerRequestTitle != "" {
-                        Text(prayerRequest.prayerRequestTitle).font(.system(size: 16)).bold()
-                        Spacer()
-                    }
-                    
-                    Text("\(prayerRequest.prayerRequestText)")
-                        .font(.system(size: 16))
-                        .multilineTextAlignment(.leading)
+                    }.buttonStyle(.plain)
                     Spacer()
                 }
-                .foregroundStyle(Color.primary)
+                .padding(.trailing, 10)
+            } else {
+                VStack() {
+                    ProfilePictureAvatar(firstName: prayerRequest.firstName, lastName: prayerRequest.lastName, imageSize: 50, fontSize: 20)
+                        .buttonStyle(.plain)
+                        .foregroundStyle(Color.primary)
+                    Spacer()
+                }.padding(.trailing, 10)
             }
+            VStack(alignment: .leading) {
+                HStack() {
+                    Text(prayerRequest.firstName + " " + prayerRequest.lastName).font(.system(size: 16)).bold()
+                    Spacer()
+                    Text(prayerRequest.date, style: .date)
+                }
+                .font(.system(size: 12))
+                .padding(.bottom, 2)
+                Text("Prayer Status: ").font(.system(size: 12)).italic() + Text(prayerRequest.status.capitalized)
+                    .font(.system(size: 12))
+                    .italic()
+                
+                if prayerRequest.prayerRequestTitle != "" {
+                    Text(prayerRequest.prayerRequestTitle)
+                        .font(.system(size: 18))
+                        .bold()
+//                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .multilineTextAlignment(.leading)
+//                        .padding(.all, 7)
+//                        .foregroundStyle(.white, .black)
+//                        .background(
+//                            RoundedRectangle(cornerRadius: 7)
+//                                .fill(Color.random)
+//                        )
+                        .padding(.top, 7)
+//                    Spacer()
+                }
+                
+                if prayerRequest.latestUpdateText != "" {
+                    VStack {
+//                        if prayerRequest.prayerRequestTitle != "" {
+//                            Text(prayerRequest.prayerRequestTitle)
+//                                .font(.system(size: 18))
+//                                .bold()
+//                                .frame(maxWidth: .infinity, alignment: .leading)
+//                                .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
+//                                .padding(.top, 10)
+//                            Spacer()
+//                        }
+//                        LatestUpdate(prayerRequest: prayerRequest)
+//                            .padding(.bottom, 3)
+                        Text("**Update**: \(prayerRequest.latestUpdateText)")
+                            .multilineTextAlignment(.leading)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                            .font(.system(size: 16))
+                            .padding(.bottom, 7)
+                            .italic()
+                        Text("\(prayerRequest.prayerRequestText)")
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                            .lineLimit(15)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .font(.system(size: 16))
+                            .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
+                    }.padding(.top, 7)
+                } else {
+                    VStack {
+                        Text(prayerRequest.prayerRequestText)
+                            .font(.system(size: 16))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
+                            .padding(.top, 7)
+                    }
+                }
+            }
+            .foregroundStyle(Color.primary)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding([.leading, .trailing], 20)
+        .padding([.top, .bottom], 15)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         Divider()
     }
 }
 
+struct LatestUpdate: View {
+    var prayerRequest: PrayerRequest
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+//            HStack {
+//                Text("Latest Update")
+//                    .bold()
+//                    .font(.system(size: 12))
+//                Spacer()
+//                Text("\(prayerRequest.latestUpdateDatePosted.formatted(date: .abbreviated, time: .omitted))")
+//                    .font(.system(size: 12))
+//            }
+//            .frame(maxWidth: .infinity, alignment: .leading)
+            Text("UPDATE: \(prayerRequest.latestUpdateText)")
+                .multilineTextAlignment(.leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .font(.system(size: 14))
+//            Spacer()
+        }
+//        .padding(.all, 10)
+//        .foregroundStyle(.white, .black)
+//        .background(
+//            RoundedRectangle(cornerRadius: 7)
+//                .fill(Color.random)
+//        )
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+}
+
+extension Color {
+    static var random: Color {
+        let colors = [
+            Color
+            .red,
+            .green,
+            .blue,
+            .orange,
+//            .yellow,
+            .pink,
+            .purple,
+//            .gray,
+            .black,
+//            .primary,
+            .secondary,
+            .accentColor,
+            .primary.opacity(0.75),
+            .secondary.opacity(0.75),
+            .accentColor.opacity(0.75)
+        ]
+        return colors.randomElement()!
+    }
+}
+
 #Preview {
-    PrayerRequestRow(prayerRequest: PrayerRequest(userID: "", username: "lammylol", date: Date(), prayerRequestText: "Prayers for this text to look beautiful. Prayers for this text to look beautiful.", status: "Current", firstName: "Matt", lastName: "Lam", priority: "high", prayerRequestTitle: "Prayers for Text", latestUpdateText: "", latestUpdateDatePosted: Date()), profileOrPrayerFeed: "feed").frame(maxHeight: 180)
+    PrayerRequestRow(prayerRequest: PrayerRequest(userID: "", username: "lammylol", date: Date(), prayerRequestText: "Prayers for this text to look beautiful. Prayers for this text to look beautiful.", status: "Current", firstName: "Matt", lastName: "Lam", priority: "high", prayerRequestTitle: "Prayers for Text", latestUpdateText: "Test Latest update: Prayers for this text to look beautiful. Prayers for this text to look beautiful.", latestUpdateDatePosted: Date()), profileOrPrayerFeed: "feed").frame(maxHeight: 200)
+}
+
+#Preview {
+    LatestUpdate(prayerRequest: PrayerRequest(userID: "", username: "lammylol", date: Date(), prayerRequestText: "Prayers for this text to look beautiful. Prayers for this text to look beautiful.", status: "Current", firstName: "Matt", lastName: "Lam", priority: "high", prayerRequestTitle: "Prayers for Text", latestUpdateText: "Test Latest update: Prayers for this text to look beautiful. Prayers for this text to look beautiful.", latestUpdateDatePosted: Date()))
 }
