@@ -43,7 +43,7 @@ struct SubmitPrayerRequestForm: View {
                     }
                     ZStack(alignment: .topLeading) {
                         if prayerRequestText.isEmpty {
-                            Text("Enter text: suggestion - write your request in the form of a prayer, so that readers can join with you in prayer as they read it.")
+                            Text("Enter Text. Consider writing your request in the form of a prayer so that readers can join with you in prayer as they read it.")
                                 .padding(.leading, 0)
                                 .padding(.top, 8)
                                 .foregroundStyle(Color.gray)
@@ -81,7 +81,7 @@ struct SubmitPrayerRequestForm: View {
     }
         
     func submitList() {
-        PrayerRequestHelper().createPrayerRequest(userID: userHolder.person.userID, datePosted: Date(), person: person, prayerRequestText: prayerRequestText, prayerRequestTitle: prayerRequestTitle, priority: priority, friendsList: userHolder.friendsList)
+        PrayerRequestHelper().createPrayerRequest(userID: userHolder.person.userID, datePosted: Date(), person: person, prayerRequestText: prayerRequestText, prayerRequestTitle: prayerRequestTitle.uppercased(), priority: priority, friendsList: userHolder.friendsList)
 
         print("Saved")
         dismiss()

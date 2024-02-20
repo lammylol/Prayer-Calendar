@@ -12,6 +12,7 @@ import FirebaseFunctions
 
 enum PrayerRequestRetrievalError: Error {
     case noUserID
+    case noPrayerRequestID
 //    case errorRetrievingFromFirebase
 }
 
@@ -164,85 +165,25 @@ class PrayerRequestHelper {
         if isMyProfile == true {
             if friendsList.isEmpty == false {
                 for friendID in friendsList {
-                    updatePrayerFeed(prayerRequest: prayerRequest, person: person, friendID: friendID, updateFriend: true, isOriginalPrayerRequest: true)
+                    updatePrayerFeed(prayerRequest: prayerRequest, person: person, friendID: friendID, updateFriend: true)
                 }
             }
         } else {
-            updatePrayerFeed(prayerRequest: prayerRequest, person: person, friendID: "", updateFriend: false, isOriginalPrayerRequest: true)
+            updatePrayerFeed(prayerRequest: prayerRequest, person: person, friendID: "", updateFriend: false)
         }
         
         // Add PrayerRequestID and Data to prayerRequests/{prayerRequestID}
-        updatePrayerRequestsDataCollection(prayerRequest: prayerRequest, person: person, isOriginalPrayerRequest: true)
+        updatePrayerRequestsDataCollection(prayerRequest: prayerRequest, person: person)
         print(prayerRequest.prayerRequestText)
     }
     
     // This function updates the prayer feed of all users who are friends of the person.
-    func updatePrayerFeed(prayerRequest: PrayerRequest, person: Person, friendID: String, updateFriend: Bool, isOriginalPrayerRequest: Bool) {
+    func updatePrayerFeed(prayerRequest: PrayerRequest, person: Person, friendID: String, updateFriend: Bool) {
         let db = Firestore.firestore()
-        
-        // isOriginalPrayerRequest == true. This means that the user is adding or updating the original prayer request. It is not a prayer 'update'.
-        if isOriginalPrayerRequest == true {
-            if updateFriend == true {
-                let ref = db.collection("prayerFeed").document(friendID).collection("prayerRequests").document(prayerRequest.id)
-                ref.setData([
-                    "datePosted": prayerRequest.date,
-                    "firstName": prayerRequest.firstName,
-                    "lastName": prayerRequest.lastName,
-                    "status": prayerRequest.status,
-                    "prayerRequestText": prayerRequest.prayerRequestText,
-                    "userID": person.userID,
-                    "username": person.username,
-                    "priority": prayerRequest.priority,
-                    "prayerRequestTitle": prayerRequest.prayerRequestTitle
-                ])
-            } else {
-                // prayer request passed in is the update.
-                let ref = db.collection("prayerFeed").document(person.userID).collection("prayerRequests").document(prayerRequest.id)
-                ref.updateData([
-                    "latestUpdateDatePosted": prayerRequest.date,
-                    "latestUpdateText": prayerRequest.prayerRequestText
-                ])
-            }
-        } else { // isOriginalPrayerRequest == false. This means that the user is adding a prayer 'update'.
-            if updateFriend == true {
-                let ref = db.collection("prayerFeed").document(friendID).collection("prayerRequests").document(prayerRequest.id)
-                ref.setData([
-                    "datePosted": prayerRequest.date,
-                    "firstName": prayerRequest.firstName,
-                    "lastName": prayerRequest.lastName,
-                    "status": prayerRequest.status,
-                    "prayerRequestText": prayerRequest.prayerRequestText,
-                    "userID": person.userID,
-                    "username": person.username,
-                    "priority": prayerRequest.priority,
-                    "prayerRequestTitle": prayerRequest.prayerRequestTitle
-                ])
-            } else {
-                let ref = db.collection("prayerFeed").document(person.userID).collection("prayerRequests").document(prayerRequest.id)
-                ref.setData([
-                    "datePosted": prayerRequest.date,
-                    "firstName": prayerRequest.firstName,
-                    "lastName": prayerRequest.lastName,
-                    "status": prayerRequest.status,
-                    "prayerRequestText": prayerRequest.prayerRequestText,
-                    "userID": person.userID,
-                    "username": person.username,
-                    "priority": prayerRequest.priority,
-                    "prayerRequestTitle": prayerRequest.prayerRequestTitle
-                ])
-            }
-        }
-    }
-    
-    // this function updates the prayer requests collection carrying all prayer requests. Takes in the prayer request being updated, and the person who is being updated for.
-    func updatePrayerRequestsDataCollection(prayerRequest: PrayerRequest, person: Person, isOriginalPrayerRequest: Bool) {
-        let db = Firestore.firestore()
-        
-        let ref =
-        db.collection("prayerRequests").document(prayerRequest.id)
-        
-        if isOriginalPrayerRequest == true {
-            ref.updateData([
+
+        if updateFriend == true {
+            let ref = db.collection("prayerFeed").document(friendID).collection("prayerRequests").document(prayerRequest.id)
+            ref.setData([
                 "datePosted": prayerRequest.date,
                 "firstName": prayerRequest.firstName,
                 "lastName": prayerRequest.lastName,
@@ -254,11 +195,39 @@ class PrayerRequestHelper {
                 "prayerRequestTitle": prayerRequest.prayerRequestTitle
             ])
         } else {
-            ref.updateData([
-                "latestUpdateDatePosted": prayerRequest.date,
-                "latestUpdateText": prayerRequest.prayerRequestText])
+            let ref = db.collection("prayerFeed").document(person.userID).collection("prayerRequests").document(prayerRequest.id)
+            ref.setData([
+                "datePosted": prayerRequest.date,
+                "firstName": prayerRequest.firstName,
+                "lastName": prayerRequest.lastName,
+                "status": prayerRequest.status,
+                "prayerRequestText": prayerRequest.prayerRequestText,
+                "userID": person.userID,
+                "username": person.username,
+                "priority": prayerRequest.priority,
+                "prayerRequestTitle": prayerRequest.prayerRequestTitle
+            ])
         }
-
+    }
+    
+    // this function updates the prayer requests collection carrying all prayer requests. Takes in the prayer request being updated, and the person who is being updated for.
+    func updatePrayerRequestsDataCollection(prayerRequest: PrayerRequest, person: Person) {
+        let db = Firestore.firestore()
+        
+        let ref =
+        db.collection("prayerRequests").document(prayerRequest.id)
+        
+        ref.updateData([
+            "datePosted": prayerRequest.date,
+            "firstName": prayerRequest.firstName,
+            "lastName": prayerRequest.lastName,
+            "status": prayerRequest.status,
+            "prayerRequestText": prayerRequest.prayerRequestText,
+            "userID": person.userID,
+            "username": person.username,
+            "priority": prayerRequest.priority,
+            "prayerRequestTitle": prayerRequest.prayerRequestTitle
+        ])
     }
     
     //person passed in for the feed is the user. prayer passed in for the profile view is the person being viewed.
@@ -313,61 +282,10 @@ class PrayerRequestHelper {
             }
         }
         
-        // Add PrayerRequestID and Data to prayerRequests/{prayerRequestID}
+        // Delete PrayerRequestID and Data from prayerRequests/{prayerRequestID}
         let ref3 =
         db.collection("prayerRequests").document(prayerRequest.id)
         
         ref3.delete()
     }
-    
-    // this function enables the creation of an 'update' for an existing prayer request.
-    func addPrayerRequestUpdate(datePosted: String, prayerRequest: PrayerRequest, prayerRequestUpdate: PrayerRequestUpdate, person: Person, friendsList: [String] /*friendID: String, updateFriend: Bool*/){
-        let db = Firestore.firestore()
-        
-        var isMyProfile: Bool
-        if person.username != "" && person.userID == prayerRequest.userID {
-            isMyProfile = true
-        } else {
-            isMyProfile = false
-        }
-        
-        // Add prayer request update within each prayer request in user collection and in prayer request collection
-        
-        let ref = db.collection("users").document(person.userID).collection("prayerList").document("\(prayerRequest.firstName.lowercased())_\(prayerRequest.lastName.lowercased())").collection("prayerRequests").document(prayerRequest.id).collection("updates").document()
-        
-        ref.setData([
-            "datePosted": datePosted,
-            "prayerUpdateText": prayerRequestUpdate.prayerUpdateText
-        ])
-        
-        let ref2 =
-        db.collection("prayerRequests").document(prayerRequest.id).collection("updates").document()
-        
-        ref2.setData([
-            "datePosted": datePosted,
-            "prayerUpdateText": prayerRequestUpdate.prayerUpdateText
-        ])
-        
-        var prayerRequest = prayerRequest.self
-        prayerRequest.latestUpdateDatePosted = prayerRequestUpdate.date
-        prayerRequest.latestUpdateText = prayerRequestUpdate.prayerUpdateText
-        
-        print(prayerRequest.latestUpdateText)
-        print(prayerRequest.latestUpdateDatePosted)
-        // Add UpdateID and Data to prayerRequests/{prayerRequestID}/Updates
-        updatePrayerRequestsDataCollection(prayerRequest: prayerRequest, person: person, isOriginalPrayerRequest: false)
-        
-        // Add prayer request update to prayerFeed/{userID} main prayerRequest
-        if isMyProfile == true {
-            if friendsList.isEmpty == false {
-                for friendID in friendsList {
-                    updatePrayerFeed(prayerRequest: prayerRequest, person: person, friendID: friendID, updateFriend: true, isOriginalPrayerRequest: false) // isOriginalPrayerRequest is false because this is an update.
-                }
-            }
-        } else {
-            updatePrayerFeed(prayerRequest: prayerRequest, person: person, friendID: "", updateFriend: false, isOriginalPrayerRequest: false)
-        }
-    
-    }
-    
 }

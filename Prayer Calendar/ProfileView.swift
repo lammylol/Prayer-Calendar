@@ -28,20 +28,9 @@ struct ProfileView: View {
 //                            if person.username == userHolder.person.username {
                                 ToolbarItem(placement: .topBarTrailing) {
                                     NavigationLink(destination: ProfileSettingsView()) {
-                                        Image(systemName: "line.horizontal.3")}
-//                                }
-//                                    Button(action: {
-//                                        self.signOut()
-//                                    }) {Text("logout")
-//                                            .bold()
-//                                            .font(.system(size: 14))
-//                                            .frame(width: 60, height: 25)
-//                                            .background(
-//                                                RoundedRectangle(cornerRadius: 15)
-//                                                    .fill(Color.blue)
-//                                            )
-//                                            .foregroundColor(.white)
-//                                    }
+//                                        Image(systemName: "line.horizontal.3")
+                                        Image(systemName: "gear")
+                                    }
 //                                ToolbarItem(){
 //                                    Button(action: {
 //                                        Task {

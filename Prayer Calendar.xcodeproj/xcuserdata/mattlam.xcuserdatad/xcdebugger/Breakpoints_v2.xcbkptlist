@@ -14,8 +14,8 @@
             filePath = "Prayer Calendar/PrayerRequestsView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "90"
-            endingLineNumber = "90"
+            startingLineNumber = "94"
+            endingLineNumber = "94"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -30,8 +30,8 @@
             filePath = "Prayer Calendar/PrayerRequestHelper.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "265"
-            endingLineNumber = "265"
+            startingLineNumber = "234"
+            endingLineNumber = "234"
             landmarkName = "deletePrayerRequest(prayerRequest:person:friendsList:)"
             landmarkType = "7">
          </BreakpointContent>

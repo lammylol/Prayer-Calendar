@@ -211,7 +211,7 @@ struct PrayerNameInputView: View {
                     
                     //for each prayer request, user is taking the friend's prayer request and updating them to their own feed. The user becomes the 'friend' of the person.
                     for prayer in prayerRequests {
-                        PrayerRequestHelper().updatePrayerFeed(prayerRequest: prayer, person: person, friendID: userID, updateFriend: true, isOriginalPrayerRequest: true)
+                        PrayerRequestHelper().updatePrayerFeed(prayerRequest: prayer, person: person, friendID: userID, updateFriend: true)
                     }
 //                    print(prayerRequests)
                 } catch {

@@ -61,7 +61,8 @@ extension PrayerRequest {
 
 struct PrayerRequestUpdate : Identifiable {
     var id: String = ""
-    var date: Date
+    var prayerRequestID: String = "" // original identifier
+    var datePosted: Date
     var prayerUpdateText: String
 }
 
@@ -69,7 +70,8 @@ extension PrayerRequestUpdate {
     static var blank: PrayerRequestUpdate {
         let item =
         PrayerRequestUpdate(
-            date: Date(),
+            prayerRequestID: "",
+            datePosted: Date(),
             prayerUpdateText: "")
         return item
     }

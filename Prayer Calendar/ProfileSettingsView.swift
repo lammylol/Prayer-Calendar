@@ -15,31 +15,32 @@ struct ProfileSettingsView: View {
     @Environment(PrayerListHolder.self) var prayerListHolder
     
     var body: some View {
-        Form {
-            Section {
-                HStack{
-                    Spacer()
-                    VStack{
-                        ProfilePictureAvatar(firstName: userHolder.person.firstName, lastName: userHolder.person.lastName, imageSize: 40, fontSize: 20)
-                        Text(userHolder.person.firstName + " " + userHolder.person.lastName)
-                    }
-                    Spacer()
-                }
-                
-                NavigationStack {
-                    NavigationLink(destination: ProfileSettingsChangePasswordView()){
-                        Text("Change Password")
+            Form {
+                Section {
+                    HStack {
+                        Spacer()
+                        VStack {
+                            ProfilePictureAvatar(firstName: userHolder.person.firstName, lastName: userHolder.person.lastName, imageSize: 40, fontSize: 20)
+                            Text(userHolder.person.firstName + " " + userHolder.person.lastName)
+                        }
+                        Spacer()
                     }
                 }
-            }
-            Section{
-                Button(action: {
-                    self.signOut()
-                }) {Text("Sign Out")
-                        .font(.system(size: 16))
-                        .foregroundColor(.red)
+                Section {
+                    NavigationStack {
+                        NavigationLink(destination: ProfileSettingsChangePasswordView()){
+                            Text("Change Password")
+                        }
+                    }
                 }
-            }.frame(alignment: .center)
+                Section{
+                    Button(action: {
+                        self.signOut()
+                    }) {Text("Sign Out")
+                            .font(.system(size: 16))
+                            .foregroundColor(.red)
+                    }
+                }.frame(alignment: .center)
         }.navigationTitle("Settings")
     }
     
@@ -125,10 +126,10 @@ struct ProfileSettingsChangePasswordView: View {
     }
 }
 
-//#Preview {
-//    ProfileSettingsView()
-//        .environment(UserProfileHolder.Blank())
-//}
+#Preview {
+    ProfileSettingsView()
+        .environment(UserProfileHolder.Blank())
+}
 //
 //#Preview {
 //    ProfileSettingsSignIn(userHolder: UserProfileHolder())

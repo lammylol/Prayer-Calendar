@@ -23,46 +23,41 @@ struct PrayerRequestRow: View {
                         Spacer()
                     }
                     .padding(.trailing, 10)
-                }
-                if profileOrPrayerFeed == "feed" {
-                    VStack(alignment: .leading) {
-                        HStack() {
-                            Text(prayerRequest.firstName + " " + prayerRequest.lastName).font(.system(size: 16)).bold()
-                            Spacer()
-                            Text(prayerRequest.date, style: .date)
-                        }
-                        .font(.system(size: 12))
-                        .padding(.bottom, 2)
-                        Text("Prayer Status: ").font(.system(size: 12)).italic() + Text(prayerRequest.status.capitalized).font(.system(size: 12)).italic()
-                        Spacer()
-                        
-                        if prayerRequest.prayerRequestTitle != "" {
-                            Text(prayerRequest.prayerRequestTitle).font(.system(size: 16)).bold()
-                            Spacer()
-                        }
-                        
-                        Text("\(prayerRequest.prayerRequestText)").font(.system(size: 16))
-                        Spacer()
-                    }
                 } else {
-                    VStack(alignment: .leading) {
-                        HStack() {
-                            Text("status: ") + Text(prayerRequest.status.capitalized)
-                            Spacer()
-                            Text(prayerRequest.date, style: .date)
-                        }.font(.system(size: 12))
-                        
+                    VStack() {
+                        ProfilePictureAvatar(firstName: prayerRequest.firstName, lastName: prayerRequest.lastName, imageSize: 50, fontSize: 20)
+                            .buttonStyle(.plain)
+                            .foregroundStyle(Color.primary)
                         Spacer()
-                        
-                        Text("\(prayerRequest.prayerRequestText)")
-                    }
+                    }.padding(.trailing, 10)
                 }
+                VStack(alignment: .leading) {
+                    HStack() {
+                        Text(prayerRequest.firstName + " " + prayerRequest.lastName).font(.system(size: 16)).bold()
+                        Spacer()
+                        Text(prayerRequest.date, style: .date)
+                    }
+                    .font(.system(size: 12))
+                    .padding(.bottom, 2)
+                    Text("Prayer Status: ").font(.system(size: 12)).italic() + Text(prayerRequest.status.capitalized).font(.system(size: 12)).italic()
+                    Spacer()
+                    
+                    if prayerRequest.prayerRequestTitle != "" {
+                        Text(prayerRequest.prayerRequestTitle).font(.system(size: 16)).bold()
+                        Spacer()
+                    }
+                    
+                    Text("\(prayerRequest.prayerRequestText)")
+                        .font(.system(size: 16))
+                        .multilineTextAlignment(.leading)
+                    Spacer()
+                }
+                .foregroundStyle(Color.primary)
             }
-            Divider()
-                .padding([.top, .bottom], 10)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding([.leading, .trailing], 20)
+        Divider()
     }
 }
 

@@ -16,7 +16,7 @@ struct PrayerRequestsView: View {
     @State private var showEdit: Bool = false
     @State var person: Person
 
-    @State var prayerRequestVar: PrayerRequest = PrayerRequest.preview
+    @State var prayerRequestVar: PrayerRequest = PrayerRequest.blank
     @State var prayerRequests = [PrayerRequest]()
     
     let db = Firestore.firestore()
@@ -55,17 +55,21 @@ struct PrayerRequestsView: View {
                 
             Divider()
             
-            ForEach(prayerRequests) { prayerRequest in
-                PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "feed")
-                    .onTapGesture {
-                        Task {
-                            await handleTap(prayerRequest: prayerRequest)
-                        }
-                        self.showEdit.toggle()
+            NavigationStack {
+                ForEach(prayerRequests) { prayerRequest in
+                    NavigationLink(destination: EditPrayerRequestForm(person: person, prayerRequest: prayerRequest)) {
+                        PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "profile")
                     }
+                    Divider()
+    //                    .onTapGesture {
+    //                        Task {
+    //                            await handleTap(prayerRequest: prayerRequest)
+    //                            self.showEdit.toggle()
+    //                        }
+    //                    }
+                }
             }
         }
-        
         .overlay {
             // Only show this if this account is saved under your userID.
             if person.userID == userHolder.person.userID {
@@ -88,7 +92,6 @@ struct PrayerRequestsView: View {
                 }
             }
         }
-        
         .task {
             do {
                 person = await PrayerPersonHelper().retrieveUserInfoFromUsername(person: person, userHolder: userHolder)
@@ -100,7 +103,6 @@ struct PrayerRequestsView: View {
                 print("Error retrieving prayer requests.")
             }
         }
-        
         .sheet(isPresented: $showEdit, onDismiss: {
             Task {
                 do {
@@ -113,9 +115,8 @@ struct PrayerRequestsView: View {
                 }
             }
         }, content: {
-            EditPrayerRequestForm(person: person, prayerRequest: prayerRequestVar)
+                EditPrayerRequestForm(person: person, prayerRequest: prayerRequestVar)
         })
-        
         .sheet(isPresented: $showSubmit, onDismiss: {
             Task {
                 do {

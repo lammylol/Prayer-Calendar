@@ -38,12 +38,12 @@ struct PrayerFeedView: View {
                     Spacer()
                     ForEach(prayerRequests) { prayerRequest in
                         PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "feed")
-                            .onTapGesture {
+//                            .onTapGesture {
 //                                Task {
 //                                    await handleTap(prayerRequest: prayerRequest)
 //                                }
 //                                self.showEdit.toggle()
-                            }
+//                            }
                     }
                 }
                 .task {
