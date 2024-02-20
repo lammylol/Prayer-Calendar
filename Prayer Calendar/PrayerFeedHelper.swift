@@ -42,7 +42,7 @@ class PrayerFeedHelper {
                 let updateTimestamp = document.data()["latestUpdateDatePosted"] as? Timestamp ?? timestamp
                 let latestUpdateDatePosted = timestamp.dateValue()
 
-                let prayerRequest = PrayerRequest(id: documentID, userID: userID, username: username, date: datePosted, prayerRequestText: prayerRequestText, status: status, firstName: firstName, lastName: lastName, priority: priority, prayerRequestTitle: prayerRequestTitle, latestUpdateText: "", latestUpdateDatePosted: latestUpdateDatePosted)
+                let prayerRequest = PrayerRequest(id: documentID, userID: userID, username: username, date: datePosted, prayerRequestText: prayerRequestText, status: status, firstName: firstName, lastName: lastName, priority: priority, prayerRequestTitle: prayerRequestTitle, latestUpdateText: latestUpdateText, latestUpdateDatePosted: latestUpdateDatePosted)
               
               prayerRequests.append(prayerRequest)
             }
