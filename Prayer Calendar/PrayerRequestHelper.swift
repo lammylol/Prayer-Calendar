@@ -13,7 +13,8 @@ import FirebaseFunctions
 enum PrayerRequestRetrievalError: Error {
     case noUserID
     case noPrayerRequestID
-//    case errorRetrievingFromFirebase
+    case noPrayerRequest
+    case errorRetrievingFromFirebase
 }
 
 class PrayerRequestHelper {
@@ -61,6 +62,50 @@ class PrayerRequestHelper {
         return prayerRequests
     }
     
+    func getPrayerRequest(prayerRequest: PrayerRequest) async throws -> PrayerRequest {
+        guard prayerRequest.id != "" else {
+            throw PrayerRequestRetrievalError.noPrayerRequestID
+        }
+        
+        var prayerRequest = prayerRequest
+        
+        let db = Firestore.firestore()
+        let ref = db.collection("prayerRequests").document(prayerRequest.id)
+        
+        do {
+            let document = try await ref.getDocument()
+            
+            guard document.exists else {
+                throw PrayerRequestRetrievalError.noPrayerRequest
+            }
+
+            if document.exists {
+                let timestamp = document.data()?["datePosted"] as? Timestamp ?? Timestamp()
+                let datePosted = timestamp.dateValue()
+                
+                let latestTimestamp = document.data()?["latestUpdateDatePosted"] as? Timestamp ?? Timestamp()
+                let latestUpdateDatePosted = latestTimestamp.dateValue()
+                
+                let firstName = document.data()?["firstName"] as? String ?? ""
+                let lastName = document.data()?["lastName"] as? String ?? ""
+                let prayerRequestText = document.data()?["prayerRequestText"] as? String ?? ""
+                let status = document.data()?["status"] as? String ?? ""
+                let userID = document.data()?["userID"] as? String ?? ""
+                let username = document.data()?["username"] as? String ?? ""
+                let priority = document.data()?["priority"] as? String ?? ""
+                let documentID = document.documentID as String
+                let prayerRequestTitle = document.data()?["prayerRequestTitle"] as? String ?? ""
+                let latestUpdateText = document.data()?["latestUpdateText"] as? String ?? ""
+            
+                prayerRequest = PrayerRequest(id: documentID, userID: userID, username: username, date: datePosted, prayerRequestText: prayerRequestText, status: status, firstName: firstName, lastName: lastName, priority: priority, prayerRequestTitle: prayerRequestTitle, latestUpdateText: latestUpdateText, latestUpdateDatePosted: latestUpdateDatePosted)
+            }
+        } catch {
+            throw error
+        }
+        
+        return prayerRequest
+    }
+        
     // this function enables the creation and submission of a new prayer request. It does three things: 1) add to user collection of prayer requests, 2) add to prayer requests collection, and 3) adds the prayer request to all friends of the person only if the prayer request is the user's main profile.
     func createPrayerRequest(userID: String, datePosted: Date, person: Person, prayerRequestText: String, prayerRequestTitle: String, priority: String, friendsList: [String]) {
         let db = Firestore.firestore()
@@ -84,7 +129,9 @@ class PrayerRequestHelper {
             "userID": userID,
             "username": person.username,
             "priority": priority,
-            "prayerRequestTitle": prayerRequestTitle
+            "prayerRequestTitle": prayerRequestTitle,
+            "latestUpdateText": "",
+            "latestUpdateDatePosted": datePosted
         ])
         
         let prayerRequestID = ref.documentID
@@ -103,7 +150,9 @@ class PrayerRequestHelper {
                         "userID": userID,
                         "username": person.username,
                         "priority": priority,
-                        "prayerRequestTitle": prayerRequestTitle
+                        "prayerRequestTitle": prayerRequestTitle,
+                        "latestUpdateText": "",
+                        "latestUpdateDatePosted": datePosted
                     ])
                 }
             }
@@ -118,7 +167,9 @@ class PrayerRequestHelper {
                     "userID": userID,
                     "username": person.username,
                     "priority": priority,
-                    "prayerRequestTitle": prayerRequestTitle
+                    "prayerRequestTitle": prayerRequestTitle,
+                    "latestUpdateText": "",
+                    "latestUpdateDatePosted": datePosted
                 ])
         }
         
@@ -135,7 +186,9 @@ class PrayerRequestHelper {
             "userID": userID,
             "username": person.username,
             "priority": priority,
-            "prayerRequestTitle": prayerRequestTitle
+            "prayerRequestTitle": prayerRequestTitle,
+            "latestUpdateText": "",
+            "latestUpdateDatePosted": datePosted
         ])
     }
     
@@ -161,7 +214,9 @@ class PrayerRequestHelper {
             "userID": person.userID,
             "username": person.username,
             "priority": prayerRequest.priority,
-            "prayerRequestTitle": prayerRequest.prayerRequestTitle
+            "prayerRequestTitle": prayerRequest.prayerRequestTitle,
+//            "latestUpdateText": prayerRequest.latestUpdateText,
+//            "latestUpdateDatePosted": prayerRequest.latestUpdateDatePosted
         ])
         
         // Add PrayerRequestID to prayerFeed/{userID}

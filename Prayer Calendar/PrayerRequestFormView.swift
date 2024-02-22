@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct EditPrayerRequestForm: View {
+struct PrayerRequestFormView: View {
     @Environment(UserProfileHolder.self) var userHolder
     @Environment(\.dismiss) var dismiss
     
@@ -52,10 +52,9 @@ struct EditPrayerRequestForm: View {
                                     .padding(.top, 8)
                                     .foregroundStyle(Color.gray)
                             }
-                            Text(prayerRequest.prayerRequestText).foregroundColor(Color.clear)//this is a swift workaround to dynamically expand textEditor.
-                                .padding([.top, .bottom], 5)
-                            TextEditor(text: $prayerRequest.prayerRequestText)
-                                .offset(x: -5)
+                            NavigationLink(destination: EditPrayerRequestTextView(person: person, prayerRequest: prayerRequest)) {
+                                Text(prayerRequest.prayerRequestText)
+                            }
                         }
                     }
                     
@@ -93,8 +92,7 @@ struct EditPrayerRequestForm: View {
                 .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: .infinity)
                 .task {
                     do {
-//                        prayerRequest = PrayerRequest(id: prayerRequest.id, userID: prayerRequest.userID, username: prayerRequest.username, date: prayerRequest.date, prayerRequestText: prayerRequest.prayerRequestText, status: prayerRequest.status, firstName: prayerRequest.firstName, lastName: prayerRequest.lastName, priority: prayerRequest.priority, prayerRequestTitle: prayerRequest.prayerRequestTitle, latestUpdateText: prayerRequest.latestUpdateText, latestUpdateDatePosted: prayerRequest.latestUpdateDatePosted)
-
+                        prayerRequest.prayerRequestText = try await PrayerRequestHelper().getPrayerRequest(prayerRequest: prayerRequest).prayerRequestText
                         prayerRequestUpdates = try await PrayerUpdateHelper().getPrayerRequestUpdates(prayerRequest: prayerRequest, person: person)
                         print(prayerRequestUpdates)
                     } catch PrayerRequestRetrievalError.noPrayerRequestID {
@@ -114,28 +112,6 @@ struct EditPrayerRequestForm: View {
                 }) {
                     AddPrayerUpdateView(person: person, prayerRequest: prayerRequest)
                 }
-                .toolbar {
-//                    ToolbarItemGroup(placement: .topBarLeading) {
-//                        Button("Cancel") {
-//                            dismiss()
-//                        }
-//                    }
-                    ToolbarItemGroup(placement: .topBarTrailing) {
-                        Button(action: {
-                            updatePrayerRequest(prayerRequestVar: prayerRequest)
-                        }) {
-                            Text("Save")
-                                .offset(x: -4)
-                                .font(.system(size: 14))
-                                .padding([.leading, .trailing], 5)
-                                .bold()
-                        }
-                        .background(
-                            RoundedRectangle(cornerRadius: 15)
-                                .fill(.blue)
-                        )
-                        .foregroundStyle(.white)
-                    }
 //                    if person.username == "" || (person.userID == userHolder.person.userID) {
 //                        ToolbarItemGroup(placement: .bottomBar) {
 //                            Button(action: {deletePrayerRequest()}) {
@@ -150,25 +126,73 @@ struct EditPrayerRequestForm: View {
 //                            .foregroundStyle(.white)
 //                        }
 //                    }
-                }
 //                .navigationBarBackButtonHidden(true)
-                .navigationTitle("Edit Prayer Request")
+                .navigationTitle("Prayer Request")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar(.hidden, for: .tabBar)
         }
-    }
-    
-    func updatePrayerRequest(prayerRequestVar: PrayerRequest) {
-        PrayerRequestHelper().editPrayerRequest(prayerRequest: prayerRequestVar, person: person, friendsList: userHolder.friendsList)
-        
-        print("Saved")
-        dismiss()
     }
     
     func deletePrayerRequest() {
         PrayerRequestHelper().deletePrayerRequest(prayerRequest: prayerRequest, person: person, friendsList: userHolder.friendsList)
 
         print("Deleted")
+        dismiss()
+    }
+}
+
+struct EditPrayerRequestTextView: View {
+    @Environment(UserProfileHolder.self) var userHolder
+    @Environment(\.dismiss) var dismiss
+    
+    var person: Person
+    @State var prayerRequest: PrayerRequest
+    
+    var body: some View {
+        NavigationView {
+            Form {
+                Section(header: Text("Edit Prayer Request")) {
+                    ZStack(alignment: .topLeading) {
+                        if prayerRequest.prayerRequestText.isEmpty {
+                            Text("Enter text")
+                                .padding(.leading, 0)
+                                .padding(.top, 8)
+                                .foregroundStyle(Color.gray)
+                        }
+                        Text(prayerRequest.prayerRequestText).foregroundColor(Color.clear)//this is a swift workaround to dynamically expand textEditor.
+                            .padding([.top, .bottom], 5)
+                        TextEditor(text: $prayerRequest.prayerRequestText)
+                            .offset(x: -5)
+                    }
+                }
+            }
+        }
+        .toolbar {
+            ToolbarItemGroup(placement: .topBarTrailing) {
+                Button(action: {
+                    updatePrayerRequest(prayerRequestVar: prayerRequest)
+                }) {
+                    Text("Save")
+                        .offset(x: -4)
+                        .font(.system(size: 14))
+                        .padding([.leading, .trailing], 5)
+                        .bold()
+                }
+                .background(
+                    RoundedRectangle(cornerRadius: 15)
+                        .fill(.blue)
+                )
+                .foregroundStyle(.white)
+            }
+        }
+        .navigationTitle("Edit Prayer Request")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+                
+    func updatePrayerRequest(prayerRequestVar: PrayerRequest) {
+        PrayerRequestHelper().editPrayerRequest(prayerRequest: prayerRequest, person: person, friendsList: userHolder.friendsList)
+        
+        print("Saved")
         dismiss()
     }
 }
@@ -239,7 +263,11 @@ struct PrayerUpdateView: View {
     
     func deleteUpdate() {
         var updates = prayerRequestUpdates.sorted(by: {$1.datePosted > $0.datePosted})
-        updates.removeLast() // must come first in order to make sure the prayer request last date posted can be factored correctly.
+        print("before:")
+        print(updates)
+        updates.removeAll(where: {$0.id == update.id}) // must come first in order to make sure the prayer request last date posted can be factored correctly.
+        print("after:")
+        print(updates)
         PrayerUpdateHelper().deletePrayerUpdate(prayerRequest: prayerRequest, prayerRequestUpdate: update, updatesArray: updates, person: person, friendsList: userHolder.friendsList)
 
         print("Deleted")
@@ -247,7 +275,7 @@ struct PrayerUpdateView: View {
     }
     
     func updatePrayerUpdate() {
-        PrayerUpdateHelper().editPrayerUpdate(prayerRequest: prayerRequest, prayerRequestUpdate: update, person: person, friendsList: userHolder.friendsList)
+        PrayerUpdateHelper().editPrayerUpdate(prayerRequest: prayerRequest, prayerRequestUpdate: update, person: person, friendsList: userHolder.friendsList, updatesArray: prayerRequestUpdates)
         print("Saved")
         dismiss()
     }
@@ -313,6 +341,6 @@ struct AddPrayerUpdateView: View {
 }
 
 #Preview {
-    EditPrayerRequestForm(person: Person(username: ""), prayerRequest: PrayerRequest.preview)
+    PrayerRequestFormView(person: Person(username: ""), prayerRequest: PrayerRequest.preview)
         .environment(UserProfileHolder())
 }

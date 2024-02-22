@@ -19,7 +19,8 @@ class PrayerFeedHelper {
         }
         
         do {
-            let prayerFeed = db.collection("prayerFeed").document(userID).collection("prayerRequests").order(by: "datePosted", descending: true)
+            let prayerFeed = db.collection("prayerFeed").document(userID).collection("prayerRequests")
+                .order(by: "datePosted", descending: true)
 
             let querySnapshot = try await prayerFeed.getDocuments()
             

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct PrayerRequest : Identifiable {
+struct PrayerRequest : Identifiable, Observable {
     var id: String = ""
     var userID: String
     var username: String

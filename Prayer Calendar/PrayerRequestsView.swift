@@ -57,7 +57,7 @@ struct PrayerRequestsView: View {
             
             NavigationStack {
                 ForEach(prayerRequests) { prayerRequest in
-                    NavigationLink(destination: EditPrayerRequestForm(person: person, prayerRequest: prayerRequest)) {
+                    NavigationLink(destination: PrayerRequestFormView(person: person, prayerRequest: prayerRequest)) {
                         PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "profile")
                     }
                     Divider()
@@ -115,7 +115,7 @@ struct PrayerRequestsView: View {
                 }
             }
         }, content: {
-                EditPrayerRequestForm(person: person, prayerRequest: prayerRequestVar)
+                PrayerRequestFormView(person: person, prayerRequest: prayerRequestVar)
         })
         .sheet(isPresented: $showSubmit, onDismiss: {
             Task {

@@ -68,7 +68,7 @@ struct PrayerFeedView: View {
                     }
                 }
             }, content: {
-                EditPrayerRequestForm(person: userHolder.person, prayerRequest: prayerRequestVar)
+                PrayerRequestFormView(person: userHolder.person, prayerRequest: prayerRequestVar)
             })
         }
 
