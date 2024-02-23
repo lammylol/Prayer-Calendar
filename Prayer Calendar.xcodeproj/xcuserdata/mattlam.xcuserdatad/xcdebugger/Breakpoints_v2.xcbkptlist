@@ -30,8 +30,8 @@
             filePath = "Prayer Calendar/PrayerRequestHelper.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "304"
-            endingLineNumber = "304"
+            startingLineNumber = "305"
+            endingLineNumber = "305"
             landmarkName = "deletePrayerRequest(prayerRequest:person:friendsList:)"
             landmarkType = "7">
          </BreakpointContent>

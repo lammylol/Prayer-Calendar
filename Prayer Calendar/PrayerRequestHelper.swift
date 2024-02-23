@@ -29,7 +29,7 @@ class PrayerRequestHelper {
         }
         
         do {
-            let profiles = db.collection("users").document(userID).collection("prayerList").document("\(person.firstName.lowercased())_\(person.lastName.lowercased())").collection("prayerRequests").order(by: "datePosted", descending: true)
+            let profiles = db.collection("users").document(userID).collection("prayerList").document("\(person.firstName.lowercased())_\(person.lastName.lowercased())").collection("prayerRequests").order(by: "latestUpdateDatePosted", descending: true)
             
             let querySnapshot = try await profiles.getDocuments()
             
@@ -221,8 +221,9 @@ class PrayerRequestHelper {
             "username": person.username,
             "priority": prayerRequest.priority,
             "prayerRequestTitle": prayerRequest.prayerRequestTitle,
-//            "latestUpdateText": prayerRequest.latestUpdateText,
-//            "latestUpdateDatePosted": prayerRequest.latestUpdateDatePosted
+            "latestUpdateText": prayerRequest.latestUpdateText,
+            "latestUpdateDatePosted": prayerRequest.latestUpdateDatePosted,
+            "latestUpdateType": prayerRequest.latestUpdateType
         ])
         
         // Add PrayerRequestID to prayerFeed/{userID}

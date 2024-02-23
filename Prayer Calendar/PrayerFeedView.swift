@@ -40,6 +40,7 @@ struct PrayerFeedView: View {
                         NavigationLink(destination: PrayerRequestFormView(person: Person(userID: prayerRequest.userID, username: prayerRequest.username, firstName: prayerRequest.firstName, lastName: prayerRequest.lastName), prayerRequest: prayerRequest)) {
                             PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "feed")
                         }
+                        Divider()
                     }
                 }
                 .task {
@@ -52,7 +53,6 @@ struct PrayerFeedView: View {
             }
             .navigationTitle("prayer feed")
             .navigationBarTitleDisplayMode(.automatic)
-            
             .sheet(isPresented: $showSubmit, onDismiss: {
             }, content: {
                 SubmitPrayerRequestForm(person: person)

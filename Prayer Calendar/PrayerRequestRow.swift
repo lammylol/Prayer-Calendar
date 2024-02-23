@@ -62,31 +62,20 @@ struct PrayerRequestRow: View {
                 }
                 
                 if prayerRequest.latestUpdateText != "" {
-                    VStack {
-//                        if prayerRequest.prayerRequestTitle != "" {
-//                            Text(prayerRequest.prayerRequestTitle)
-//                                .font(.system(size: 18))
-//                                .bold()
-//                                .frame(maxWidth: .infinity, alignment: .leading)
-//                                .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
-//                                .padding(.top, 10)
-//                            Spacer()
-//                        }
-//                        LatestUpdate(prayerRequest: prayerRequest)
-//                            .padding(.bottom, 3)
-                        Text("**\(prayerRequest.latestUpdateType)**: \(prayerRequest.latestUpdateText)")
+                    VStack (alignment: .leading) {
+                        Text("**\(prayerRequest.latestUpdateType)**: \(prayerRequest.latestUpdateDatePosted.formatted(date: .abbreviated, time: .omitted)), \(prayerRequest.latestUpdateText)")
                             .multilineTextAlignment(.leading)
-                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                             .font(.system(size: 16))
-                            .padding(.bottom, 7)
                             .italic()
+                            .padding(.bottom, 0)
                         Text("\(prayerRequest.prayerRequestText)")
                             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                             .lineLimit(15)
                             .fixedSize(horizontal: false, vertical: true)
                             .font(.system(size: 16))
                             .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
-                    }.padding(.top, 7)
+                    }
+                    .padding(.top, 7)
                 } else {
                     VStack {
                         Text(prayerRequest.prayerRequestText)
