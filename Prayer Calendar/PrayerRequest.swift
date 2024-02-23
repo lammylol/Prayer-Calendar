@@ -20,6 +20,7 @@ struct PrayerRequest : Identifiable, Observable {
     var prayerRequestTitle: String
     var latestUpdateText: String
     var latestUpdateDatePosted: Date
+    var latestUpdateType: String
 }
 
 extension PrayerRequest {
@@ -36,7 +37,8 @@ extension PrayerRequest {
             priority: "high",
             prayerRequestTitle: "Test this is Title djaskldjklsajdklasjdklasjdklajsdlkasjdklajdklajdklajsdklasjdklasjdklasjdaklsdjaldjklad",
             latestUpdateText: "Test Latest Update.",
-            latestUpdateDatePosted: Date()
+            latestUpdateDatePosted: Date(), 
+            latestUpdateType: "Update"
         )
         return item
     }
@@ -54,7 +56,8 @@ extension PrayerRequest {
             priority: "",
             prayerRequestTitle: "",
             latestUpdateText: "",
-            latestUpdateDatePosted: Date())
+            latestUpdateDatePosted: Date(),
+            latestUpdateType: "Update")
         return item
     }
 }
@@ -64,6 +67,7 @@ struct PrayerRequestUpdate : Identifiable {
     var prayerRequestID: String = "" // original identifier
     var datePosted: Date
     var prayerUpdateText: String
+    var updateType: String
 }
 
 extension PrayerRequestUpdate {
@@ -72,7 +76,8 @@ extension PrayerRequestUpdate {
         PrayerRequestUpdate(
             prayerRequestID: "",
             datePosted: Date(),
-            prayerUpdateText: "")
+            prayerUpdateText: "",
+            updateType: "Update")
         return item
     }
 }

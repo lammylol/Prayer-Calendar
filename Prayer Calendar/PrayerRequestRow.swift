@@ -16,9 +16,11 @@ struct PrayerRequestRow: View {
         HStack {
             if profileOrPrayerFeed == "feed" {
                 VStack() {
-                    NavigationLink(destination: ProfileView(person: Person(userID: prayerRequest.userID, username: prayerRequest.username, firstName: prayerRequest.firstName, lastName: prayerRequest.lastName))){
+                    NavigationLink(destination: ProfileView(person: Person(userID: prayerRequest.userID, username: prayerRequest.username, firstName: prayerRequest.firstName, lastName: prayerRequest.lastName))) {
                         ProfilePictureAvatar(firstName: prayerRequest.firstName, lastName: prayerRequest.lastName, imageSize: 50, fontSize: 20)
-                    }.buttonStyle(.plain)
+                            .buttonStyle(.plain)
+                            .foregroundStyle(Color.primary)
+                    }
                     Spacer()
                 }
                 .padding(.trailing, 10)
@@ -28,7 +30,8 @@ struct PrayerRequestRow: View {
                         .buttonStyle(.plain)
                         .foregroundStyle(Color.primary)
                     Spacer()
-                }.padding(.trailing, 10)
+                }
+                .padding(.trailing, 10)
             }
             VStack(alignment: .leading) {
                 HStack() {
@@ -71,7 +74,7 @@ struct PrayerRequestRow: View {
 //                        }
 //                        LatestUpdate(prayerRequest: prayerRequest)
 //                            .padding(.bottom, 3)
-                        Text("**Update**: \(prayerRequest.latestUpdateText)")
+                        Text("**\(prayerRequest.latestUpdateType)**: \(prayerRequest.latestUpdateText)")
                             .multilineTextAlignment(.leading)
                             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                             .font(.system(size: 16))
@@ -117,7 +120,7 @@ struct LatestUpdate: View {
 //                    .font(.system(size: 12))
 //            }
 //            .frame(maxWidth: .infinity, alignment: .leading)
-            Text("UPDATE: \(prayerRequest.latestUpdateText)")
+            Text("\(prayerRequest.latestUpdateType): \(prayerRequest.latestUpdateText)")
                 .multilineTextAlignment(.leading)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .font(.system(size: 14))
@@ -158,9 +161,9 @@ extension Color {
 }
 
 #Preview {
-    PrayerRequestRow(prayerRequest: PrayerRequest(userID: "", username: "lammylol", date: Date(), prayerRequestText: "Prayers for this text to look beautiful. Prayers for this text to look beautiful.", status: "Current", firstName: "Matt", lastName: "Lam", priority: "high", prayerRequestTitle: "Prayers for Text", latestUpdateText: "Test Latest update: Prayers for this text to look beautiful. Prayers for this text to look beautiful.", latestUpdateDatePosted: Date()), profileOrPrayerFeed: "feed").frame(maxHeight: 200)
+    PrayerRequestRow(prayerRequest: PrayerRequest(userID: "", username: "lammylol", date: Date(), prayerRequestText: "Prayers for this text to look beautiful. Prayers for this text to look beautiful.", status: "Current", firstName: "Matt", lastName: "Lam", priority: "high", prayerRequestTitle: "Prayers for Text", latestUpdateText: "Test Latest update: Prayers for this text to look beautiful. Prayers for this text to look beautiful.", latestUpdateDatePosted: Date(), latestUpdateType: "Testimony"), profileOrPrayerFeed: "feed").frame(maxHeight: 200)
 }
 
 #Preview {
-    LatestUpdate(prayerRequest: PrayerRequest(userID: "", username: "lammylol", date: Date(), prayerRequestText: "Prayers for this text to look beautiful. Prayers for this text to look beautiful.", status: "Current", firstName: "Matt", lastName: "Lam", priority: "high", prayerRequestTitle: "Prayers for Text", latestUpdateText: "Test Latest update: Prayers for this text to look beautiful. Prayers for this text to look beautiful.", latestUpdateDatePosted: Date()))
+    LatestUpdate(prayerRequest: PrayerRequest(userID: "", username: "lammylol", date: Date(), prayerRequestText: "Prayers for this text to look beautiful. Prayers for this text to look beautiful.", status: "Current", firstName: "Matt", lastName: "Lam", priority: "high", prayerRequestTitle: "Prayers for Text", latestUpdateText: "Test Latest update: Prayers for this text to look beautiful. Prayers for this text to look beautiful.", latestUpdateDatePosted: Date(), latestUpdateType: "Testimony"))
 }

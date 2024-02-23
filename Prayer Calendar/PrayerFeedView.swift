@@ -37,13 +37,9 @@ struct PrayerFeedView: View {
                         }
                     Spacer()
                     ForEach(prayerRequests) { prayerRequest in
-                        PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "feed")
-//                            .onTapGesture {
-//                                Task {
-//                                    await handleTap(prayerRequest: prayerRequest)
-//                                }
-//                                self.showEdit.toggle()
-//                            }
+                        NavigationLink(destination: PrayerRequestFormView(person: Person(userID: prayerRequest.userID, username: prayerRequest.username, firstName: prayerRequest.firstName, lastName: prayerRequest.lastName), prayerRequest: prayerRequest)) {
+                            PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "feed")
+                        }
                     }
                 }
                 .task {

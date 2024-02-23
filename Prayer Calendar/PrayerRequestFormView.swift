@@ -19,7 +19,8 @@ struct PrayerRequestFormView: View {
     
     var body: some View {
         NavigationStack {
-                Form {
+            Form {
+                if person.userID == userHolder.person.userID { // only if you are the 'owner' of the profile.
                     Section(header: Text("Prayer Request title")) {
                         ZStack(alignment: .topLeading) {
                             if prayerRequest.prayerRequestTitle.isEmpty {
@@ -31,7 +32,7 @@ struct PrayerRequestFormView: View {
                             Text(prayerRequest.prayerRequestTitle).foregroundColor(Color.clear)//this is a swift workaround to dynamically expand textEditor.
                             TextEditor(text: $prayerRequest.prayerRequestTitle)
                                 .offset(x: -5, y: -1)
-
+                            
                         }
                         Picker("Priority", selection: $prayerRequest.priority) {
                             Text("low").tag("low")
@@ -57,10 +58,9 @@ struct PrayerRequestFormView: View {
                             }
                         }
                     }
-                    
                     if prayerRequestUpdates.count > 0 {
                         ForEach(prayerRequestUpdates) { update in
-                            Section(header: Text("Update: \(update.datePosted, style: .date)")) {
+                            Section(header: Text("\(update.updateType): \(update.datePosted, style: .date)")) {
                                 VStack(alignment: .leading){
                                     NavigationLink(destination: PrayerUpdateView(person: person, prayerRequest: prayerRequest, prayerRequestUpdates: prayerRequestUpdates, update: update)) {
                                         Text(update.prayerUpdateText)
@@ -73,8 +73,8 @@ struct PrayerRequestFormView: View {
                     Section {
                         Button(action: {
                             showAddUpdateView.toggle()
-                        }) {Text("Add Update")
-//                                .font(.system(size: 16))
+                        }) {Text("Add Update or Testimony")
+                            //                                .font(.system(size: 16))
                                 .foregroundColor(.blue)
                                 .frame(maxWidth: .infinity, alignment: .center)
                         }
@@ -83,54 +83,90 @@ struct PrayerRequestFormView: View {
                         Button(action: {
                             deletePrayerRequest()
                         }) {Text("Delete Prayer Request")
-//                                .font(.system(size: 16))
+                            //                                .font(.system(size: 16))
                                 .foregroundColor(.red)
                                 .frame(maxWidth: .infinity, alignment: .center)
                         }
                     }
-                }
-                .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: .infinity)
-                .task {
-                    do {
-                        prayerRequest.prayerRequestText = try await PrayerRequestHelper().getPrayerRequest(prayerRequest: prayerRequest).prayerRequestText
-                        prayerRequestUpdates = try await PrayerUpdateHelper().getPrayerRequestUpdates(prayerRequest: prayerRequest, person: person)
-                        print(prayerRequestUpdates)
-                    } catch PrayerRequestRetrievalError.noPrayerRequestID {
-                        print("missing prayer request ID for update.")
-                    } catch {
-                        print("error retrieving")
-                    }
-                }
-                .sheet(isPresented: $showAddUpdateView, onDismiss: {
-                    Task {
-                        do {
-                            prayerRequestUpdates = try await PrayerUpdateHelper().getPrayerRequestUpdates(prayerRequest: prayerRequest, person: person)
-                        } catch {
-                            print("error retrieving updates.")
+                } else { // if you are not the owner, then you can't edit.
+                    Section(header: Text("Title")) {
+                        VStack(alignment: .leading) {
+                            Text(prayerRequest.prayerRequestTitle)
                         }
                     }
-                }) {
-                    AddPrayerUpdateView(person: person, prayerRequest: prayerRequest)
+                    Section(header: Text("Prayer Request")) {
+                        VStack(alignment: .leading){
+                            Text(prayerRequest.prayerRequestText)
+                        }
+                        Text("Priority: \(prayerRequest.priority)")
+                        Text("Status: \(prayerRequest.status)")
+                    }
+                    if prayerRequestUpdates.count > 0 {
+                        ForEach(prayerRequestUpdates) { update in
+                            Section(header: Text("\(update.updateType): \(update.datePosted, style: .date)")) {
+                                VStack(alignment: .leading){
+                                    Text(update.prayerUpdateText)
+                                }
+                            }
+                        }
+                    }
                 }
-//                    if person.username == "" || (person.userID == userHolder.person.userID) {
-//                        ToolbarItemGroup(placement: .bottomBar) {
-//                            Button(action: {deletePrayerRequest()}) {
-//                                Text("Delete Prayer Request")
-//                                    .font(.system(size: 14))
-//                                    .padding([.leading, .trailing], 5)
-//                            }
-//                            .background(
-//                                RoundedRectangle(cornerRadius: 15)
-//                                    .fill(.red)
-//                            )
-//                            .foregroundStyle(.white)
-//                        }
-//                    }
+            }
+            .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: .infinity)
+            .task {
+                do {
+                    prayerRequest.prayerRequestText = try await PrayerRequestHelper().getPrayerRequest(prayerRequest: prayerRequest).prayerRequestText
+                    prayerRequestUpdates = try await PrayerUpdateHelper().getPrayerRequestUpdates(prayerRequest: prayerRequest, person: person)
+                    print(prayerRequestUpdates)
+                } catch PrayerRequestRetrievalError.noPrayerRequestID {
+                    print("missing prayer request ID for update.")
+                } catch {
+                    print("error retrieving")
+                }
+            }
+            .sheet(isPresented: $showAddUpdateView, onDismiss: {
+                Task {
+                    do {
+                        prayerRequestUpdates = try await PrayerUpdateHelper().getPrayerRequestUpdates(prayerRequest: prayerRequest, person: person)
+                    } catch {
+                        print("error retrieving updates.")
+                    }
+                }
+            }) {
+                AddPrayerUpdateView(person: person, prayerRequest: prayerRequest)
+            }
+            .toolbar {
+                ToolbarItemGroup(placement: .topBarTrailing) {
+                    if person.userID == userHolder.person.userID { // only if you are the 'owner' of the profile.
+                        Button(action: {
+                            updatePrayerRequest(prayerRequestVar: prayerRequest)
+                        }) {
+                            Text("Save")
+                                .offset(x: -4)
+                                .font(.system(size: 14))
+                                .padding([.leading, .trailing], 5)
+                                .bold()
+                        }
+                        .background(
+                            RoundedRectangle(cornerRadius: 15)
+                                .fill(.blue)
+                        )
+                        .foregroundStyle(.white)
+                    }
+                }
+            }
 //                .navigationBarBackButtonHidden(true)
-                .navigationTitle("Prayer Request")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar(.hidden, for: .tabBar)
+            .navigationTitle("Prayer Request")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar(.hidden, for: .tabBar)
         }
+    }
+    
+    func updatePrayerRequest(prayerRequestVar: PrayerRequest) {
+        PrayerRequestHelper().editPrayerRequest(prayerRequest: prayerRequest, person: person, friendsList: userHolder.friendsList)
+        
+        print("Saved")
+        dismiss()
     }
     
     func deletePrayerRequest() {
@@ -172,7 +208,7 @@ struct EditPrayerRequestTextView: View {
                 Button(action: {
                     updatePrayerRequest(prayerRequestVar: prayerRequest)
                 }) {
-                    Text("Save")
+                    Text("Update")
                         .offset(x: -4)
                         .font(.system(size: 14))
                         .padding([.leading, .trailing], 5)
@@ -192,149 +228,6 @@ struct EditPrayerRequestTextView: View {
     func updatePrayerRequest(prayerRequestVar: PrayerRequest) {
         PrayerRequestHelper().editPrayerRequest(prayerRequest: prayerRequest, person: person, friendsList: userHolder.friendsList)
         
-        print("Saved")
-        dismiss()
-    }
-}
-
-struct PrayerUpdateView: View {
-    @Environment(UserProfileHolder.self) var userHolder
-    @Environment(\.dismiss) var dismiss
-    
-    var person: Person
-    @State var prayerRequest: PrayerRequest
-    @State var prayerRequestUpdates: [PrayerRequestUpdate] = []
-    @State var update: PrayerRequestUpdate
-    
-    var body: some View {
-        NavigationView {
-            Form {
-                Section(header: Text("Date Posted: \(update.datePosted.formatted(.dateTime))")) {
-                    ZStack(alignment: .topLeading) {
-                        if update.prayerUpdateText == "" {
-                            Text("Text")
-                                .padding(.leading, 0)
-                                .padding(.top, 8)
-                                .foregroundStyle(Color.gray)
-                        }
-                        Text(update.prayerUpdateText).foregroundColor(Color.clear)//this is a swift workaround to dynamically expand textEditor.
-                        TextEditor(text: $update.prayerUpdateText)
-                            .offset(x: -5, y: -1)
-                    }
-                }
-            }
-        }
-        .toolbar {
-            ToolbarItem(placement: .automatic) {
-                Button(action: {
-                    updatePrayerUpdate()
-                }) {
-                    Text("Save")
-                        .offset(x: -4)
-                        .font(.system(size: 14))
-                        .padding([.leading, .trailing], 5)
-                        .bold()
-                }
-                .background(
-                    RoundedRectangle(cornerRadius: 15)
-                        .fill(.blue)
-                )
-                .foregroundStyle(.white)
-            }
-            
-            if person.username == "" || (person.userID == userHolder.person.userID) {
-                ToolbarItemGroup(placement: .bottomBar) {
-                    Button(action: {deleteUpdate()}) {
-                        Text("Delete Update")
-                            .font(.system(size: 14))
-                            .padding([.leading, .trailing], 5)
-                    }
-                    .background(
-                        RoundedRectangle(cornerRadius: 15)
-                            .fill(.red)
-                    )
-                    .foregroundStyle(.white)
-                }
-            }
-        }
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarTitle("Prayer Update")
-    }
-    
-    func deleteUpdate() {
-        var updates = prayerRequestUpdates.sorted(by: {$1.datePosted > $0.datePosted})
-        print("before:")
-        print(updates)
-        updates.removeAll(where: {$0.id == update.id}) // must come first in order to make sure the prayer request last date posted can be factored correctly.
-        print("after:")
-        print(updates)
-        PrayerUpdateHelper().deletePrayerUpdate(prayerRequest: prayerRequest, prayerRequestUpdate: update, updatesArray: updates, person: person, friendsList: userHolder.friendsList)
-
-        print("Deleted")
-        dismiss()
-    }
-    
-    func updatePrayerUpdate() {
-        PrayerUpdateHelper().editPrayerUpdate(prayerRequest: prayerRequest, prayerRequestUpdate: update, person: person, friendsList: userHolder.friendsList, updatesArray: prayerRequestUpdates)
-        print("Saved")
-        dismiss()
-    }
-    
-}
-
-struct AddPrayerUpdateView: View {
-    @Environment(UserProfileHolder.self) var userHolder
-    @Environment(\.dismiss) var dismiss
-    
-    var person: Person
-    @State var prayerRequest: PrayerRequest
-    @State var update: PrayerRequestUpdate = PrayerRequestUpdate(datePosted: Date(), prayerUpdateText: "")
-    
-    var body: some View {
-        NavigationStack {
-            Form {
-                Section(header: Text("Add Update to Prayer Request")) {
-                    ZStack(alignment: .topLeading) {
-                        if update.prayerUpdateText == "" {
-                            Text("Text")
-                                .padding(.leading, 0)
-                                .padding(.top, 8)
-                                .foregroundStyle(Color.gray)
-                        }
-                        Text(update.prayerUpdateText).foregroundColor(Color.clear)//this is a swift workaround to dynamically expand textEditor.
-                        TextEditor(text: $update.prayerUpdateText)
-                            .offset(x: -5, y: -1)
-                    }
-                }
-            }
-            .toolbar {
-                ToolbarItemGroup(placement: .topBarLeading) {
-                    Button("Cancel") {
-                        dismiss()
-                    }
-                }
-                ToolbarItemGroup(placement: .topBarTrailing) {
-                    Button(action: {self.addUpdate()}) {
-                        Text("Add")
-                            .offset(x: -4)
-                            .font(.system(size: 14))
-                            .padding([.leading, .trailing], 10)
-                            .bold()
-                    }
-                    .background(
-                        RoundedRectangle(cornerRadius: 15)
-                            .fill(.blue)
-                    )
-                    .foregroundStyle(.white)
-                }
-            }
-            .navigationTitle("Prayer Update")
-            .navigationBarTitleDisplayMode(.inline)
-        }
-    }
-    
-    func addUpdate() {
-        PrayerUpdateHelper().addPrayerRequestUpdate(datePosted: Date(), prayerRequest: prayerRequest, prayerRequestUpdate: update, person: person, friendsList: userHolder.friendsList)
         print("Saved")
         dismiss()
     }

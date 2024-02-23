@@ -36,9 +36,8 @@ struct SubmitPrayerRequestForm: View {
                                 .padding(.top, 8)
                                 .foregroundStyle(Color.gray)
                         }
-                        
                         TextEditor(text: $prayerRequestTitle)
-                            .frame(height: 35)
+                            .frame(minHeight: 35)
                             .offset(x: -5, y: -1)
                     }
                     ZStack(alignment: .topLeading) {

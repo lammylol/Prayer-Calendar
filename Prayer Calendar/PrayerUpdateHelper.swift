@@ -37,8 +37,9 @@ class PrayerUpdateHelper {
                 let prayerRequestID = document.data()["prayerRequestID"] as? String ?? ""
                 let prayerUpdateText = document.data()["prayerUpdateText"] as? String ?? ""
                 let documentID = document.documentID as String
+                let updateType = document.data()["updateType"] as? String ?? ""
                 
-                let prayerRequestUpdate = PrayerRequestUpdate(id: documentID, prayerRequestID: prayerRequestID, datePosted: datePosted, prayerUpdateText: prayerUpdateText)
+                let prayerRequestUpdate = PrayerRequestUpdate(id: documentID, prayerRequestID: prayerRequestID, datePosted: datePosted, prayerUpdateText: prayerUpdateText, updateType: updateType)
                 
                 updates.append(prayerRequestUpdate)
             }
@@ -75,7 +76,8 @@ class PrayerUpdateHelper {
         ref2.setData([
             "datePosted": datePosted,
             "prayerRequestID": prayerRequest.id,
-            "prayerUpdateText": prayerRequestUpdate.prayerUpdateText
+            "prayerUpdateText": prayerRequestUpdate.prayerUpdateText,
+            "updateType": prayerRequestUpdate.updateType
         ])
         
     // Add UpdateID and Data to prayerRequests/{prayerRequestID}/Updates
@@ -84,7 +86,8 @@ class PrayerUpdateHelper {
         
         ref.updateData([
             "latestUpdateDatePosted": datePosted,
-            "latestUpdateText": prayerRequestUpdate.prayerUpdateText]
+            "latestUpdateText": prayerRequestUpdate.prayerUpdateText,
+            "latestUpdateType": prayerRequestUpdate.updateType]
         )
         
         // update the latestUpdateDatePosted and latestUpdateText in prayer request collection.
@@ -92,7 +95,8 @@ class PrayerUpdateHelper {
         
         refPrayerRequestCollection.updateData([
             "latestUpdateDatePosted": datePosted,
-            "latestUpdateText": prayerRequestUpdate.prayerUpdateText]
+            "latestUpdateText": prayerRequestUpdate.prayerUpdateText,
+            "latestUpdateType": prayerRequestUpdate.updateType]
         )
         
         // Add prayer request update to prayerFeed/{userID} main prayerRequest
@@ -102,7 +106,8 @@ class PrayerUpdateHelper {
                     let refFriend = db.collection("prayerFeed").document(friendID).collection("prayerRequests").document(prayerRequest.id)
                     refFriend.updateData([
                         "latestUpdateDatePosted": prayerRequestUpdate.datePosted,
-                        "latestUpdateText": prayerRequestUpdate.prayerUpdateText]
+                        "latestUpdateText": prayerRequestUpdate.prayerUpdateText,
+                        "latestUpdateType": prayerRequestUpdate.updateType]
                     )
                 }
             }
@@ -110,7 +115,8 @@ class PrayerUpdateHelper {
             let refProfile = db.collection("prayerFeed").document(person.userID).collection("prayerRequests").document(prayerRequest.id)
             refProfile.updateData([
                 "latestUpdateDatePosted": prayerRequestUpdate.datePosted,
-                "latestUpdateText": prayerRequestUpdate.prayerUpdateText]
+                "latestUpdateText": prayerRequestUpdate.prayerUpdateText,
+                "latestUpdateType": prayerRequestUpdate.updateType]
             )
         }
     }
@@ -130,13 +136,16 @@ class PrayerUpdateHelper {
         // For resetting latest date and latest text.
         let latestUpdateDatePosted = getLatestUpdateDate(prayerRequest: prayerRequest, updates: updatesArray)
         let latestUpdateText = getLatestUpdateText(prayerRequest: prayerRequest, updates: updatesArray)
+        let latestUpdateType = getLatestUpdateType(prayerRequest: prayerRequest, updates: updatesArray)
         
 //      Reset latest update date and text for user id prayer list.
         let ref = db.collection("users").document(person.userID).collection("prayerList").document("\(prayerRequest.firstName.lowercased())_\(prayerRequest.lastName.lowercased())").collection("prayerRequests").document(prayerRequest.id)
         
         ref.updateData([
             "latestUpdateDatePosted": latestUpdateDatePosted,
-            "latestUpdateText": latestUpdateText]
+            "latestUpdateText": latestUpdateText,
+            "latestUpdateType": latestUpdateType
+        ]
         )
         
         // update the latestUpdateDatePosted and latestUpdateText in prayer request collection.
@@ -144,7 +153,8 @@ class PrayerUpdateHelper {
         
         refPrayerRequestCollection.updateData([
             "latestUpdateDatePosted": latestUpdateDatePosted,
-            "latestUpdateText": latestUpdateText]
+            "latestUpdateText": latestUpdateText,
+            "latestUpdateType": latestUpdateType]
         )
         
         // Delete PrayerRequestID from prayerFeed/{userID}
@@ -154,7 +164,8 @@ class PrayerUpdateHelper {
                     let refFriend = db.collection("prayerFeed").document(friendID).collection("prayerRequests").document(prayerRequest.id)
                     refFriend.updateData([
                         "latestUpdateDatePosted": latestUpdateDatePosted,
-                        "latestUpdateText": latestUpdateText]
+                        "latestUpdateText": latestUpdateText,
+                        "latestUpdateType": latestUpdateType]
                     )
                 }
             }
@@ -162,7 +173,8 @@ class PrayerUpdateHelper {
             let refProfile = db.collection("prayerFeed").document(person.userID).collection("prayerRequests").document(prayerRequest.id)
             refProfile.updateData([
                 "latestUpdateDatePosted": latestUpdateDatePosted,
-                "latestUpdateText": latestUpdateText]
+                "latestUpdateText": latestUpdateText,
+                "latestUpdateType": latestUpdateType]
             )
         }
         
@@ -206,6 +218,21 @@ class PrayerUpdateHelper {
         return latestUpdateText
     }
     
+    func getLatestUpdateType(prayerRequest: PrayerRequest, updates: [PrayerRequestUpdate]) -> String {
+        var latestUpdateType = ""
+        
+        if updates.count >= 1 {
+            // if there are more than 1 updates, then get datePosted of the latest update.
+            // assume the array is sorted already on getPrayerUpdates
+            latestUpdateType = updates.last?.updateType ?? ""
+        } else {
+            // if either there are no updates, or there will be no updates after delete, then get datePosted of the original prayer request.
+            latestUpdateType = ""
+        }
+        
+        return latestUpdateType
+    }
+    
     //person passed in for the feed is the user. prayer passed in for the profile view is the person being viewed.
     func editPrayerUpdate(prayerRequest: PrayerRequest, prayerRequestUpdate: PrayerRequestUpdate, person: Person, friendsList: [String], updatesArray: [PrayerRequestUpdate]) {
         let db = Firestore.firestore()
@@ -225,7 +252,9 @@ class PrayerUpdateHelper {
             
             ref.updateData([
                 "latestUpdateDatePosted": prayerRequestUpdate.datePosted,
-                "latestUpdateText": prayerRequestUpdate.prayerUpdateText]
+                "latestUpdateText": prayerRequestUpdate.prayerUpdateText,
+                "latestUpdateType": prayerRequestUpdate.updateType
+            ]
             )
             
             // update the latestUpdateDatePosted and latestUpdateText in prayer request collection.
@@ -233,7 +262,8 @@ class PrayerUpdateHelper {
             
             refPrayerRequestCollection.updateData([
                 "latestUpdateDatePosted": prayerRequestUpdate.datePosted,
-                "latestUpdateText": prayerRequestUpdate.prayerUpdateText]
+                "latestUpdateText": prayerRequestUpdate.prayerUpdateText,
+                "latestUpdateType": prayerRequestUpdate.updateType]
             )
             
             // Update PrayerRequestID in prayerFeed/{userID}
@@ -243,7 +273,8 @@ class PrayerUpdateHelper {
                         let refFriend = db.collection("prayerFeed").document(friendID).collection("prayerRequests").document(prayerRequest.id)
                         refFriend.updateData([
                             "latestUpdateDatePosted": prayerRequestUpdate.datePosted,
-                            "latestUpdateText": prayerRequestUpdate.prayerUpdateText]
+                            "latestUpdateText": prayerRequestUpdate.prayerUpdateText,
+                            "latestUpdateType": prayerRequestUpdate.updateType]
                         )
                     }
                 }
@@ -251,21 +282,23 @@ class PrayerUpdateHelper {
                 let refProfile = db.collection("prayerFeed").document(person.userID).collection("prayerRequests").document(prayerRequest.id)
                 refProfile.updateData([
                     "latestUpdateDatePosted": prayerRequestUpdate.datePosted,
-                    "latestUpdateText": prayerRequestUpdate.prayerUpdateText]
+                    "latestUpdateText": prayerRequestUpdate.prayerUpdateText,
+                    "latestUpdateType": prayerRequestUpdate.updateType]
                 )
             }
         }
         
         //----------------- Update prayer update in collection ---------------------
         
-        // Delete prayer update from prayerRequests/{prayerRequestID}
+        // Update prayer update in prayerRequests/{prayerRequestID}
         let refUpdate =
         db.collection("prayerRequests").document(prayerRequest.id).collection("updates").document(prayerRequestUpdate.id)
         
         refUpdate.updateData([
 //            "datePosted": datePosted,
 //            "prayerRequestID": prayerRequest.id,
-            "prayerUpdateText": prayerRequestUpdate.prayerUpdateText
+            "prayerUpdateText": prayerRequestUpdate.prayerUpdateText,
+            "updateType": prayerRequestUpdate.updateType
         ])
     }
 }

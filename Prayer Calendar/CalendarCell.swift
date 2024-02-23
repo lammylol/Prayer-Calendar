@@ -57,18 +57,24 @@ struct CalendarCell: View {
                 if (monthStruct().day() == Date.now.formatted(.dateTime.day()) &&
                     date.formatted(date: .abbreviated, time: .omitted) == Date().formatted(date: .abbreviated, time: .omitted)) {
                     ZStack{
-                            VStack{
-                                Circle()
-                                    .foregroundStyle(.blue)
-                                    .frame(width: 30, height: 30)
-                                    .offset(y: -4)
-                                Spacer()
-                            }
+//                            VStack{
+//                                Circle()
+//                                    .foregroundStyle(.blue)
+//                                    .frame(width: 30, height: 30)
+//                                    .offset(y: -4)
+//                                Spacer()
+//                            }
                             VStack {
                                 Text(monthStruct().day())
                                     .font(.title3)
                                     .fontWeight(.semibold)
                                     .foregroundColor(.white)
+                                    .background(
+                                        Circle()
+                                            .foregroundStyle(.blue)
+                                            .padding(.all, -5)
+                                    )
+                                    
                                 Spacer()
                                 Text(monthStruct().person.firstName)
                                     .font(Font.system(size: 12))

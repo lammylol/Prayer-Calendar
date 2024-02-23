@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7A12A9CE2B87FA3B00707E3C /* PrayerUpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A12A9CD2B87FA3B00707E3C /* PrayerUpdateView.swift */; };
 		7A27B7B62B2FE0EB00FF72FC /* CreateProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A27B7B52B2FE0EA00FF72FC /* CreateProfileView.swift */; };
 		7A3158E92AEF9C0B009B6E59 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 7A3158E82AEF9C0B009B6E59 /* FirebaseAnalytics */; };
 		7A3158EB2AEF9C0B009B6E59 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 7A3158EA2AEF9C0B009B6E59 /* FirebaseAnalyticsSwift */; };
@@ -69,6 +70,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7A12A9CD2B87FA3B00707E3C /* PrayerUpdateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerUpdateView.swift; sourceTree = "<group>"; };
 		7A27B7B52B2FE0EA00FF72FC /* CreateProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateProfileView.swift; sourceTree = "<group>"; };
 		7A3158EC2AF357F5009B6E59 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		7A416B7A2AFC71CA00249BB3 /* UIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIHelper.swift; sourceTree = "<group>"; };
@@ -258,6 +260,7 @@
 				7A5C72322AFF5D9E00A75636 /* PrayerRequestRow.swift */,
 				7ADE4C522B046CD400CE6B33 /* SubmitPrayerRequestForm.swift */,
 				7ADE4C542B0811AC00CE6B33 /* PrayerRequestFormView.swift */,
+				7A12A9CD2B87FA3B00707E3C /* PrayerUpdateView.swift */,
 			);
 			name = PrayerRequest;
 			sourceTree = "<group>";
@@ -441,6 +444,7 @@
 				7AD808D12AD6F9E000A0ECA6 /* ContentView.swift in Sources */,
 				7A66A0C52B0B24BC000CA93E /* PrayerRequestHelper.swift in Sources */,
 				7A4F26342AD0D2B600FB086C /* PrayerNameInputView.swift in Sources */,
+				7A12A9CE2B87FA3B00707E3C /* PrayerUpdateView.swift in Sources */,
 				7AE46BD82B1010E80034DAD6 /* PrayerPersonHelper.swift in Sources */,
 				7A7CA4752B771106001922AA /* ProfileSettingsView.swift in Sources */,
 				7A5C72332AFF5D9F00A75636 /* PrayerRequestRow.swift in Sources */,

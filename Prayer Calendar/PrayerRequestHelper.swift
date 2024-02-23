@@ -51,8 +51,9 @@ class PrayerRequestHelper {
                 let documentID = document.documentID as String
                 let prayerRequestTitle = document.data()["prayerRequestTitle"] as? String ?? ""
                 let latestUpdateText = document.data()["latestUpdateText"] as? String ?? ""
+                let latestUpdateType = document.data()["latestUpdateType"] as? String ?? ""
                 
-                let prayerRequest = PrayerRequest(id: documentID, userID: userID, username: username, date: datePosted, prayerRequestText: prayerRequestText, status: status, firstName: firstName, lastName: lastName, priority: priority, prayerRequestTitle: prayerRequestTitle, latestUpdateText: latestUpdateText, latestUpdateDatePosted: latestUpdateDatePosted)
+                let prayerRequest = PrayerRequest(id: documentID, userID: userID, username: username, date: datePosted, prayerRequestText: prayerRequestText, status: status, firstName: firstName, lastName: lastName, priority: priority, prayerRequestTitle: prayerRequestTitle, latestUpdateText: latestUpdateText, latestUpdateDatePosted: latestUpdateDatePosted, latestUpdateType: latestUpdateType)
                 
                 prayerRequests.append(prayerRequest)
             }
@@ -96,8 +97,9 @@ class PrayerRequestHelper {
                 let documentID = document.documentID as String
                 let prayerRequestTitle = document.data()?["prayerRequestTitle"] as? String ?? ""
                 let latestUpdateText = document.data()?["latestUpdateText"] as? String ?? ""
+                let latestUpdateType = document.data()?["latestUpdateType"] as? String ?? ""
             
-                prayerRequest = PrayerRequest(id: documentID, userID: userID, username: username, date: datePosted, prayerRequestText: prayerRequestText, status: status, firstName: firstName, lastName: lastName, priority: priority, prayerRequestTitle: prayerRequestTitle, latestUpdateText: latestUpdateText, latestUpdateDatePosted: latestUpdateDatePosted)
+                prayerRequest = PrayerRequest(id: documentID, userID: userID, username: username, date: datePosted, prayerRequestText: prayerRequestText, status: status, firstName: firstName, lastName: lastName, priority: priority, prayerRequestTitle: prayerRequestTitle, latestUpdateText: latestUpdateText, latestUpdateDatePosted: latestUpdateDatePosted, latestUpdateType: latestUpdateType)
             }
         } catch {
             throw error
@@ -131,7 +133,8 @@ class PrayerRequestHelper {
             "priority": priority,
             "prayerRequestTitle": prayerRequestTitle,
             "latestUpdateText": "",
-            "latestUpdateDatePosted": datePosted
+            "latestUpdateDatePosted": datePosted,
+            "latestUpdateType": ""
         ])
         
         let prayerRequestID = ref.documentID
@@ -152,7 +155,8 @@ class PrayerRequestHelper {
                         "priority": priority,
                         "prayerRequestTitle": prayerRequestTitle,
                         "latestUpdateText": "",
-                        "latestUpdateDatePosted": datePosted
+                        "latestUpdateDatePosted": datePosted,
+                        "latestUpdateType": ""
                     ])
                 }
             }
@@ -169,7 +173,8 @@ class PrayerRequestHelper {
                     "priority": priority,
                     "prayerRequestTitle": prayerRequestTitle,
                     "latestUpdateText": "",
-                    "latestUpdateDatePosted": datePosted
+                    "latestUpdateDatePosted": datePosted,
+                    "latestUpdateType": ""
                 ])
         }
         
@@ -188,7 +193,8 @@ class PrayerRequestHelper {
             "priority": priority,
             "prayerRequestTitle": prayerRequestTitle,
             "latestUpdateText": "",
-            "latestUpdateDatePosted": datePosted
+            "latestUpdateDatePosted": datePosted,
+            "latestUpdateType": ""
         ])
     }
     
@@ -250,7 +256,10 @@ class PrayerRequestHelper {
                 "userID": person.userID,
                 "username": person.username,
                 "priority": prayerRequest.priority,
-                "prayerRequestTitle": prayerRequest.prayerRequestTitle
+                "prayerRequestTitle": prayerRequest.prayerRequestTitle,
+                "latestUpdateText": prayerRequest.latestUpdateText,
+                "latestUpdateDatePosted": prayerRequest.latestUpdateDatePosted,
+                "latestUpdateType": prayerRequest.latestUpdateType,
             ])
         } else {
             let ref = db.collection("prayerFeed").document(person.userID).collection("prayerRequests").document(prayerRequest.id)
@@ -263,7 +272,10 @@ class PrayerRequestHelper {
                 "userID": person.userID,
                 "username": person.username,
                 "priority": prayerRequest.priority,
-                "prayerRequestTitle": prayerRequest.prayerRequestTitle
+                "prayerRequestTitle": prayerRequest.prayerRequestTitle,
+                "latestUpdateText": prayerRequest.latestUpdateText,
+                "latestUpdateDatePosted": prayerRequest.latestUpdateDatePosted,
+                "latestUpdateType": prayerRequest.latestUpdateType,
             ])
         }
     }
