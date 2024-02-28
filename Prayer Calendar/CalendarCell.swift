@@ -55,7 +55,7 @@ struct CalendarCell: View {
             NavigationLink(destination: ProfileView(person: Person(username: monthStruct().person.username, firstName: monthStruct().person.firstName, lastName: monthStruct().person.lastName))) {
                 
                 if (monthStruct().day() == Date.now.formatted(.dateTime.day()) &&
-                    date.formatted(date: .abbreviated, time: .omitted) == Date().formatted(date: .abbreviated, time: .omitted)) {
+                    date.formatted(date: .abbreviated, time: .omitted) == Date().formatted(date: .abbreviated, time: .omitted) && monthStruct().monthType == MonthType.Current) {
                     ZStack{
 //                            VStack{
 //                                Circle()
@@ -72,7 +72,7 @@ struct CalendarCell: View {
                                     .background(
                                         Circle()
                                             .foregroundStyle(.blue)
-                                            .padding(.all, -5)
+                                            .frame(width: 40, height: 40)
                                     )
                                     
                                 Spacer()
