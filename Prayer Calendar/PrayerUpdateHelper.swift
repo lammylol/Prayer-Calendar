@@ -29,11 +29,6 @@ class PrayerUpdateHelper {
                 //              let timestamp = document.data()["DatePosted"]/* as? ip_timestamp ?? ip_timestamp()*/
                 let datePosted = timestamp.dateValue()
                 
-//                var id: String = ""
-//                var prayerRequestID: String = "" // original identifier
-//                var datePosted: Date
-//                var prayerUpdateText: String
-                
                 let prayerRequestID = document.data()["prayerRequestID"] as? String ?? ""
                 let prayerUpdateText = document.data()["prayerUpdateText"] as? String ?? ""
                 let documentID = document.documentID as String

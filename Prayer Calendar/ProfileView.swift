@@ -28,7 +28,6 @@ struct ProfileView: View {
 //                            if person.username == userHolder.person.username {
                                 ToolbarItem(placement: .topBarTrailing) {
                                     NavigationLink(destination: ProfileSettingsView()) {
-//                                        Image(systemName: "line.horizontal.3")
                                         Image(systemName: "gear")
                                     }
 //                                ToolbarItem(){
@@ -49,7 +48,6 @@ struct ProfileView: View {
                     }
                     .padding([.leading, .trailing], 20)
                     .font(.system(size: 14))
-                    .italic()
                     
                     Spacer()
                 
@@ -63,29 +61,21 @@ struct ProfileView: View {
         }
     }
     
-//    func signOut() {
-//        // Sign out from firebase and change loggedIn to return to SignInView.
-//        try? Auth.auth().signOut()
-//        resetInfo()
-//    }
-//                    
-//    func resetInfo() {
-//        userHolder.friendsList = []
-//        userHolder.isLoggedIn = false
-//        
-//        dataHolder.userID = ""
-//        dataHolder.prayerList = ""
-//        dataHolder.prayStartDate = Date()
-//    }
-    
     func usernameDisplay() -> String {
-        
         if person.username == "" {
-            return "no active profile linked via username. data will be stored under your own account."
+            return "[Private Account]: No active profile linked"
         } else {
-            return "username: \(person.username)"
+            return "[Username]: \(person.username.capitalized)"
         }
     }
+
+//    func nameDisplay() -> String {
+//        if person.username != "" {
+//            return person.firstName + " " + person.lastName
+//        } else {
+//            return person.firstName + " " + person.lastName + " (private account)"
+//        }
+//    }
 }
 
 #Preview {
