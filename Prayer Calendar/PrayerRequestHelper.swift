@@ -213,17 +213,17 @@ class PrayerRequestHelper {
         
         ref.updateData([
             "datePosted": prayerRequest.date,
-            "firstName": prayerRequest.firstName,
-            "lastName": prayerRequest.lastName,
+//            "firstName": prayerRequest.firstName,
+//            "lastName": prayerRequest.lastName,
             "status": prayerRequest.status,
             "prayerRequestText": prayerRequest.prayerRequestText,
-            "userID": person.userID,
-            "username": person.username,
+//            "userID": person.userID,
+//            "username": person.username,
             "priority": prayerRequest.priority,
-            "prayerRequestTitle": prayerRequest.prayerRequestTitle,
-            "latestUpdateText": prayerRequest.latestUpdateText,
-            "latestUpdateDatePosted": prayerRequest.latestUpdateDatePosted,
-            "latestUpdateType": prayerRequest.latestUpdateType
+            "prayerRequestTitle": prayerRequest.prayerRequestTitle
+//            "latestUpdateText": prayerRequest.latestUpdateText,
+//            "latestUpdateDatePosted": prayerRequest.latestUpdateDatePosted,
+//            "latestUpdateType": prayerRequest.latestUpdateType
         ])
         
         // Add PrayerRequestID to prayerFeed/{userID}

@@ -9,6 +9,12 @@ import SwiftUI
 import FirebaseAuth
 import FirebaseFirestore
 
+enum AuthError: Error {
+    case networkError
+    case invalidPassword
+    case noUserFound
+}
+
 struct SignInView: View {
     @Environment(UserProfileHolder.self) var userHolder
     @Environment(\.colorScheme) var colorScheme
@@ -16,8 +22,35 @@ struct SignInView: View {
     @State var username = ""
     @State var password = ""
     @State var showCreateAccount: Bool = false
+    @State var errorMessage = ""
+    @State var text: String = ""
+    @State var passwordText: String = ""
     
     var body: some View {
+//        GeometryReader.init { geometry in
+//                ScrollView.init {
+//                    VStack.init(alignment: .leading, spacing: nil, content: {
+//                        TextField("Hello", text: $text, prompt: Text("hello"))
+//                            .frame(width: geometry.size.width, height: 50)
+//                            .disableAutocorrection(true)
+//                        
+//                        SecureField("Hello", text: $passwordText, prompt: Text("hello"))
+//                            .disableAutocorrection(true)
+//                            .frame(width: geometry.size.width, height: 50)
+//                    })
+//                }
+//        }
+        
+//        HStack {
+//            Text("Email: ")
+//                .padding(.leading, 40)
+//            TextField("Hello", text: $text, prompt: Text("hello"))
+//        }
+//        HStack {
+//            Text("Password: ")
+//                .padding(.leading, 40)
+//            SecureField("Hello", text: $passwordText, prompt: Text("hello"))
+//        }
         Group {
             if userHolder.isLoggedIn == false {
                 VStack(/*spacing: 20*/) {
@@ -30,7 +63,6 @@ struct SignInView: View {
                         Text("Email: ")
                             .padding(.leading, 40)
                         MyTextView(placeholder: "", text: $email, textPrompt: "enter email", textFieldType: "text")
-//                            .keyboardType(.emailAddress)
                     }
                     
                     Rectangle()
@@ -47,7 +79,7 @@ struct SignInView: View {
                 
                     Button(action: {
                         Task {
-                            await signIn()
+                            try signIn()
                         }
                     }) {Text("Login")
                             .bold()
@@ -59,6 +91,10 @@ struct SignInView: View {
                     )
                     .foregroundStyle(.white)
                     .padding(.top, 15)
+                    
+                    Text(errorMessage)
+                        .font(.system(size: 16))
+                        .foregroundStyle(Color.red)
                     
                     Button(action: {
                         showCreateAccount.toggle()
@@ -76,11 +112,26 @@ struct SignInView: View {
         }
     }
     
-    func signIn() async {
-        Auth.auth().signIn(withEmail: email, password: password) { result, error in
-            if error != nil {
-                print("no account found")
-                userHolder.isLoggedIn = false
+    func signIn() throws {
+        Auth.auth().signIn(withEmail: email, password: password) { (result, error) in
+            if let error = error {
+                let err = error as NSError
+                if let authErrorCode = AuthErrorCode.Code(rawValue: err.code) {
+                    
+                    switch authErrorCode {
+                    case .userNotFound:
+                        errorMessage = "User Not Found"
+                    case .wrongPassword:
+                        errorMessage = "Incorrect Password"
+                    case .invalidEmail:
+                        errorMessage = "Invalid Email"
+                    case .networkError:
+                        errorMessage = "Network Error"
+                    default:
+                        errorMessage = "Invalid Credentials"
+                    }
+                }
+                print(errorMessage)
             } else {
                 Task {
                     let userID = Auth.auth().currentUser!.uid
@@ -90,18 +141,14 @@ struct SignInView: View {
                     email = ""
                     password = ""
                     username = ""
+                    errorMessage = ""
                 }
-//                print("//GETUSERINFO: username: " + userHolder.person.username + " userID: " + userHolder.person.userID)
-//                print(userHolder.friendsList)
             }
         }
     }
     
         //  This function retrieves Userinfo data from Firestore.
     func getUserInfo(userID: String, email: String) async {
-            
-    //        userHolder.person.userID = userID
-    //        userHolder.person.email = email
         
         let db = Firestore.firestore()
 //        let ref = db.collection("users").document(userID)
@@ -153,22 +200,35 @@ struct MyTextView: View {
     
     var body: some View {
         if textFieldType == "text" {
-            TextField(placeholder, text: $text, prompt: Text(textPrompt))
-                .textInputAutocapitalization(.never)
-                .autocorrectionDisabled(true) // for constraint issue
-                .frame(minHeight: 35, maxHeight: 35)
-                .padding(.trailing, 40)
+            ZStack {
+                TextField(placeholder, text: $text, prompt: Text(textPrompt))
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled(true) // for constraint issue
+                    .frame(height: 35)
+                    .padding(.trailing, 40)
+                    .background(
+                        Rectangle().foregroundStyle(.clear)
+                            .frame(height: 35)
+                        )
+            }
         } else if textFieldType == "secure" {
-            SecureField(placeholder, text: $text, prompt: Text(textPrompt))
-                .textInputAutocapitalization(.never)
-                .autocorrectionDisabled(true) // for constraint issue
-                .frame(minHeight: 35, maxHeight: 35)
-                .padding(.trailing, 40)
+            ZStack {
+                SecureField(placeholder, text: $text, prompt: Text(textPrompt))
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled(true) // for constraint issue
+                    .frame(height: 35)
+                    .padding(.trailing, 40)
+                    .background(
+                        Rectangle().foregroundStyle(.clear)
+                            .frame(height: 35)
+                        )
+            }
+            
         }
     }
 }
 
-#Preview {
-    SignInView()
-        .environment(UserProfileHolder())
-}
+//#Preview {
+//    SignInView()
+//        .environment(UserProfileHolder())
+//}
