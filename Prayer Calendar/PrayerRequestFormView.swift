@@ -115,7 +115,7 @@ struct PrayerRequestFormView: View {
             .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: .infinity)
             .task {
                 do {
-                    prayerRequest.prayerRequestText = try await PrayerRequestHelper().getPrayerRequest(prayerRequest: prayerRequest).prayerRequestText
+                    prayerRequest = try await PrayerRequestHelper().getPrayerRequest(prayerRequest: prayerRequest)
                     prayerRequestUpdates = try await PrayerUpdateHelper().getPrayerRequestUpdates(prayerRequest: prayerRequest, person: person)
                     print(prayerRequestUpdates)
                 } catch PrayerRequestRetrievalError.noPrayerRequestID {

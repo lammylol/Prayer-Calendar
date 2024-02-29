@@ -227,25 +227,29 @@ class PrayerRequestHelper {
         ])
         
         // Add PrayerRequestID to prayerFeed/{userID}
-        if isMyProfile == true {
-            if friendsList.isEmpty == false {
-                for friendID in friendsList {
-                    updatePrayerFeed(prayerRequest: prayerRequest, person: person, friendID: friendID, updateFriend: true)
-                }
-            }
+        if prayerRequest.status == "No Longer Needed" {
+            deleteRequestFromFeed(prayerRequest: prayerRequest, person: person, friendsList: friendsList) // If it is no longer needed, remove from all feeds. If not, update all feeds.
         } else {
-            updatePrayerFeed(prayerRequest: prayerRequest, person: person, friendID: "", updateFriend: false)
+            if isMyProfile == true {
+                if friendsList.isEmpty == false {
+                    for friendID in friendsList {
+                        updatePrayerFeed(prayerRequest: prayerRequest, person: person, friendID: friendID, updateFriend: true)
+                    }
+                }
+            } else {
+                updatePrayerFeed(prayerRequest: prayerRequest, person: person, friendID: "", updateFriend: false)
+            }
+            
+            // Add PrayerRequestID and Data to prayerRequests/{prayerRequestID}
+            updatePrayerRequestsDataCollection(prayerRequest: prayerRequest, person: person)
+            print(prayerRequest.prayerRequestText)
         }
-        
-        // Add PrayerRequestID and Data to prayerRequests/{prayerRequestID}
-        updatePrayerRequestsDataCollection(prayerRequest: prayerRequest, person: person)
-        print(prayerRequest.prayerRequestText)
     }
     
     // This function updates the prayer feed of all users who are friends of the person.
     func updatePrayerFeed(prayerRequest: PrayerRequest, person: Person, friendID: String, updateFriend: Bool) {
         let db = Firestore.firestore()
-
+        
         if updateFriend == true {
             let ref = db.collection("prayerFeed").document(friendID).collection("prayerRequests").document(prayerRequest.id)
             ref.setData([
@@ -305,13 +309,6 @@ class PrayerRequestHelper {
     func deletePrayerRequest(prayerRequest: PrayerRequest, person: Person, friendsList: [String]) {
         let db = Firestore.firestore()
         
-        var isMyProfile: Bool
-        if person.username != "" && person.userID == prayerRequest.userID {
-            isMyProfile = true
-        } else {
-            isMyProfile = false
-        }
-        
         let ref = db.collection("users").document(person.userID).collection("prayerList").document("\(prayerRequest.firstName.lowercased())_\(prayerRequest.lastName.lowercased())").collection("prayerRequests").document(prayerRequest.id)
         
         ref.delete() { err in
@@ -324,6 +321,27 @@ class PrayerRequestHelper {
             }
         }
         
+        // Delete PrayerRequest from all feeds: friend feeds and user's feed.
+        deleteRequestFromFeed(prayerRequest: prayerRequest, person: person, friendsList: friendsList)
+        
+        // Delete PrayerRequestID and Data from prayerRequests/{prayerRequestID}
+        let ref3 =
+        db.collection("prayerRequests").document(prayerRequest.id)
+        
+        ref3.delete()
+    }
+    
+    // This function is used only for deleting from prayer feed. ie. No longer needed, or deleted prayer request.
+    func deleteRequestFromFeed(prayerRequest: PrayerRequest, person: Person, friendsList: [String]) {
+        let db = Firestore.firestore()
+        
+        var isMyProfile: Bool
+        if person.username != "" && person.userID == prayerRequest.userID {
+            isMyProfile = true
+        } else {
+            isMyProfile = false
+        }
+    
         // Delete PrayerRequestID from prayerFeed/{userID}
         if isMyProfile == true {
             if friendsList.isEmpty == false {
@@ -352,11 +370,5 @@ class PrayerRequestHelper {
                 }
             }
         }
-        
-        // Delete PrayerRequestID and Data from prayerRequests/{prayerRequestID}
-        let ref3 =
-        db.collection("prayerRequests").document(prayerRequest.id)
-        
-        ref3.delete()
     }
 }

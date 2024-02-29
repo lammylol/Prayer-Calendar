@@ -56,34 +56,24 @@ struct CalendarCell: View {
                 
                 if (monthStruct().day() == Date.now.formatted(.dateTime.day()) &&
                     date.formatted(date: .abbreviated, time: .omitted) == Date().formatted(date: .abbreviated, time: .omitted) && monthStruct().monthType == MonthType.Current) {
-                    ZStack{
-//                            VStack{
-//                                Circle()
-//                                    .foregroundStyle(.blue)
-//                                    .frame(width: 30, height: 30)
-//                                    .offset(y: -4)
-//                                Spacer()
-//                            }
-                            VStack {
-                                Text(monthStruct().day())
-                                    .font(.title3)
-                                    .fontWeight(.semibold)
-                                    .foregroundColor(.white)
-                                    .background(
-                                        Circle()
-                                            .foregroundStyle(.blue)
-                                            .frame(width: 40, height: 40)
-                                    )
-                                    
-                                Spacer()
-                                Text(monthStruct().person.firstName)
-                                    .font(Font.system(size: 12))
-                                    .foregroundColor(textColor(type: monthStruct().monthType))
-                                Spacer()
-                            }
-                    }
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 95)
+                        VStack {
+                            Text(monthStruct().day())
+                                .font(.title3)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.white)
+                                .background(
+                                    Circle()
+                                        .foregroundStyle(.blue)
+                                        .frame(width: 40, height: 40)
+                                )
+                            Spacer()
+                            Text(monthStruct().person.firstName)
+                                .font(Font.system(size: 12))
+                                .foregroundColor(textColor(type: monthStruct().monthType))
+                            Spacer()
+                        }
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 95)
                 } else {
                     VStack {
                         Text(monthStruct().day())

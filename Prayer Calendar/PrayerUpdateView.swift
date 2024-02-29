@@ -84,7 +84,6 @@ struct PrayerUpdateView: View {
         print("after:")
         print(updates)
         PrayerUpdateHelper().deletePrayerUpdate(prayerRequest: prayerRequest, prayerRequestUpdate: update, updatesArray: updates, person: person, friendsList: userHolder.friendsList)
-
         print("Deleted")
         dismiss()
     }

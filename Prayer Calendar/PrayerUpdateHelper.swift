@@ -238,6 +238,7 @@ class PrayerUpdateHelper {
         } else {
             isMyProfile = false
         }
+        print(isMyProfile)
         
         let latestUpdateDatePosted = getLatestUpdateDate(prayerRequest: prayerRequest, updates: updatesArray)
         
