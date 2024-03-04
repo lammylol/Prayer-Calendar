@@ -100,27 +100,11 @@ struct LatestUpdate: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-//            HStack {
-//                Text("Latest Update")
-//                    .bold()
-//                    .font(.system(size: 12))
-//                Spacer()
-//                Text("\(prayerRequest.latestUpdateDatePosted.formatted(date: .abbreviated, time: .omitted))")
-//                    .font(.system(size: 12))
-//            }
-//            .frame(maxWidth: .infinity, alignment: .leading)
             Text("\(prayerRequest.latestUpdateType): \(prayerRequest.latestUpdateText)")
                 .multilineTextAlignment(.leading)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .font(.system(size: 14))
-//            Spacer()
         }
-//        .padding(.all, 10)
-//        .foregroundStyle(.white, .black)
-//        .background(
-//            RoundedRectangle(cornerRadius: 7)
-//                .fill(Color.random)
-//        )
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }

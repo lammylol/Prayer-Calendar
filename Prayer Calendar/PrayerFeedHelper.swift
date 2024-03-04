@@ -10,7 +10,7 @@ import FirebaseFirestore
 
 class PrayerFeedHelper {
     //Retrieve prayer requests for PrayerFeed.
-    func retrievePrayerRequestFeed(userID: String) async throws -> [PrayerRequest] {
+    func retrievePrayerRequestFeed(userID: String, answeredFilter: Bool) async throws -> [PrayerRequest] {
         var prayerRequests = [PrayerRequest]()
         let db = Firestore.firestore()
         
@@ -19,8 +19,14 @@ class PrayerFeedHelper {
         }
         
         do {
-            let prayerFeed = db.collection("prayerFeed").document(userID).collection("prayerRequests")
-                .order(by: "latestUpdateDatePosted", descending: true)
+            var prayerFeed: Query
+            
+            //answeredFilter is true if only filtering on answered prayers.
+            if answeredFilter == true {
+                prayerFeed = db.collection("prayerFeed").document(userID).collection("prayerRequests").whereField("status", isEqualTo: "Answered").order(by: "latestUpdateDatePosted", descending: true)
+            } else {
+                prayerFeed = db.collection("prayerFeed").document(userID).collection("prayerRequests").order(by: "status").whereField("status", isNotEqualTo: "Answered").order(by: "latestUpdateDatePosted", descending: true)
+            }
 
             let querySnapshot = try await prayerFeed.getDocuments()
             

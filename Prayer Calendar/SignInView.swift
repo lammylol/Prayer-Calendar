@@ -27,37 +27,15 @@ struct SignInView: View {
     @State var passwordText: String = ""
     
     var body: some View {
-//        GeometryReader.init { geometry in
-//                ScrollView.init {
-//                    VStack.init(alignment: .leading, spacing: nil, content: {
-//                        TextField("Hello", text: $text, prompt: Text("hello"))
-//                            .frame(width: geometry.size.width, height: 50)
-//                            .disableAutocorrection(true)
-//                        
-//                        SecureField("Hello", text: $passwordText, prompt: Text("hello"))
-//                            .disableAutocorrection(true)
-//                            .frame(width: geometry.size.width, height: 50)
-//                    })
-//                }
-//        }
-        
-//        HStack {
-//            Text("Email: ")
-//                .padding(.leading, 40)
-//            TextField("Hello", text: $text, prompt: Text("hello"))
-//        }
-//        HStack {
-//            Text("Password: ")
-//                .padding(.leading, 40)
-//            SecureField("Hello", text: $passwordText, prompt: Text("hello"))
-//        }
         Group {
             if userHolder.isLoggedIn == false {
                 VStack(/*spacing: 20*/) {
+                    Spacer()
+                    
                     Text("Welcome")
                         .font(.largeTitle)
                         .bold()
-                        .offset(x: -80, y: -25)
+                        .offset(x: -80)
                     
                     HStack {
                         Text("Email: ")
@@ -79,30 +57,42 @@ struct SignInView: View {
                 
                     Button(action: {
                         Task {
-                            try signIn()
+                            signIn()
                         }
-                    }) {Text("Login")
+                    }) {Text("Sign In")
                             .bold()
-                            .frame(width: 150, height: 35)
+                            .frame(height: 35)
                     }
                     .background(
                         RoundedRectangle(cornerRadius: 5)
                             .fill(.blue)
                     )
+                    .frame(maxWidth: .infinity)
+                    .padding([.leading, .trailing], 40)
                     .foregroundStyle(.white)
-                    .padding(.top, 15)
+                    .padding([.top, .bottom], 15)
                     
                     Text(errorMessage)
                         .font(.system(size: 16))
                         .foregroundStyle(Color.red)
+                        .padding([.leading, .trailing], 40)
                     
-                    Button(action: {
-                        showCreateAccount.toggle()
-                    }) {Text("Create an Account")
+                    HStack {
+                        Text("Don't have an account yet? ")
+                        Button(action: {
+                            showCreateAccount.toggle()
+                        }) {
+                            Text("Sign Up")
+                        }
                     }
-                    .padding(.top, 10)
+                        .padding([.top, .bottom], 15)
+                        
+                    Spacer()
+                    
                 }
-                .sheet(isPresented: $showCreateAccount) {
+                .sheet(isPresented: $showCreateAccount, onDismiss: {
+                    errorMessage = ""
+                }) {
                     CreateProfileView()
                 }
             }
@@ -112,23 +102,23 @@ struct SignInView: View {
         }
     }
     
-    func signIn() throws {
-        Auth.auth().signIn(withEmail: email, password: password) { (result, error) in
+    func signIn() {
+        Auth.auth().signIn(withEmail: email, password: password) { result, error in
             if let error = error {
                 let err = error as NSError
                 if let authErrorCode = AuthErrorCode.Code(rawValue: err.code) {
                     
                     switch authErrorCode {
                     case .userNotFound:
-                        errorMessage = "User Not Found"
+                        errorMessage = "No account found with these credentials."
                     case .wrongPassword:
-                        errorMessage = "Incorrect Password"
+                        errorMessage = "Incorrect password entered. Please try again."
                     case .invalidEmail:
-                        errorMessage = "Invalid Email"
+                        errorMessage = "Invalid email entered. Please enter a valid email."
                     case .networkError:
-                        errorMessage = "Network Error"
+                        errorMessage = "A network error has occurred. Please try again later."
                     default:
-                        errorMessage = "Invalid Credentials"
+                        errorMessage = "Invalid Credentials."
                     }
                 }
                 print(errorMessage)
@@ -228,7 +218,7 @@ struct MyTextView: View {
     }
 }
 
-//#Preview {
-//    SignInView()
-//        .environment(UserProfileHolder())
-//}
+#Preview {
+    SignInView()
+        .environment(UserProfileHolder())
+}

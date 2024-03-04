@@ -17,7 +17,7 @@ struct CreateProfileView: View {
     @State var username = ""
     @State var firstName = ""
     @State var lastName = ""
-    @State var usernameCheck = ""
+    @State var errorMessage = ""
     
     var body: some View {
         NavigationView{
@@ -83,7 +83,14 @@ struct CreateProfileView: View {
                         .fill(.blue)
                 )
                 .foregroundStyle(.white)
-                .padding(.top, 30)
+                .padding([.top, .bottom], 15)
+                
+                Text(errorMessage)
+                    .font(.system(size: 16))
+                    .foregroundStyle(Color.red)
+                    .padding([.leading, .trailing], 40)
+                
+                Spacer()
             }
             .toolbar {
                 ToolbarItemGroup(placement: .topBarLeading) {
@@ -106,11 +113,11 @@ struct CreateProfileView: View {
         Task {
             // Ensure username does not exist.
             if await PrayerPersonHelper().checkIfUsernameExists(username: username) == true {
-                usernameCheck = "Username already taken. Please submit a new username."
-            } 
+                errorMessage = "Username already taken by an existing account. Please enter try a different username."
+            }
             // Ensure username does not have special characters. This will affect assessment of 'username' or 'name' in prayerNameInputView().
             else if specialCharacterTest(username: username) {
-                usernameCheck = "Username cannot contain special characters. Please submit a new username."
+                errorMessage = "Username cannot contain special characters. Please enter a new username."
                 print("Username cannot contain special characters. Please submit a new username.")
             } 
             
@@ -119,14 +126,16 @@ struct CreateProfileView: View {
                 Auth.auth().createUser(withEmail: email, password: password) { result, error in
                     
                     if error != nil {
+                        errorMessage = error!.localizedDescription
                         print(error!.localizedDescription.localizedLowercase)
                     } else {
+                            
                         let userID = result?.user.uid
                         print("userID: " + (userID ?? ""))
                         
                         let db = Firestore.firestore()
                         let ref = db.collection("users").document("\(userID ?? "")")
-        
+                        
                         ref.setData(
                             ["email": email,
                              "userID": userID ?? "",
@@ -146,6 +155,7 @@ struct CreateProfileView: View {
                         
                         print("Account successfully created.")
                         dismiss()
+                        errorMessage = ""
                     }
                 }
             }

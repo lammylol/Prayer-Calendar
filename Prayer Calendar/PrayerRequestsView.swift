@@ -61,12 +61,6 @@ struct PrayerRequestsView: View {
                         PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "profile")
                     }
                     Divider()
-    //                    .onTapGesture {
-    //                        Task {
-    //                            await handleTap(prayerRequest: prayerRequest)
-    //                            self.showEdit.toggle()
-    //                        }
-    //                    }
                 }
             }
         }
