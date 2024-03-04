@@ -174,18 +174,11 @@
 		7A285BA22B959B5900BAF4C0 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				7A285BA82B959C7200BAF4C0 /* Main Views */,
+				7A285BA62B959C0A00BAF4C0 /* Sign-In */,
 				7A285BA52B959B9100BAF4C0 /* Profile */,
 				7A285BA42B959B7B00BAF4C0 /* PrayerRequests */,
 				7A285BA32B959B6B00BAF4C0 /* Calendar */,
-				7A3158EC2AF357F5009B6E59 /* SignInView.swift */,
-				7A27B7B52B2FE0EA00FF72FC /* CreateProfileView.swift */,
-				7AD808D02AD6F9E000A0ECA6 /* ContentView.swift */,
-				7A4F262A2AD0D2B100FB086C /* ProfileView.swift */,
-				7A8D40B42B44A9CF00B029E6 /* PrayerFeedView.swift */,
-				7A5C72302AFEBADE00A75636 /* PrayerRequestsView.swift */,
-				7A7CA4742B771106001922AA /* ProfileSettingsView.swift */,
-				7A7CA4762B7E9FB5001922AA /* SettingsSecurityView.swift */,
-				7A4F26292AD0D2B000FB086C /* PrayerNameInputView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -193,6 +186,7 @@
 		7A285BA32B959B6B00BAF4C0 /* Calendar */ = {
 			isa = PBXGroup;
 			children = (
+				7A4F26292AD0D2B000FB086C /* PrayerNameInputView.swift */,
 				7A4F262C2AD0D2B300FB086C /* PrayerCalendarView.swift */,
 				7A4F262B2AD0D2B200FB086C /* CalendarCell.swift */,
 				7A4F26252AD0D2AD00FB086C /* DateScroller.swift */,
@@ -215,9 +209,39 @@
 		7A285BA52B959B9100BAF4C0 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				7A285BA72B959C3100BAF4C0 /* Settings */,
+				7A4F262A2AD0D2B100FB086C /* ProfileView.swift */,
 				7A92577B2B686BCF00D5EF35 /* ProfilePictureAvatar.swift */,
 			);
 			path = Profile;
+			sourceTree = "<group>";
+		};
+		7A285BA62B959C0A00BAF4C0 /* Sign-In */ = {
+			isa = PBXGroup;
+			children = (
+				7A3158EC2AF357F5009B6E59 /* SignInView.swift */,
+				7A27B7B52B2FE0EA00FF72FC /* CreateProfileView.swift */,
+			);
+			path = "Sign-In";
+			sourceTree = "<group>";
+		};
+		7A285BA72B959C3100BAF4C0 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				7A7CA4742B771106001922AA /* ProfileSettingsView.swift */,
+				7A7CA4762B7E9FB5001922AA /* SettingsSecurityView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		7A285BA82B959C7200BAF4C0 /* Main Views */ = {
+			isa = PBXGroup;
+			children = (
+				7AD808D02AD6F9E000A0ECA6 /* ContentView.swift */,
+				7A5C72302AFEBADE00A75636 /* PrayerRequestsView.swift */,
+				7A8D40B42B44A9CF00B029E6 /* PrayerFeedView.swift */,
+			);
+			path = "Main Views";
 			sourceTree = "<group>";
 		};
 		7A4F25EC2AD0D23900FB086C = {
