@@ -37,24 +37,41 @@ struct SignInView: View {
                         .bold()
                         .offset(x: -80)
                     
-                    HStack {
-                        Text("Email: ")
-                            .padding(.leading, 40)
-                        MyTextView(placeholder: "", text: $email, textPrompt: "enter email", textFieldType: "text")
+                    VStack {
+                        HStack {
+                            Text("Email: ")
+                                .padding(.leading, 40)
+                            MyTextView(placeholder: "", text: $email, textPrompt: "enter email", textFieldType: "text")
+                        }
+                        
+                        Rectangle()
+                            .frame(height: 1)
+                            .padding([.leading, .trailing], 40)
+                        
+                        HStack {
+                            Text("Password: ")
+                                .padding(.leading, 40)
+                            MyTextView(placeholder: "", text: $password, textPrompt: "enter password", textFieldType: "secure")
+                        }
+                        
+                        Rectangle()
+                            .frame(height: 1)
+                            .padding([.leading, .trailing], 40)
+                        
+                        HStack {
+                            Button(action: {
+                                showCreateAccount.toggle()
+                            }) {
+                                Text("Forgot Password?")
+                                    .foregroundStyle(.blue)
+                                    .font(.system(size: 16))
+                            }
+                            Spacer()
+                        }
+                        .padding([.leading, .trailing], 40)
+                        .padding(.top, 5)
                     }
                     
-                    Rectangle()
-                        .frame(width: 310, height: 1)
-                    
-                    HStack {
-                        Text("Password: ")
-                            .padding(.leading, 40)
-                        MyTextView(placeholder: "", text: $password, textPrompt: "enter password", textFieldType: "secure")
-                    }
-                    
-                    Rectangle()
-                        .frame(width: 310, height: 1)
-                
                     Button(action: {
                         Task {
                             signIn()
@@ -62,15 +79,15 @@ struct SignInView: View {
                     }) {Text("Sign In")
                             .bold()
                             .frame(height: 35)
+                            .frame(maxWidth: .infinity)
                     }
                     .background(
                         RoundedRectangle(cornerRadius: 5)
                             .fill(.blue)
                     )
-                    .frame(maxWidth: .infinity)
                     .padding([.leading, .trailing], 40)
                     .foregroundStyle(.white)
-                    .padding([.top, .bottom], 15)
+                    .padding([.top, .bottom], 30)
                     
                     Text(errorMessage)
                         .font(.system(size: 16))
@@ -85,7 +102,7 @@ struct SignInView: View {
                             Text("Sign Up")
                         }
                     }
-                        .padding([.top, .bottom], 15)
+                        .padding([.bottom], 15)
                         
                     Spacer()
                     

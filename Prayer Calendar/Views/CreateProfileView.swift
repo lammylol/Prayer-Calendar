@@ -34,7 +34,8 @@ struct CreateProfileView: View {
                 }
                 
                 Rectangle()
-                    .frame(width: 310, height: 1)
+                    .frame(height: 1)
+                    .padding([.leading, .trailing], 40)
                 
                 HStack {
                     Text("Last Name: ")
@@ -43,7 +44,8 @@ struct CreateProfileView: View {
                 }
                 
                 Rectangle()
-                    .frame(width: 310, height: 1)
+                    .frame(height: 1)
+                    .padding([.leading, .trailing], 40)
                 
                 HStack {
                     Text("Email: ")
@@ -52,7 +54,8 @@ struct CreateProfileView: View {
                 }
                 
                 Rectangle()
-                    .frame(width: 310, height: 1)
+                    .frame(height: 1)
+                    .padding([.leading, .trailing], 40)
                 
                 HStack {
                     Text("Username: ")
@@ -61,7 +64,8 @@ struct CreateProfileView: View {
                 }
                 
                 Rectangle()
-                    .frame(width: 310, height: 1)
+                    .frame(height: 1)
+                    .padding([.leading, .trailing], 40)
                 
                 HStack {
                     Text("Password: ")
@@ -70,7 +74,8 @@ struct CreateProfileView: View {
                 }
                 
                 Rectangle()
-                    .frame(width: 310, height: 1)
+                    .frame(height: 1)
+                    .padding([.leading, .trailing], 40)
             
                 Button(action: {
                     self.createAccount()
