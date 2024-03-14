@@ -22,10 +22,16 @@ struct CreateProfileView: View {
     var body: some View {
         NavigationView{
             VStack(/*spacing: 20*/) {
-                Text("Create an Account")
-                    .font(.largeTitle)
-                    .bold()
-                    .offset(x: 0, y: 0)
+                Spacer()
+                
+                HStack {
+                    Text("Create Account")
+                        .font(.title)
+                        .bold()
+                        .padding(.trailing, 60)
+                    Spacer()
+                }
+                .padding([.leading, .trailing], 40)
                 
                 HStack {
                     Text("First Name: ")
@@ -81,7 +87,8 @@ struct CreateProfileView: View {
                     self.createAccount()
                 }) {Text("Create Account")
                         .bold()
-                        .frame(width: 150, height: 35)
+                        .frame(height: 35)
+                        .frame(maxWidth: .infinity)
                 }
                 .background(
                     RoundedRectangle(cornerRadius: 5)
@@ -89,6 +96,7 @@ struct CreateProfileView: View {
                 )
                 .foregroundStyle(.white)
                 .padding([.top, .bottom], 15)
+                .padding([.leading, .trailing], 40)
                 
                 Text(errorMessage)
                     .font(.system(size: 16))
@@ -96,6 +104,7 @@ struct CreateProfileView: View {
                     .padding([.leading, .trailing], 40)
                 
                 Spacer()
+
             }
             .toolbar {
                 ToolbarItemGroup(placement: .topBarLeading) {
@@ -103,7 +112,6 @@ struct CreateProfileView: View {
                         dismiss()
                     }
                 }
-
             }
             .navigationBarBackButtonHidden(true)
         }

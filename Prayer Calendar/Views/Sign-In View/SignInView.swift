@@ -22,13 +22,14 @@ struct SignInView: View {
     @State var username = ""
     @State var password = ""
     @State var showCreateAccount: Bool = false
+    @State var showForgotPassword: Bool = false
     @State var errorMessage = ""
     @State var text: String = ""
     @State var passwordText: String = ""
     
     var body: some View {
-        Group {
-            if userHolder.isLoggedIn == false {
+        if userHolder.isLoggedIn == false {
+            NavigationView {
                 VStack(/*spacing: 20*/) {
                     Spacer()
                     
@@ -42,6 +43,7 @@ struct SignInView: View {
                             Text("Email: ")
                                 .padding(.leading, 40)
                             MyTextView(placeholder: "", text: $email, textPrompt: "enter email", textFieldType: "text")
+                                .textContentType(.emailAddress)
                         }
                         
                         Rectangle()
@@ -52,6 +54,7 @@ struct SignInView: View {
                             Text("Password: ")
                                 .padding(.leading, 40)
                             MyTextView(placeholder: "", text: $password, textPrompt: "enter password", textFieldType: "secure")
+                                .textContentType(.password)
                         }
                         
                         Rectangle()
@@ -60,7 +63,7 @@ struct SignInView: View {
                         
                         HStack {
                             Button(action: {
-                                showCreateAccount.toggle()
+                                showForgotPassword.toggle()
                             }) {
                                 Text("Forgot Password?")
                                     .foregroundStyle(.blue)
@@ -87,12 +90,15 @@ struct SignInView: View {
                     )
                     .padding([.leading, .trailing], 40)
                     .foregroundStyle(.white)
-                    .padding([.top, .bottom], 30)
+                    .padding(.top, 30)
                     
-                    Text(errorMessage)
-                        .font(.system(size: 16))
-                        .foregroundStyle(Color.red)
-                        .padding([.leading, .trailing], 40)
+                    if errorMessage != "" {
+                        Text(errorMessage)
+                            .font(.system(size: 16))
+                            .foregroundStyle(Color.red)
+                            .padding([.leading, .trailing], 40)
+                            .padding([.top, .bottom], 15)
+                    }
                     
                     HStack {
                         Text("Don't have an account yet? ")
@@ -102,8 +108,8 @@ struct SignInView: View {
                             Text("Sign Up")
                         }
                     }
-                        .padding([.bottom], 15)
-                        
+                    .padding([.top, .bottom], 15)
+                    
                     Spacer()
                     
                 }
@@ -112,10 +118,15 @@ struct SignInView: View {
                 }) {
                     CreateProfileView()
                 }
-            }
-            else {
-                ContentView(selection: 1)
-            }
+                .sheet(isPresented: $showForgotPassword, onDismiss: {
+                    errorMessage = ""
+                }) {
+                    ForgotPassword()
+                }
+            }.navigationViewStyle(.stack)
+        }
+        else {
+            ContentView(selection: 1)
         }
     }
     
@@ -153,6 +164,11 @@ struct SignInView: View {
             }
         }
     }
+    
+//    func signInWithGoogle() {
+//        let provider = GoogleAuthProvider().responds(to: <#T##Selector!#>)
+//        Google
+//    }
     
         //  This function retrieves Userinfo data from Firestore.
     func getUserInfo(userID: String, email: String) async {
@@ -212,11 +228,8 @@ struct MyTextView: View {
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled(true) // for constraint issue
                     .frame(height: 35)
+                    .frame(maxWidth: .infinity)
                     .padding(.trailing, 40)
-                    .background(
-                        Rectangle().foregroundStyle(.clear)
-                            .frame(height: 35)
-                        )
             }
         } else if textFieldType == "secure" {
             ZStack {
@@ -224,6 +237,7 @@ struct MyTextView: View {
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled(true) // for constraint issue
                     .frame(height: 35)
+                    .frame(maxWidth: .infinity)
                     .padding(.trailing, 40)
                     .background(
                         Rectangle().foregroundStyle(.clear)

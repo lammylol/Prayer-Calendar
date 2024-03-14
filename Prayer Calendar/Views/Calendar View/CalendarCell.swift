@@ -64,7 +64,8 @@ struct CalendarCell: View {
                                 .background(
                                     Circle()
                                         .foregroundStyle(.blue)
-                                        .frame(width: 40, height: 40)
+                                        .padding(.all, -10)
+                                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                                 )
                             Spacer()
                             Text(monthStruct().person.firstName)

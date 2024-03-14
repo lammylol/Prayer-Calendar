@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		7A12A9CE2B87FA3B00707E3C /* PrayerUpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A12A9CD2B87FA3B00707E3C /* PrayerUpdateView.swift */; };
 		7A27B7B62B2FE0EB00FF72FC /* CreateProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A27B7B52B2FE0EA00FF72FC /* CreateProfileView.swift */; };
+		7A285BAA2B959D5000BAF4C0 /* ForgotPassword.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A285BA92B959D5000BAF4C0 /* ForgotPassword.swift */; };
 		7A3158E92AEF9C0B009B6E59 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 7A3158E82AEF9C0B009B6E59 /* FirebaseAnalytics */; };
 		7A3158EB2AEF9C0B009B6E59 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 7A3158EA2AEF9C0B009B6E59 /* FirebaseAnalyticsSwift */; };
 		7A3158ED2AF357F5009B6E59 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A3158EC2AF357F5009B6E59 /* SignInView.swift */; };
@@ -72,6 +73,7 @@
 /* Begin PBXFileReference section */
 		7A12A9CD2B87FA3B00707E3C /* PrayerUpdateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerUpdateView.swift; sourceTree = "<group>"; };
 		7A27B7B52B2FE0EA00FF72FC /* CreateProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateProfileView.swift; sourceTree = "<group>"; };
+		7A285BA92B959D5000BAF4C0 /* ForgotPassword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPassword.swift; sourceTree = "<group>"; };
 		7A3158EC2AF357F5009B6E59 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		7A416B7A2AFC71CA00249BB3 /* UIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIHelper.swift; sourceTree = "<group>"; };
 		7A4F25F52AD0D23900FB086C /* Prayer Calendar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Prayer Calendar.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -175,15 +177,15 @@
 			isa = PBXGroup;
 			children = (
 				7A285BA82B959C7200BAF4C0 /* Main Views */,
-				7A285BA62B959C0A00BAF4C0 /* Sign-In */,
-				7A285BA52B959B9100BAF4C0 /* Profile */,
-				7A285BA42B959B7B00BAF4C0 /* PrayerRequests */,
-				7A285BA32B959B6B00BAF4C0 /* Calendar */,
+				7A285BA62B959C0A00BAF4C0 /* Sign-In View */,
+				7A285BA52B959B9100BAF4C0 /* Profile View */,
+				7A285BA42B959B7B00BAF4C0 /* Prayer Feed View */,
+				7A285BA32B959B6B00BAF4C0 /* Calendar View */,
 			);
 			path = Views;
 			sourceTree = "<group>";
 		};
-		7A285BA32B959B6B00BAF4C0 /* Calendar */ = {
+		7A285BA32B959B6B00BAF4C0 /* Calendar View */ = {
 			isa = PBXGroup;
 			children = (
 				7A4F26292AD0D2B000FB086C /* PrayerNameInputView.swift */,
@@ -192,37 +194,40 @@
 				7A4F26252AD0D2AD00FB086C /* DateScroller.swift */,
 				7A4F262F2AD0D2B600FB086C /* MonthStruct.swift */,
 			);
-			path = Calendar;
+			path = "Calendar View";
 			sourceTree = "<group>";
 		};
-		7A285BA42B959B7B00BAF4C0 /* PrayerRequests */ = {
+		7A285BA42B959B7B00BAF4C0 /* Prayer Feed View */ = {
 			isa = PBXGroup;
 			children = (
+				7A8D40B42B44A9CF00B029E6 /* PrayerFeedView.swift */,
+				7A5C72302AFEBADE00A75636 /* PrayerRequestsView.swift */,
 				7A5C72322AFF5D9E00A75636 /* PrayerRequestRow.swift */,
 				7ADE4C522B046CD400CE6B33 /* SubmitPrayerRequestForm.swift */,
 				7ADE4C542B0811AC00CE6B33 /* PrayerRequestFormView.swift */,
 				7A12A9CD2B87FA3B00707E3C /* PrayerUpdateView.swift */,
 			);
-			path = PrayerRequests;
+			path = "Prayer Feed View";
 			sourceTree = "<group>";
 		};
-		7A285BA52B959B9100BAF4C0 /* Profile */ = {
+		7A285BA52B959B9100BAF4C0 /* Profile View */ = {
 			isa = PBXGroup;
 			children = (
 				7A285BA72B959C3100BAF4C0 /* Settings */,
 				7A4F262A2AD0D2B100FB086C /* ProfileView.swift */,
 				7A92577B2B686BCF00D5EF35 /* ProfilePictureAvatar.swift */,
 			);
-			path = Profile;
+			path = "Profile View";
 			sourceTree = "<group>";
 		};
-		7A285BA62B959C0A00BAF4C0 /* Sign-In */ = {
+		7A285BA62B959C0A00BAF4C0 /* Sign-In View */ = {
 			isa = PBXGroup;
 			children = (
 				7A3158EC2AF357F5009B6E59 /* SignInView.swift */,
 				7A27B7B52B2FE0EA00FF72FC /* CreateProfileView.swift */,
+				7A285BA92B959D5000BAF4C0 /* ForgotPassword.swift */,
 			);
-			path = "Sign-In";
+			path = "Sign-In View";
 			sourceTree = "<group>";
 		};
 		7A285BA72B959C3100BAF4C0 /* Settings */ = {
@@ -238,8 +243,6 @@
 			isa = PBXGroup;
 			children = (
 				7AD808D02AD6F9E000A0ECA6 /* ContentView.swift */,
-				7A5C72302AFEBADE00A75636 /* PrayerRequestsView.swift */,
-				7A8D40B42B44A9CF00B029E6 /* PrayerFeedView.swift */,
 			);
 			path = "Main Views";
 			sourceTree = "<group>";
@@ -488,6 +491,7 @@
 				7A8D40B52B44A9CF00B029E6 /* PrayerFeedView.swift in Sources */,
 				7AF1E9F02B145848007E3303 /* UserProfileHolder.swift in Sources */,
 				7A4F26362AD0D2B600FB086C /* CalendarCell.swift in Sources */,
+				7A285BAA2B959D5000BAF4C0 /* ForgotPassword.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
