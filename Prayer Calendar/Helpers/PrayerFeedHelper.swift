@@ -42,6 +42,7 @@ class PrayerFeedHelper {
                 let userID = document.data()["userID"] as? String ?? ""
                 let username = document.data()["username"] as? String ?? ""
                 let priority = document.data()["priority"] as? String ?? ""
+                let isPinned = document.data()["isPinned"] as? Bool ?? false
                 let prayerRequestTitle = document.data()["prayerRequestTitle"] as? String ?? ""
                 let documentID = document.documentID as String
                 let latestUpdateText = document.data()["latestUpdateText"] as? String ?? ""
@@ -50,7 +51,7 @@ class PrayerFeedHelper {
                 let updateTimestamp = document.data()["latestUpdateDatePosted"] as? Timestamp ?? timestamp
                 let latestUpdateDatePosted = updateTimestamp.dateValue()
 
-                let prayerRequest = PrayerRequest(id: documentID, userID: userID, username: username, date: datePosted, prayerRequestText: prayerRequestText, status: status, firstName: firstName, lastName: lastName, priority: priority, prayerRequestTitle: prayerRequestTitle, latestUpdateText: latestUpdateText, latestUpdateDatePosted: latestUpdateDatePosted, latestUpdateType: latestUpdateType)
+                let prayerRequest = PrayerRequest(id: documentID, userID: userID, username: username, date: datePosted, prayerRequestText: prayerRequestText, status: status, firstName: firstName, lastName: lastName, priority: priority, isPinned: isPinned, prayerRequestTitle: prayerRequestTitle, latestUpdateText: latestUpdateText, latestUpdateDatePosted: latestUpdateDatePosted, latestUpdateType: latestUpdateType)
               
               prayerRequests.append(prayerRequest)
             }

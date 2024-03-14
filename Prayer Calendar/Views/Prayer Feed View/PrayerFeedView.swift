@@ -21,59 +21,36 @@ struct PrayerFeedView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView() {
-                LazyVStack {
-//                    Picker("", selection: $selectedPage) {
-//                        Text("Current").tag(0)
-//                        Text("Testimonies").tag(1)
-//                    }
-//                    .pickerStyle(.segmented)
-//                    .padding(.top, 10)
-                    Text("Hello")
-                    TabView(selection: $selectedPage) {
-                            PrayerFeedCurrentView(person: person).tag(0)
-                            
-                            PrayerFeedAnsweredView(person: person).tag(1)
-                            .saveSize(in: $size)
-                    }
-                    .tabViewStyle(.page)
-                    .sheet(isPresented: $showSubmit, onDismiss: {
-                    }, content: {
-                        SubmitPrayerRequestForm(person: person)
-                    })
-                    .frame(height: size.height)
+            VStack {
+                Picker("", selection: $selectedPage) {
+                    Text("Current").tag(0)
+                    Text("Testimonies").tag(1)
                 }
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button(action: { showSubmit.toggle()
-                        }) {
-                            Image(systemName: "plus")
-                        }
-                        .padding(.trailing, 15)
-                    }
+                .pickerStyle(.segmented)
+                .padding(.top, 10)
+                
+                TabView(selection: $selectedPage) {
+                    PrayerFeedCurrentView(person: person).tag(0)
+                    PrayerFeedAnsweredView(person: person).tag(1)
                 }
-                .navigationTitle("prayer feed")
-                .navigationBarTitleDisplayMode(.automatic)
+                .tabViewStyle(.page(indexDisplayMode: .never))
+                .sheet(isPresented: $showSubmit, onDismiss: {
+                }, content: {
+                    SubmitPrayerRequestForm(person: person)
+                })
             }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button(action: { showSubmit.toggle()
+                    }) {
+                        Image(systemName: "plus")
+                    }
+                    .padding(.trailing, 15)
+                }
+            }
+            .navigationTitle("prayer feed")
+            .navigationBarTitleDisplayMode(.automatic)
             .scrollIndicators(.hidden)
-            //                VStack {
-            //                    //                    Picker("", selection: $selectedPage) {
-            //                    //                        Text("Current").tag(0)
-            //                    //                        Text("Answered").tag(1)
-            //                    //                    }
-            //                    //                    .pickerStyle(.segmented)
-            //                    //                    .padding([.top, .bottom], 10)
-            //                    //
-            //                    TabView(selection: $selectedPage) {
-            //                        PrayerFeedCurrentView(person: person).tag(0)
-            //                            .frame(maxHeight: .infinity)
-            //                        PrayerFeedAnsweredView(person: person).tag(1)
-            //                            .frame(maxHeight: .infinity)
-            //                    }
-            //                    .frame(maxHeight: .infinity)
-            //                    .tabViewStyle(.page)
-            //                    .border(.clear) // need to check if this does anything. Hide borders.
-            //                }
         }
     }
 }
@@ -84,13 +61,13 @@ struct PrayerFeedAnsweredView: View {
     
     @State var prayerRequests: [PrayerRequest] = []
     @State var prayerRequestVar: PrayerRequest = PrayerRequest.blank
-    @State var size: CGSize = .zero
+//    @State var size: CGSize = .zero
     
     @Environment(UserProfileHolder.self) var userHolder
     var person: Person
     
     var body: some View {
-        LazyVStack{
+        ScrollView{
             NavigationStack{
                 ForEach(prayerRequests) { prayerRequest in
                     NavigationLink(destination: PrayerRequestFormView(person: Person(userID: prayerRequest.userID, username: prayerRequest.username, firstName: prayerRequest.firstName, lastName: prayerRequest.lastName), prayerRequest: prayerRequest)) {
@@ -116,15 +93,15 @@ struct PrayerFeedAnsweredView: View {
         }, content: {
             PrayerRequestFormView(person: userHolder.person, prayerRequest: prayerRequestVar)
         })
-        .frame(width: size.width, height: size.height)
-        .saveSize(in: $size)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+//        .saveSize(in: $size)
     }
 }
 
 struct PrayerFeedCurrentView: View {
     // view to only see 'answered' prayers
     @State private var showEdit: Bool = false
-    @State var size: CGSize = CGSize.zero
+//    @State var size: CGSize = CGSize.zero
     
     @State var prayerRequests: [PrayerRequest] = []
     @State var prayerRequestVar: PrayerRequest = PrayerRequest.blank
@@ -133,34 +110,67 @@ struct PrayerFeedCurrentView: View {
     var person: Person
     
     var body: some View {
-        LazyVStack{
-            NavigationStack{
-                ForEach(prayerRequests) { prayerRequest in
-                    NavigationLink(destination: PrayerRequestFormView(person: Person(userID: prayerRequest.userID, username: prayerRequest.username, firstName: prayerRequest.firstName, lastName: prayerRequest.lastName), prayerRequest: prayerRequest)) {
-                        PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "feed")
+        VStack{
+            NavigationStack {
+                List(prayerRequests, id: \.self) { prayerRequest in
+//                    VStack{
+                    ScrollView{
+                        NavigationLink(destination: PrayerRequestFormView(person: Person(userID: prayerRequest.userID, username: prayerRequest.username, firstName: prayerRequest.firstName, lastName: prayerRequest.lastName), prayerRequest: prayerRequest)) {
+                            PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "feed")
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                        .swipeActions(edge: .leading, allowsFullSwipe: false) {
+                            Button { PrayerRequestHelper().togglePinned(prayerRequest: prayerRequest) } label: {
+                                if prayerRequest.isPinned == true {
+                                                    Label("Pinned", systemImage: "envelope.open")
+                                                } else {
+                                                    Label("Unpinned", systemImage: "envelope.badge")
+                                                }
+                                            }
+                        }
+                        //                        Divider()
+                        //                    }
                     }
-                    Divider()
                 }
+                .listStyle(.plain)
+//                ForEach(prayerRequests) { prayerRequest in
+//                    VStack{
+//                        NavigationLink(destination: PrayerRequestFormView(person: Person(userID: prayerRequest.userID, username: prayerRequest.username, firstName: prayerRequest.firstName, lastName: prayerRequest.lastName), prayerRequest: prayerRequest)) {
+//                            PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "feed")
+//                        }
+////                        .swipeActions(edge: .leading, allowsFullSwipe: false) {
+////                            Button { PrayerRequestHelper().togglePinned(prayerRequest: prayerRequest) } label: {
+////                                if prayerRequest.isPinned == true {
+////                                                    Label("Pinned", systemImage: "envelope.open")
+////                                                } else {
+////                                                    Label("Unpinned", systemImage: "envelope.badge")
+////                                                }
+////                                            }
+////                        }
+//                        Divider()
+//                    }
+//                }
+                    
             }
-        }
-        .task {
-            do {
-                prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID, answeredFilter: false)
-            } catch {
-                print("error retrieving prayerfeed")
-            }
-        }
-        .sheet(isPresented: $showEdit, onDismiss: {
-            Task {
+            .task {
                 do {
                     prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID, answeredFilter: false)
+                } catch {
+                    print("error retrieving prayerfeed")
                 }
             }
-        }, content: {
-            PrayerRequestFormView(person: userHolder.person, prayerRequest: prayerRequestVar)
-        })
+            .sheet(isPresented: $showEdit, onDismiss: {
+                Task {
+                    do {
+                        prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID, answeredFilter: false)
+                    }
+                }
+            }, content: {
+                PrayerRequestFormView(person: userHolder.person, prayerRequest: prayerRequestVar)
+            })
+        }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .saveSize(in: $size)
+//        .saveSize(in: $size)
     }
 }
 

@@ -48,12 +48,13 @@ class PrayerRequestHelper {
                 let userID = document.data()["userID"] as? String ?? ""
                 let username = document.data()["username"] as? String ?? ""
                 let priority = document.data()["priority"] as? String ?? ""
+                let isPinned = document.data()["isPinned"] as? Bool ?? false
                 let documentID = document.documentID as String
                 let prayerRequestTitle = document.data()["prayerRequestTitle"] as? String ?? ""
                 let latestUpdateText = document.data()["latestUpdateText"] as? String ?? ""
                 let latestUpdateType = document.data()["latestUpdateType"] as? String ?? ""
                 
-                let prayerRequest = PrayerRequest(id: documentID, userID: userID, username: username, date: datePosted, prayerRequestText: prayerRequestText, status: status, firstName: firstName, lastName: lastName, priority: priority, prayerRequestTitle: prayerRequestTitle, latestUpdateText: latestUpdateText, latestUpdateDatePosted: latestUpdateDatePosted, latestUpdateType: latestUpdateType)
+                let prayerRequest = PrayerRequest(id: documentID, userID: userID, username: username, date: datePosted, prayerRequestText: prayerRequestText, status: status, firstName: firstName, lastName: lastName, priority: priority, isPinned: isPinned, prayerRequestTitle: prayerRequestTitle, latestUpdateText: latestUpdateText, latestUpdateDatePosted: latestUpdateDatePosted, latestUpdateType: latestUpdateType)
                 
                 prayerRequests.append(prayerRequest)
             }
@@ -94,12 +95,13 @@ class PrayerRequestHelper {
                 let userID = document.data()?["userID"] as? String ?? ""
                 let username = document.data()?["username"] as? String ?? ""
                 let priority = document.data()?["priority"] as? String ?? ""
+                let isPinned = document.data()?["isPinned"] as? Bool ?? false
                 let documentID = document.documentID as String
                 let prayerRequestTitle = document.data()?["prayerRequestTitle"] as? String ?? ""
                 let latestUpdateText = document.data()?["latestUpdateText"] as? String ?? ""
                 let latestUpdateType = document.data()?["latestUpdateType"] as? String ?? ""
             
-                prayerRequest = PrayerRequest(id: documentID, userID: userID, username: username, date: datePosted, prayerRequestText: prayerRequestText, status: status, firstName: firstName, lastName: lastName, priority: priority, prayerRequestTitle: prayerRequestTitle, latestUpdateText: latestUpdateText, latestUpdateDatePosted: latestUpdateDatePosted, latestUpdateType: latestUpdateType)
+                prayerRequest = PrayerRequest(id: documentID, userID: userID, username: username, date: datePosted, prayerRequestText: prayerRequestText, status: status, firstName: firstName, lastName: lastName, priority: priority, isPinned: isPinned, prayerRequestTitle: prayerRequestTitle, latestUpdateText: latestUpdateText, latestUpdateDatePosted: latestUpdateDatePosted, latestUpdateType: latestUpdateType)
             }
         } catch {
             throw error
@@ -370,5 +372,9 @@ class PrayerRequestHelper {
                 }
             }
         }
+    }
+    
+    func togglePinned(prayerRequest: PrayerRequest) {
+        
     }
 }

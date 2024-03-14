@@ -25,6 +25,7 @@ struct ProfilePictureAvatar: View {
                 Text(name)
                     .foregroundStyle(textColor())
                     .font(.system(size: fontSize))
+                    .bold()
             }
         }
 //        .shadow(radius: 10)

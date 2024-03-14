@@ -57,10 +57,12 @@ struct PrayerRequestsView: View {
             
             NavigationStack {
                 ForEach(prayerRequests) { prayerRequest in
-                    NavigationLink(destination: PrayerRequestFormView(person: person, prayerRequest: prayerRequest)) {
-                        PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "profile")
+                    VStack{
+                        NavigationLink(destination: PrayerRequestFormView(person: person, prayerRequest: prayerRequest)) {
+                            PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "profile")
+                        }
+                        Divider()
                     }
-                    Divider()
                 }
             }
         }

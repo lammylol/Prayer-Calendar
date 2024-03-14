@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct PrayerRequest : Identifiable, Observable {
+struct PrayerRequest : Identifiable, Observable, Hashable {
     var id: String = ""
     var userID: String
     var username: String
@@ -17,6 +17,7 @@ struct PrayerRequest : Identifiable, Observable {
     var firstName: String
     var lastName: String
     var priority: String
+    var isPinned: Bool
     var prayerRequestTitle: String
     var latestUpdateText: String
     var latestUpdateDatePosted: Date
@@ -35,6 +36,7 @@ extension PrayerRequest {
             firstName: "Matt",
             lastName: "Lam",
             priority: "high",
+            isPinned: true,
             prayerRequestTitle: "Test this is Title djaskldjklsajdklasjdklasjdklajsdlkasjdklajdklajdklajsdklasjdklasjdklasjdaklsdjaldjklad",
             latestUpdateText: "Test Latest Update.",
             latestUpdateDatePosted: Date(), 
@@ -54,6 +56,7 @@ extension PrayerRequest {
             firstName: "",
             lastName: "",
             priority: "",
+            isPinned: true,
             prayerRequestTitle: "",
             latestUpdateText: "",
             latestUpdateDatePosted: Date(),
