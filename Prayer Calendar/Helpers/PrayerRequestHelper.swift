@@ -374,7 +374,12 @@ class PrayerRequestHelper {
         }
     }
     
-    func togglePinned(prayerRequest: PrayerRequest) {
+    func togglePinned(person: Person, prayerRequest: PrayerRequest, toggle: Bool) {
+        let db = Firestore.firestore()
         
+        let ref = db.collection("prayerFeed").document(person.userID).collection("prayerRequests").document(prayerRequest.id)
+        ref.updateData([
+            "isPinned": toggle
+        ])
     }
 }

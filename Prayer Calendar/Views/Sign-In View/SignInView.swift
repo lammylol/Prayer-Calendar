@@ -193,6 +193,8 @@ struct SignInView: View {
             print("/username: " + prayerPerson.username)
             
             userHolder.person = prayerPerson
+            userHolder.pinnedPrayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: userID, answeredFilter: "pinned")
+            
             print("//username: " + userHolder.person.username)
         } catch {
             print("Error retrieving user info.")

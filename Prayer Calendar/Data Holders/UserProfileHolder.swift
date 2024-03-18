@@ -14,6 +14,7 @@ import SwiftUI
     var isLoggedIn: Bool = false
     var friendsList: [String] = []
     var userPassword: String = ""
+    var pinnedPrayerRequests: [PrayerRequest] = []
 }
 
 extension UserProfileHolder {

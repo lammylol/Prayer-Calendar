@@ -10,11 +10,10 @@ import SwiftUI
 struct PrayerFeedView: View {
     @State private var showSubmit: Bool = false
     @State private var showEdit: Bool = false
-    @State private var selectedPage: Int = 0
+    @State private var selectedPage: Int = 1
     
-    @State var prayerRequests: [PrayerRequest] = []
+//    @State var pinnedPrayerRequests: [PrayerRequest] = []
     @State var prayerRequestVar: PrayerRequest = PrayerRequest.blank
-    @State var size: CGSize = .zero
     
     @Environment(UserProfileHolder.self) var userHolder
     var person: Person
@@ -23,21 +22,34 @@ struct PrayerFeedView: View {
         NavigationStack {
             VStack {
                 Picker("", selection: $selectedPage) {
-                    Text("Current").tag(0)
-                    Text("Testimonies").tag(1)
+                    if userHolder.pinnedPrayerRequests.isEmpty == false {
+                        Text("Pinned").tag(0)
+                    }
+                    Text("Current").tag(1)
+                    Text("Testimonies").tag(2)
                 }
                 .pickerStyle(.segmented)
                 .padding(.top, 10)
                 
                 TabView(selection: $selectedPage) {
-                    PrayerFeedCurrentView(person: person).tag(0)
-                    PrayerFeedAnsweredView(person: person).tag(1)
+                    if userHolder.pinnedPrayerRequests.isEmpty == false {
+                        PrayerFeedPinnedView(person: person, toggleView: "pinned").tag(0)
+                    }
+                    PrayerFeedCurrentView(person: person).tag(1)
+                    PrayerFeedAnsweredView(person: person).tag(2)
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
                 .sheet(isPresented: $showSubmit, onDismiss: {
                 }, content: {
                     SubmitPrayerRequestForm(person: person)
                 })
+                .task {
+                    if userHolder.pinnedPrayerRequests.isEmpty {
+                        selectedPage = 1
+                    } else {
+                        selectedPage = 1
+                    }
+                }
             }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -48,6 +60,12 @@ struct PrayerFeedView: View {
                     .padding(.trailing, 15)
                 }
             }
+//            .task {
+//                do { pinnedPrayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID, answeredFilter: "pinned")
+//                } catch {
+//                    print("error retrieving prayerfeed")
+//                }
+//            }
             .navigationTitle("prayer feed")
             .navigationBarTitleDisplayMode(.automatic)
             .scrollIndicators(.hidden)
@@ -79,7 +97,7 @@ struct PrayerFeedAnsweredView: View {
         }
         .task {
             do {
-                prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID, answeredFilter: true)
+                prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID, answeredFilter: "answered")
             } catch {
                 print("error retrieving prayerfeed")
             }
@@ -87,7 +105,7 @@ struct PrayerFeedAnsweredView: View {
         .sheet(isPresented: $showEdit, onDismiss: {
             Task {
                 do {
-                    prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID, answeredFilter: true)
+                    prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID, answeredFilter: "answered")
                 }
             }
         }, content: {
@@ -101,60 +119,36 @@ struct PrayerFeedAnsweredView: View {
 struct PrayerFeedCurrentView: View {
     // view to only see 'answered' prayers
     @State private var showEdit: Bool = false
-//    @State var size: CGSize = CGSize.zero
     
     @State var prayerRequests: [PrayerRequest] = []
     @State var prayerRequestVar: PrayerRequest = PrayerRequest.blank
     
     @Environment(UserProfileHolder.self) var userHolder
     var person: Person
+//    var toggleView: String
     
     var body: some View {
-        VStack{
+        ScrollView{
             NavigationStack {
-                List(prayerRequests, id: \.self) { prayerRequest in
-//                    VStack{
-                    ScrollView{
+                ForEach(prayerRequests) { prayerRequest in
+                    VStack{
                         NavigationLink(destination: PrayerRequestFormView(person: Person(userID: prayerRequest.userID, username: prayerRequest.username, firstName: prayerRequest.firstName, lastName: prayerRequest.lastName), prayerRequest: prayerRequest)) {
                             PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "feed")
                         }
-                        .buttonStyle(PlainButtonStyle())
-                        .swipeActions(edge: .leading, allowsFullSwipe: false) {
-                            Button { PrayerRequestHelper().togglePinned(prayerRequest: prayerRequest) } label: {
-                                if prayerRequest.isPinned == true {
-                                                    Label("Pinned", systemImage: "envelope.open")
-                                                } else {
-                                                    Label("Unpinned", systemImage: "envelope.badge")
-                                                }
-                                            }
-                        }
-                        //                        Divider()
-                        //                    }
+                        Divider()
                     }
                 }
-                .listStyle(.plain)
-//                ForEach(prayerRequests) { prayerRequest in
-//                    VStack{
-//                        NavigationLink(destination: PrayerRequestFormView(person: Person(userID: prayerRequest.userID, username: prayerRequest.username, firstName: prayerRequest.firstName, lastName: prayerRequest.lastName), prayerRequest: prayerRequest)) {
-//                            PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "feed")
-//                        }
-////                        .swipeActions(edge: .leading, allowsFullSwipe: false) {
-////                            Button { PrayerRequestHelper().togglePinned(prayerRequest: prayerRequest) } label: {
-////                                if prayerRequest.isPinned == true {
-////                                                    Label("Pinned", systemImage: "envelope.open")
-////                                                } else {
-////                                                    Label("Unpinned", systemImage: "envelope.badge")
-////                                                }
-////                                            }
-////                        }
-//                        Divider()
-//                    }
-//                }
-                    
             }
             .task {
                 do {
-                    prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID, answeredFilter: false)
+                    prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID, answeredFilter: "current")
+//                    if toggleView == "current" {
+//                        prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID, answeredFilter: "current")
+//                    } else if toggleView == "answered" {
+//                        prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID, answeredFilter: "answered")
+//                    } else { //if pinned
+//                        prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID, answeredFilter: "pinned")
+//                    }
                 } catch {
                     print("error retrieving prayerfeed")
                 }
@@ -162,7 +156,7 @@ struct PrayerFeedCurrentView: View {
             .sheet(isPresented: $showEdit, onDismiss: {
                 Task {
                     do {
-                        prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID, answeredFilter: false)
+                        prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID, answeredFilter: "current")
                     }
                 }
             }, content: {
@@ -171,6 +165,53 @@ struct PrayerFeedCurrentView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
 //        .saveSize(in: $size)
+    }
+}
+
+struct PrayerFeedPinnedView: View {
+    // view to only see 'pinned' prayers
+    @State private var showEdit: Bool = false
+    
+    @State var prayerRequests: [PrayerRequest] = []
+    @State var prayerRequestVar: PrayerRequest = PrayerRequest.blank
+    
+    @Environment(UserProfileHolder.self) var userHolder
+    var person: Person
+    var toggleView: String
+    
+    var body: some View {
+        ScrollView{
+            NavigationStack {
+                ForEach(prayerRequests) { prayerRequest in
+                    VStack{
+                        NavigationLink(destination: PrayerRequestFormView(person: Person(userID: prayerRequest.userID, username: prayerRequest.username, firstName: prayerRequest.firstName, lastName: prayerRequest.lastName), prayerRequest: prayerRequest)) {
+                            PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "feed")
+                        }
+                        Divider()
+                    }
+                }
+            }
+            .task {
+                prayerRequests = userHolder.pinnedPrayerRequests
+            }
+//            .task {
+//                do {
+//                    prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID, answeredFilter: "pinned")
+//                } catch {
+//                    print("error retrieving prayerfeed")
+//                }
+//            }
+            .sheet(isPresented: $showEdit, onDismiss: {
+                Task {
+                    do {
+                        prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID, answeredFilter: "pinned")
+                    }
+                }
+            }, content: {
+                PrayerRequestFormView(person: userHolder.person, prayerRequest: prayerRequestVar)
+            })
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
