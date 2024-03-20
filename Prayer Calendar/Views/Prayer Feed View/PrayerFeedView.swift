@@ -291,7 +291,11 @@ struct PrayerFeedPinnedView: View {
             Spacer()
         }
         .task {
-            prayerRequests = userHolder.pinnedPrayerRequests
+            do {
+                prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID, answeredFilter: "pinned")
+            } catch {
+                print("error retrieving prayerfeed")
+            }
         }
 //            .task {
 //                do {
