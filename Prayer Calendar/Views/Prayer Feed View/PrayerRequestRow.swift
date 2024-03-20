@@ -109,9 +109,9 @@ struct PrayerRequestRow: View {
                                 .padding(.top, 7)
                         }
                     }
-                    Spacer()
                     Text(prayerRequest.date, style: .date)
                         .font(.system(size: 12))
+                        .padding(.top, 7)
                 }
                 .foregroundStyle(Color.primary)
             }
