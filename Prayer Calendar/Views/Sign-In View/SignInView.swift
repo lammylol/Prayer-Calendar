@@ -232,6 +232,9 @@ struct MyTextView: View {
                     .frame(height: 35)
                     .frame(maxWidth: .infinity)
                     .padding(.trailing, 40)
+                Rectangle().foregroundStyle(.clear)
+                    .frame(height: 35)
+                
             }
         } else if textFieldType == "secure" {
             ZStack {
@@ -241,10 +244,8 @@ struct MyTextView: View {
                     .frame(height: 35)
                     .frame(maxWidth: .infinity)
                     .padding(.trailing, 40)
-                    .background(
-                        Rectangle().foregroundStyle(.clear)
-                            .frame(height: 35)
-                        )
+                Rectangle().foregroundStyle(.clear)
+                    .frame(height: 35)
             }
             
         }
