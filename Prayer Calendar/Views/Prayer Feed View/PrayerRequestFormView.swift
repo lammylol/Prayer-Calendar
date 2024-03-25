@@ -13,7 +13,7 @@ struct PrayerRequestFormView: View {
     @Environment(\.dismiss) var dismiss
     
     var person: Person
-    @State var prayerRequest: PrayerRequest
+    @Binding var prayerRequest: PrayerRequest
     @State var prayerRequestUpdates: [PrayerRequestUpdate] = []
     @State var showAddUpdateView: Bool = false
     
@@ -140,7 +140,7 @@ struct PrayerRequestFormView: View {
                 ToolbarItemGroup(placement: .topBarTrailing) {
                     if person.userID == userHolder.person.userID { // only if you are the 'owner' of the profile.
                         Button(action: {
-                            updatePrayerRequest(prayerRequestVar: prayerRequest)
+                            updatePrayerRequest(prayerRequest: prayerRequest)
                         }) {
                             Text("Save")
                                 .offset(x: -4)
@@ -163,8 +163,9 @@ struct PrayerRequestFormView: View {
         }
     }
     
-    func updatePrayerRequest(prayerRequestVar: PrayerRequest) {
+    func updatePrayerRequest(prayerRequest: PrayerRequest) {
         PrayerRequestHelper().editPrayerRequest(prayerRequest: prayerRequest, person: person, friendsList: userHolder.friendsList)
+        self.prayerRequest = prayerRequest
         
         print("Saved")
         dismiss()
@@ -234,7 +235,7 @@ struct EditPrayerRequestTextView: View {
     }
 }
 
-#Preview {
-    PrayerRequestFormView(person: Person(username: ""), prayerRequest: PrayerRequest.preview)
-        .environment(UserProfileHolder())
-}
+//#Preview {
+//    PrayerRequestFormView(person: Person(username: ""), prayerRequest: PrayerRequest.preview)
+//        .environment(UserProfileHolder())
+//}

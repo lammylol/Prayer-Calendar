@@ -20,7 +20,7 @@ struct PrayerFeedView: View {
     @State private var height: CGFloat = 0
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ScrollView {
                 VStack {
                     Picker("", selection: $selectedPage) {
@@ -149,15 +149,11 @@ struct PrayerFeedAnsweredView: View {
     
     var body: some View {
         VStack {
-            VStack {
-                Text("Answered")
-                Divider()
-            }
-            ForEach(prayerRequests) { prayerRequest in
+            ForEach($prayerRequests) { prayerRequest in
                 LazyVStack {
-                    NavigationLink(destination: PrayerRequestFormView(person: Person(userID: prayerRequest.userID, username: prayerRequest.username, firstName: prayerRequest.firstName, lastName: prayerRequest.lastName), prayerRequest: prayerRequest)) {
-                        PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "feed")
-                    }
+//                    NavigationLink(destination: PrayerRequestFormView(person: Person(userID: prayerRequest.userID, username: prayerRequest.username, firstName: prayerRequest.firstName, lastName: prayerRequest.lastName), prayerRequest: prayerRequest)) {
+                    PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "feed")
+//                    }
                     Divider()
                 }
             }
@@ -177,7 +173,7 @@ struct PrayerFeedAnsweredView: View {
                 }
             }
         }, content: {
-            PrayerRequestFormView(person: userHolder.person, prayerRequest: prayerRequestVar)
+            PrayerRequestFormView(person: userHolder.person, prayerRequest: $prayerRequestVar)
         })
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
@@ -209,15 +205,9 @@ struct PrayerFeedCurrentView: View {
     
     var body: some View {
         VStack {
-            VStack {
-                Text("Current")
-                Divider()
-            }
-            ForEach(prayerRequests) { prayerRequest in
+            ForEach($prayerRequests) { prayerRequest in
                 LazyVStack {
-                    NavigationLink(destination: PrayerRequestFormView(person: Person(userID: prayerRequest.userID, username: prayerRequest.username, firstName: prayerRequest.firstName, lastName: prayerRequest.lastName), prayerRequest: prayerRequest)) {
-                        PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "feed")
-                    }
+                    PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "feed")
                     Divider()
                 }
             }
@@ -244,7 +234,7 @@ struct PrayerFeedCurrentView: View {
                 }
             }
         }, content: {
-            PrayerRequestFormView(person: userHolder.person, prayerRequest: prayerRequestVar)
+            PrayerRequestFormView(person: userHolder.person, prayerRequest: $prayerRequestVar)
         })
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
@@ -276,15 +266,9 @@ struct PrayerFeedPinnedView: View {
     
     var body: some View {
         VStack {
-            VStack {
-                Text("Pinned")
-                Divider()
-            }
-            ForEach(prayerRequests) { prayerRequest in
+            ForEach($prayerRequests) { prayerRequest in
                 LazyVStack {
-                    NavigationLink(destination: PrayerRequestFormView(person: Person(userID: prayerRequest.userID, username: prayerRequest.username, firstName: prayerRequest.firstName, lastName: prayerRequest.lastName), prayerRequest: prayerRequest)) {
-                        PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "feed")
-                    }
+                    PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "feed")
                     Divider()
                 }
             }
@@ -292,9 +276,7 @@ struct PrayerFeedPinnedView: View {
         }
         .task {
             do {
-                prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID, answeredFilter: "pinned")
-            } catch {
-                print("error retrieving prayerfeed")
+                prayerRequests = userHolder.pinnedPrayerRequests
             }
         }
 //            .task {
@@ -308,10 +290,13 @@ struct PrayerFeedPinnedView: View {
             Task {
                 do {
                     prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID, answeredFilter: "pinned")
+                    userHolder.pinnedPrayerRequests = prayerRequests
+                } catch {
+                    print("error retrieving prayerfeed")
                 }
             }
         }, content: {
-            PrayerRequestFormView(person: userHolder.person, prayerRequest: prayerRequestVar)
+            PrayerRequestFormView(person: userHolder.person, prayerRequest: $prayerRequestVar)
         })
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(

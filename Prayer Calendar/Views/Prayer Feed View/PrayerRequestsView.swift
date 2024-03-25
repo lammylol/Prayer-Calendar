@@ -56,11 +56,11 @@ struct PrayerRequestsView: View {
             Divider()
             
             NavigationStack {
-                ForEach(prayerRequests) { prayerRequest in
+                ForEach($prayerRequests) { prayerRequest in
                     VStack{
-                        NavigationLink(destination: PrayerRequestFormView(person: person, prayerRequest: prayerRequest)) {
-                            PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "profile")
-                        }
+//                        NavigationLink(destination: PrayerRequestFormView(person: person, prayerRequest: prayerRequest)) {
+                        PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "profile")
+//                        }
                         Divider()
                     }
                 }
@@ -111,7 +111,7 @@ struct PrayerRequestsView: View {
                 }
             }
         }, content: {
-                PrayerRequestFormView(person: person, prayerRequest: prayerRequestVar)
+                PrayerRequestFormView(person: person, prayerRequest: $prayerRequestVar)
         })
         .sheet(isPresented: $showSubmit, onDismiss: {
             Task {

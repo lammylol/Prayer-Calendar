@@ -9,115 +9,117 @@
 import SwiftUI
 
 struct PrayerRequestRow: View {
-    @State var prayerRequest: PrayerRequest
+    @Binding var prayerRequest: PrayerRequest
     let profileOrPrayerFeed: String
     @Environment(UserProfileHolder.self) var userHolder
 //    @State var editToggle: Bool
     
     var body: some View {
-        VStack{
-            HStack {
-                if profileOrPrayerFeed == "feed" { //feed used in the feed view
-                    VStack() {
-                        NavigationLink(destination: ProfileView(person: Person(userID: prayerRequest.userID, username: prayerRequest.username, firstName: prayerRequest.firstName, lastName: prayerRequest.lastName))) {
+        NavigationLink(destination: PrayerRequestFormView(person: Person(userID: prayerRequest.userID, username: prayerRequest.username, firstName: prayerRequest.firstName, lastName: prayerRequest.lastName), prayerRequest: $prayerRequest)) {
+            VStack{
+                HStack {
+                    if profileOrPrayerFeed == "feed" { //feed used in the feed view
+                        VStack() {
+                            NavigationLink(destination: ProfileView(person: Person(userID: prayerRequest.userID, username: prayerRequest.username, firstName: prayerRequest.firstName, lastName: prayerRequest.lastName))) {
+                                ProfilePictureAvatar(firstName: prayerRequest.firstName, lastName: prayerRequest.lastName, imageSize: 50, fontSize: 20)
+                                    .buttonStyle(.plain)
+                                    .foregroundStyle(Color.primary)
+                            }
+                            Spacer()
+                        }
+                        .padding(.trailing, 10)
+                    } else { //used in 'profile' view
+                        VStack() {
                             ProfilePictureAvatar(firstName: prayerRequest.firstName, lastName: prayerRequest.lastName, imageSize: 50, fontSize: 20)
                                 .buttonStyle(.plain)
                                 .foregroundStyle(Color.primary)
+                            Spacer()
                         }
-                        Spacer()
+                        .padding(.trailing, 10)
                     }
-                    .padding(.trailing, 10)
-                } else { //used in 'profile' view
-                    VStack() {
-                        ProfilePictureAvatar(firstName: prayerRequest.firstName, lastName: prayerRequest.lastName, imageSize: 50, fontSize: 20)
-                            .buttonStyle(.plain)
-                            .foregroundStyle(Color.primary)
-                        Spacer()
-                    }
-                    .padding(.trailing, 10)
-                }
-                
-                VStack(alignment: .leading) {
-                    HStack() {
-                        Text(prayerRequest.firstName + " " + prayerRequest.lastName).font(.system(size: 16)).bold()
-                        Spacer()
-                        if prayerRequest.isPinned == true {
-                            Image(systemName: "pin.fill")
-                        }
-                        Menu {
-                            Button {
-                                self.pinPrayerRequest()
-                            } label: {
-                                if prayerRequest.isPinned == false {
-                                    Label("Pin to feed", systemImage: "pin.fill")
-                                } else {
-                                    Label("Unpin prayer request", systemImage: "pin.slash")
-                                }
+                    
+                    VStack(alignment: .leading) {
+                        HStack() {
+                            Text(prayerRequest.firstName + " " + prayerRequest.lastName).font(.system(size: 16)).bold()
+                            Spacer()
+                            if prayerRequest.isPinned == true {
+                                Image(systemName: "pin.fill")
                             }
-                //            Button {pinPrayerRequest()
-                //            } label: {
-                //                Label("Remove from feed", systemImage: "pin.fill")
-                //            }
-                        } label: {
-                            Label("", systemImage: "ellipsis")
+                            Menu {
+                                Button {
+                                    self.pinPrayerRequest()
+                                } label: {
+                                    if prayerRequest.isPinned == false {
+                                        Label("Pin to feed", systemImage: "pin.fill")
+                                    } else {
+                                        Label("Unpin prayer request", systemImage: "pin.slash")
+                                    }
+                                }
+                                //            Button {pinPrayerRequest()
+                                //            } label: {
+                                //                Label("Remove from feed", systemImage: "pin.fill")
+                                //            }
+                            } label: {
+                                Label("", systemImage: "ellipsis")
+                            }
+                            .highPriorityGesture(TapGesture())
+                            //                        .onDisappear(perform: {
+                            //
+                            //                        })
+                            //                        PrayerRequestMenu(prayerRequest: $prayerRequest)
+                            //                            .highPriorityGesture(TapGesture())
                         }
-                        .highPriorityGesture(TapGesture())
-//                        .onDisappear(perform: {
-//                            
-//                        })
-//                        PrayerRequestMenu(prayerRequest: $prayerRequest)
-//                            .highPriorityGesture(TapGesture())
-                    }
-                    .font(.system(size: 12))
-                    .padding(.bottom, 2)
-                    HStack() {
-                        Text("Prayer Status: ").font(.system(size: 12)).italic() + Text(prayerRequest.status.capitalized)
-                            .font(.system(size: 12))
-                            .italic()
-                        Spacer()
-                    }
-                    
-                    if prayerRequest.prayerRequestTitle != "" {
-                        Text(prayerRequest.prayerRequestTitle)
-                            .font(.system(size: 18))
-                            .bold()
-                            .multilineTextAlignment(.leading)
-                            .padding(.top, 7)
-                    }
-                    
-                    if prayerRequest.latestUpdateText != "" {
-                        VStack (alignment: .leading) {
-                            Text("**\(prayerRequest.latestUpdateType)**: \(prayerRequest.latestUpdateDatePosted.formatted(date: .abbreviated, time: .omitted)), \(prayerRequest.latestUpdateText)")
-                                .multilineTextAlignment(.leading)
-                                .font(.system(size: 16))
+                        .font(.system(size: 12))
+                        .padding(.bottom, 2)
+                        HStack() {
+                            Text("Prayer Status: ").font(.system(size: 12)).italic() + Text(prayerRequest.status.capitalized)
+                                .font(.system(size: 12))
                                 .italic()
-                                .padding(.bottom, 0)
-                            Text("\(prayerRequest.prayerRequestText)")
-                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                                .lineLimit(15)
-                                .fixedSize(horizontal: false, vertical: true)
-                                .font(.system(size: 16))
-                                .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
+                            Spacer()
                         }
-                        .padding(.top, 7)
-                    } else {
-                        VStack {
-                            Text(prayerRequest.prayerRequestText)
-                                .font(.system(size: 16))
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
+                        
+                        if prayerRequest.prayerRequestTitle != "" {
+                            Text(prayerRequest.prayerRequestTitle)
+                                .font(.system(size: 18))
+                                .bold()
+                                .multilineTextAlignment(.leading)
                                 .padding(.top, 7)
                         }
+                        
+                        if prayerRequest.latestUpdateText != "" {
+                            VStack (alignment: .leading) {
+                                Text("**\(prayerRequest.latestUpdateType)**: \(prayerRequest.latestUpdateDatePosted.formatted(date: .abbreviated, time: .omitted)), \(prayerRequest.latestUpdateText)")
+                                    .multilineTextAlignment(.leading)
+                                    .font(.system(size: 16))
+                                    .italic()
+                                    .padding(.bottom, 0)
+                                Text("\(prayerRequest.prayerRequestText)")
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                                    .lineLimit(15)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .font(.system(size: 16))
+                                    .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
+                            }
+                            .padding(.top, 7)
+                        } else {
+                            VStack {
+                                Text(prayerRequest.prayerRequestText)
+                                    .font(.system(size: 16))
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
+                                    .padding(.top, 7)
+                            }
+                        }
+                        Text(prayerRequest.date, style: .date)
+                            .font(.system(size: 12))
+                            .padding(.top, 7)
                     }
-                    Text(prayerRequest.date, style: .date)
-                        .font(.system(size: 12))
-                        .padding(.top, 7)
+                    .foregroundStyle(Color.primary)
                 }
-                .foregroundStyle(Color.primary)
+                .padding([.leading, .trailing], 20)
+                .padding([.top, .bottom], 15)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-            .padding([.leading, .trailing], 20)
-            .padding([.top, .bottom], 15)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
     
