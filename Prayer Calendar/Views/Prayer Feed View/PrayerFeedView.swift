@@ -36,7 +36,7 @@ struct PrayerFeedView: View {
                     TabView(selection: $selectedPage) {
                         Group {
                             if userHolder.pinnedPrayerRequests.isEmpty == false {
-                                PrayerFeedPinnedView(person: person, toggleView: "pinned", height: $height)
+                                PrayerFeedPinnedView(person: person, height: $height)
                                     .tag(0)
                             }
                             PrayerFeedCurrentView(person: person, height: $height)
@@ -81,79 +81,23 @@ struct PrayerFeedView: View {
         }
     }
 }
-        
-//    var body: some View {
-//        NavigationStack {
-//            VStack {
-//                Picker("", selection: $selectedPage) {
-//                    if userHolder.pinnedPrayerRequests.isEmpty == false {
-//                        Text("Pinned").tag(0)
-//                    }
-//                    Text("Current").tag(1)
-//                    Text("Testimonies").tag(2)
-//                }
-//                .pickerStyle(.segmented)
-//                .padding(.top, 10)
-//                
-//                TabView(selection: $selectedPage) {
-//                    if userHolder.pinnedPrayerRequests.isEmpty == false {
-//                        PrayerFeedPinnedView(person: person, toggleView: "pinned").tag(0)
-//                    }
-//                    PrayerFeedCurrentView(person: person).tag(1)
-//                    PrayerFeedAnsweredView(person: person).tag(2)
-//                }
-//                .tabViewStyle(.page(indexDisplayMode: .never))
-//                .sheet(isPresented: $showSubmit, onDismiss: {
-//                }, content: {
-//                    SubmitPrayerRequestForm(person: person)
-//                })
-//                .task {
-//                    if userHolder.pinnedPrayerRequests.isEmpty {
-//                        selectedPage = 1
-//                    } else {
-//                        selectedPage = 1
-//                    }
-//                }
-//            }
-//            .toolbar {
-//                ToolbarItem(placement: .topBarTrailing) {
-//                    Button(action: { showSubmit.toggle()
-//                    }) {
-//                        Image(systemName: "plus")
-//                    }
-//                    .padding(.trailing, 15)
-//                }
-//            }
-////            .task {
-////                do { pinnedPrayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID, answeredFilter: "pinned")
-////                } catch {
-////                    print("error retrieving prayerfeed")
-////                }
-////            }
-//            .navigationTitle("prayer feed")
-//            .navigationBarTitleDisplayMode(.automatic)
-//            .scrollIndicators(.hidden)
-//        }
-//    }
 
-struct PrayerFeedAnsweredView: View {
-    // view to only see 'answered' prayers
+struct FeedRequestsRowView: View {
     @State private var showEdit: Bool = false
+//    @Binding var height: CGFloat
     
     @State var prayerRequests: [PrayerRequest] = []
     @State var prayerRequestVar: PrayerRequest = PrayerRequest.blank
-
+    
     @Environment(UserProfileHolder.self) var userHolder
     var person: Person
-    @Binding var height: CGFloat
+    var answeredFilter: String
     
     var body: some View {
         VStack {
             ForEach($prayerRequests) { prayerRequest in
                 LazyVStack {
-//                    NavigationLink(destination: PrayerRequestFormView(person: Person(userID: prayerRequest.userID, username: prayerRequest.username, firstName: prayerRequest.firstName, lastName: prayerRequest.lastName), prayerRequest: prayerRequest)) {
                     PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "feed")
-//                    }
                     Divider()
                 }
             }
@@ -161,7 +105,7 @@ struct PrayerFeedAnsweredView: View {
         }
         .task {
             do {
-                prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID, answeredFilter: "answered")
+                prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID, answeredFilter: answeredFilter)
             } catch {
                 print("error retrieving prayerfeed")
             }
@@ -169,13 +113,23 @@ struct PrayerFeedAnsweredView: View {
         .sheet(isPresented: $showEdit, onDismiss: {
             Task {
                 do {
-                    prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID, answeredFilter: "answered")
+                    prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID, answeredFilter: answeredFilter)
                 }
             }
         }, content: {
             PrayerRequestFormView(person: userHolder.person, prayerRequest: $prayerRequestVar)
         })
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+}
+
+struct PrayerFeedAnsweredView: View {
+    // view to only see 'answered' prayers
+    var person: Person
+    @Binding var height: CGFloat
+    
+    var body: some View {
+        FeedRequestsRowView(person: person, answeredFilter: "answered")
         .background(
             GeometryReader { geo in
                 Color.clear
@@ -185,7 +139,6 @@ struct PrayerFeedAnsweredView: View {
                     )
             }
             .onPreferenceChange(HeightPreferenceKey.self) { height in
-//                self.height = max(self.height, height)
                 self.height = height
             }
         )
@@ -193,50 +146,12 @@ struct PrayerFeedAnsweredView: View {
 }
 
 struct PrayerFeedCurrentView: View {
-    // view to only see 'answered' prayers
-    @State private var showEdit: Bool = false
-    
-    @State var prayerRequests: [PrayerRequest] = []
-    @State var prayerRequestVar: PrayerRequest = PrayerRequest.blank
-    
-    @Environment(UserProfileHolder.self) var userHolder
+    // view to see 'current' prayers
     var person: Person
     @Binding var height: CGFloat
     
     var body: some View {
-        VStack {
-            ForEach($prayerRequests) { prayerRequest in
-                LazyVStack {
-                    PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "feed")
-                    Divider()
-                }
-            }
-            Spacer()
-        }
-        .task {
-            do {
-                prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID, answeredFilter: "current")
-//                    if toggleView == "current" {
-//                        prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID, answeredFilter: "current")
-//                    } else if toggleView == "answered" {
-//                        prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID, answeredFilter: "answered")
-//                    } else { //if pinned
-//                        prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID, answeredFilter: "pinned")
-//                    }
-            } catch {
-                print("error retrieving prayerfeed")
-            }
-        }
-        .sheet(isPresented: $showEdit, onDismiss: {
-            Task {
-                do {
-                    prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID, answeredFilter: "current")
-                }
-            }
-        }, content: {
-            PrayerRequestFormView(person: userHolder.person, prayerRequest: $prayerRequestVar)
-        })
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        FeedRequestsRowView(person: person, answeredFilter: "current")
         .background(
             GeometryReader { geo in
                 Color.clear
@@ -254,51 +169,11 @@ struct PrayerFeedCurrentView: View {
 
 struct PrayerFeedPinnedView: View {
     // view to only see 'pinned' prayers
-    @State private var showEdit: Bool = false
-    
-    @State var prayerRequests: [PrayerRequest] = []
-    @State var prayerRequestVar: PrayerRequest = PrayerRequest.blank
-    
-    @Environment(UserProfileHolder.self) var userHolder
     var person: Person
-    var toggleView: String
     @Binding var height: CGFloat
     
     var body: some View {
-        VStack {
-            ForEach($prayerRequests) { prayerRequest in
-                LazyVStack {
-                    PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "feed")
-                    Divider()
-                }
-            }
-            Spacer()
-        }
-        .task {
-            do {
-                prayerRequests = userHolder.pinnedPrayerRequests
-            }
-        }
-//            .task {
-//                do {
-//                    prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID, answeredFilter: "pinned")
-//                } catch {
-//                    print("error retrieving prayerfeed")
-//                }
-//            }
-        .sheet(isPresented: $showEdit, onDismiss: {
-            Task {
-                do {
-                    prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID, answeredFilter: "pinned")
-                    userHolder.pinnedPrayerRequests = prayerRequests
-                } catch {
-                    print("error retrieving prayerfeed")
-                }
-            }
-        }, content: {
-            PrayerRequestFormView(person: userHolder.person, prayerRequest: $prayerRequestVar)
-        })
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        FeedRequestsRowView(person: person, answeredFilter: "pinned")
         .background(
             GeometryReader { geo in
                 Color.clear
@@ -306,9 +181,9 @@ struct PrayerFeedPinnedView: View {
                         key: HeightPreferenceKey.self,
                         value: geo.size.height
                     )
-                    .onPreferenceChange(HeightPreferenceKey.self) { height in
-                        self.height = height
-                    }
+            }
+            .onPreferenceChange(HeightPreferenceKey.self) { height in
+                self.height = height
             }
         )
     }

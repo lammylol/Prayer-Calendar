@@ -29,7 +29,7 @@
 		7A4F26382AD0D2B600FB086C /* PrayerCalendarSwiftApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4F262D2AD0D2B400FB086C /* PrayerCalendarSwiftApp.swift */; };
 		7A4F26392AD0D2B600FB086C /* CalendarHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4F262E2AD0D2B500FB086C /* CalendarHelper.swift */; };
 		7A4F263A2AD0D2B600FB086C /* MonthStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4F262F2AD0D2B600FB086C /* MonthStruct.swift */; };
-		7A5C72312AFEBADE00A75636 /* PrayerRequestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A5C72302AFEBADE00A75636 /* PrayerRequestsView.swift */; };
+		7A5C72312AFEBADE00A75636 /* ProfilePrayerRequestsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A5C72302AFEBADE00A75636 /* ProfilePrayerRequestsView.swift */; };
 		7A5C72332AFF5D9F00A75636 /* PrayerRequestRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A5C72322AFF5D9E00A75636 /* PrayerRequestRow.swift */; };
 		7A5C72352AFF5E3100A75636 /* PrayerRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A5C72342AFF5E3100A75636 /* PrayerRequest.swift */; };
 		7A5D85BF2B623E2E002F55B2 /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = 7A5D85BE2B623E2E002F55B2 /* FirebaseFunctions */; };
@@ -93,7 +93,7 @@
 		7A4F262D2AD0D2B400FB086C /* PrayerCalendarSwiftApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrayerCalendarSwiftApp.swift; sourceTree = "<group>"; };
 		7A4F262E2AD0D2B500FB086C /* CalendarHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarHelper.swift; sourceTree = "<group>"; };
 		7A4F262F2AD0D2B600FB086C /* MonthStruct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonthStruct.swift; sourceTree = "<group>"; };
-		7A5C72302AFEBADE00A75636 /* PrayerRequestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerRequestsView.swift; sourceTree = "<group>"; };
+		7A5C72302AFEBADE00A75636 /* ProfilePrayerRequestsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePrayerRequestsView.swift; sourceTree = "<group>"; };
 		7A5C72322AFF5D9E00A75636 /* PrayerRequestRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerRequestRow.swift; sourceTree = "<group>"; };
 		7A5C72342AFF5E3100A75636 /* PrayerRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerRequest.swift; sourceTree = "<group>"; };
 		7A66A0C42B0B24BC000CA93E /* PrayerRequestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerRequestHelper.swift; sourceTree = "<group>"; };
@@ -201,7 +201,7 @@
 			isa = PBXGroup;
 			children = (
 				7A8D40B42B44A9CF00B029E6 /* PrayerFeedView.swift */,
-				7A5C72302AFEBADE00A75636 /* PrayerRequestsView.swift */,
+				7A5C72302AFEBADE00A75636 /* ProfilePrayerRequestsView.swift */,
 				7A5C72322AFF5D9E00A75636 /* PrayerRequestRow.swift */,
 				7ADE4C522B046CD400CE6B33 /* SubmitPrayerRequestForm.swift */,
 				7ADE4C542B0811AC00CE6B33 /* PrayerRequestFormView.swift */,
@@ -463,7 +463,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7A416B7B2AFC71CB00249BB3 /* UIHelper.swift in Sources */,
-				7A5C72312AFEBADE00A75636 /* PrayerRequestsView.swift in Sources */,
+				7A5C72312AFEBADE00A75636 /* ProfilePrayerRequestsView.swift in Sources */,
 				7A4F26352AD0D2B600FB086C /* ProfileView.swift in Sources */,
 				7A7CA4772B7E9FB5001922AA /* SettingsSecurityView.swift in Sources */,
 				7A92577C2B686BCF00D5EF35 /* ProfilePictureAvatar.swift in Sources */,

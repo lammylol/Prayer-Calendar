@@ -10,7 +10,7 @@
 import SwiftUI
 import FirebaseFirestore
 
-struct PrayerRequestsView: View {
+struct ProfilePrayerRequestsView: View {
     @Environment(UserProfileHolder.self) var userHolder
     @State private var showSubmit: Bool = false
     @State private var showEdit: Bool = false
@@ -133,5 +133,5 @@ struct PrayerRequestsView: View {
 }
 
 #Preview {
-    PrayerRequestsView(person: Person(userID: "aMq0YdteGEbYXWlSgxehVy7Fyrl2", username: "lammylol"))
+    ProfilePrayerRequestsView(person: Person(userID: "aMq0YdteGEbYXWlSgxehVy7Fyrl2", username: "lammylol"))
 }

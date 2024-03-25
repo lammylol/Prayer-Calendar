@@ -51,7 +51,7 @@ struct ProfileView: View {
                     
                     Spacer()
                 
-                    PrayerRequestsView(person: person)
+                    ProfilePrayerRequestsView(person: person)
                         .frame(maxHeight: .infinity)
                         .padding(.top, 20)
                 }
