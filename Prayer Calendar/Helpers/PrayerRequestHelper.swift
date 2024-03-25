@@ -69,10 +69,10 @@ class PrayerRequestHelper {
             throw PrayerRequestRetrievalError.noPrayerRequestID
         }
         
-        var prayerRequest = prayerRequest
-        
         let db = Firestore.firestore()
         let ref = db.collection("prayerRequests").document(prayerRequest.id)
+        var prayerRequest = PrayerRequest.blank
+        var isPinned = prayerRequest.isPinned // Need to save separately because isPinned is not stored in larger 'prayer requests' collection. Only within a user's feed.
         
         do {
             let document = try await ref.getDocument()
@@ -95,7 +95,6 @@ class PrayerRequestHelper {
                 let userID = document.data()?["userID"] as? String ?? ""
                 let username = document.data()?["username"] as? String ?? ""
                 let priority = document.data()?["priority"] as? String ?? ""
-                let isPinned = document.data()?["isPinned"] as? Bool ?? false
                 let documentID = document.documentID as String
                 let prayerRequestTitle = document.data()?["prayerRequestTitle"] as? String ?? ""
                 let latestUpdateText = document.data()?["latestUpdateText"] as? String ?? ""
@@ -215,17 +214,10 @@ class PrayerRequestHelper {
         
         ref.updateData([
             "datePosted": prayerRequest.date,
-//            "firstName": prayerRequest.firstName,
-//            "lastName": prayerRequest.lastName,
             "status": prayerRequest.status,
             "prayerRequestText": prayerRequest.prayerRequestText,
-//            "userID": person.userID,
-//            "username": person.username,
             "priority": prayerRequest.priority,
             "prayerRequestTitle": prayerRequest.prayerRequestTitle
-//            "latestUpdateText": prayerRequest.latestUpdateText,
-//            "latestUpdateDatePosted": prayerRequest.latestUpdateDatePosted,
-//            "latestUpdateType": prayerRequest.latestUpdateType
         ])
         
         // Add PrayerRequestID to prayerFeed/{userID}
@@ -266,7 +258,7 @@ class PrayerRequestHelper {
                 "prayerRequestTitle": prayerRequest.prayerRequestTitle,
                 "latestUpdateText": prayerRequest.latestUpdateText,
                 "latestUpdateDatePosted": prayerRequest.latestUpdateDatePosted,
-                "latestUpdateType": prayerRequest.latestUpdateType,
+                "latestUpdateType": prayerRequest.latestUpdateType
             ])
         } else {
             let ref = db.collection("prayerFeed").document(person.userID).collection("prayerRequests").document(prayerRequest.id)
@@ -283,6 +275,7 @@ class PrayerRequestHelper {
                 "latestUpdateText": prayerRequest.latestUpdateText,
                 "latestUpdateDatePosted": prayerRequest.latestUpdateDatePosted,
                 "latestUpdateType": prayerRequest.latestUpdateType,
+                "isPinned": prayerRequest.isPinned
             ])
         }
     }

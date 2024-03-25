@@ -115,9 +115,11 @@ struct PrayerRequestFormView: View {
             .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: .infinity)
             .task {
                 do {
+                    print("isPinned: " + prayerRequest.isPinned.description)
                     prayerRequest = try await PrayerRequestHelper().getPrayerRequest(prayerRequest: prayerRequest)
                     prayerRequestUpdates = try await PrayerUpdateHelper().getPrayerRequestUpdates(prayerRequest: prayerRequest, person: person)
                     print(prayerRequestUpdates)
+                    print("isPinned: " + prayerRequest.isPinned.description)
                 } catch PrayerRequestRetrievalError.noPrayerRequestID {
                     print("missing prayer request ID for update.")
                 } catch {
