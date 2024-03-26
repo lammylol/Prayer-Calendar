@@ -7,6 +7,23 @@
 
 import SwiftUI
 
+extension View {
+    func getSizeOfView(_ getHeight: @escaping ((CGFloat) -> Void)) -> some View {
+        return self
+            .background {
+                GeometryReader { geometry in
+                    Color.clear.preference(
+                        key: HeightPreferenceKey.self,
+                        value: geometry.size.height
+                    )
+                    .onPreferenceChange(HeightPreferenceKey.self) { value in
+                        getHeight(value)
+                    }
+                }
+            }
+    }
+}
+
 struct PrayerFeedView: View {
     @State private var showSubmit: Bool = false
     @State private var showEdit: Bool = false
@@ -34,23 +51,22 @@ struct PrayerFeedView: View {
                     .padding(.top, 10)
                     
                     TabView(selection: $selectedPage) {
-                        Group {
-                            if userHolder.pinnedPrayerRequests.isEmpty == false {
-                                PrayerFeedPinnedView(person: person, height: $height)
-                                    .tag(0)
-                            }
-                            PrayerFeedCurrentView(person: person, height: $height)
-                                .tag(1)
-                            PrayerFeedAnsweredView(person: person, height: $height)
-                                .tag(2)
+                        if userHolder.pinnedPrayerRequests.isEmpty == false {
+                            PrayerFeedPinnedView(person: person)
+                                .tag(0)
+                                .getSizeOfView { height = $0 }
                         }
-                        .onAppear() {
-                            self.height = height
-                        }
+                        PrayerFeedCurrentView(person: person)
+                            .tag(1)
+                            .getSizeOfView { height = $0 }
+                        PrayerFeedAnsweredView(person: person)
+                            .tag(2)
+                            .getSizeOfView { height = $0 }
                     }
+                    .frame(alignment: .top)
                     .tabViewStyle(PageTabViewStyle())
-                    .frame(height: self.height)
-                    //                .tabViewStyle(.page(indexDisplayMode: .never))
+                    .frame(idealHeight: height)
+                    .tabViewStyle(.page(indexDisplayMode: .never))
                     
                     .sheet(isPresented: $showSubmit, onDismiss: {
                     }, content: {
@@ -94,14 +110,15 @@ struct FeedRequestsRowView: View {
     var answeredFilter: String
     
     var body: some View {
-        VStack {
-            ForEach($prayerRequests) { prayerRequest in
-                LazyVStack {
-                    PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "feed")
-                    Divider()
+        LazyVStack {
+            NavigationStack {
+                ForEach($prayerRequests) { prayerRequest in
+                    LazyVStack {
+                        PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "feed")
+                        Divider()
+                    }
                 }
             }
-            Spacer()
         }
         .task {
             do {
@@ -120,72 +137,37 @@ struct FeedRequestsRowView: View {
             PrayerRequestFormView(person: userHolder.person, prayerRequest: $prayerRequestVar)
         })
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        Spacer()
     }
 }
 
 struct PrayerFeedAnsweredView: View {
     // view to only see 'answered' prayers
     var person: Person
-    @Binding var height: CGFloat
+//    @Binding var height: CGFloat
     
     var body: some View {
         FeedRequestsRowView(person: person, answeredFilter: "answered")
-        .background(
-            GeometryReader { geo in
-                Color.clear
-                    .preference(
-                        key: HeightPreferenceKey.self,
-                        value: geo.size.height
-                    )
-            }
-            .onPreferenceChange(HeightPreferenceKey.self) { height in
-                self.height = height
-            }
-        )
     }
 }
 
 struct PrayerFeedCurrentView: View {
     // view to see 'current' prayers
     var person: Person
-    @Binding var height: CGFloat
-    
+//    @Binding var height: CGFloat
+//    
     var body: some View {
         FeedRequestsRowView(person: person, answeredFilter: "current")
-        .background(
-            GeometryReader { geo in
-                Color.clear
-                    .preference(
-                        key: HeightPreferenceKey.self,
-                        value: geo.size.height
-                    )
-            }
-            .onPreferenceChange(HeightPreferenceKey.self) { height in
-                self.height = height
-            }
-        )
     }
 }
 
 struct PrayerFeedPinnedView: View {
     // view to only see 'pinned' prayers
     var person: Person
-    @Binding var height: CGFloat
+//    @Binding var height: CGFloat
     
     var body: some View {
         FeedRequestsRowView(person: person, answeredFilter: "pinned")
-        .background(
-            GeometryReader { geo in
-                Color.clear
-                    .preference(
-                        key: HeightPreferenceKey.self,
-                        value: geo.size.height
-                    )
-            }
-            .onPreferenceChange(HeightPreferenceKey.self) { height in
-                self.height = height
-            }
-        )
     }
 }
 
