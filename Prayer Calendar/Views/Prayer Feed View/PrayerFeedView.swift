@@ -7,23 +7,6 @@
 
 import SwiftUI
 
-extension View {
-    func getSizeOfView(_ getHeight: @escaping ((CGFloat) -> Void)) -> some View {
-        return self
-            .background {
-                GeometryReader { geometry in
-                    Color.clear.preference(
-                        key: HeightPreferenceKey.self,
-                        value: geometry.size.height
-                    )
-                    .onPreferenceChange(HeightPreferenceKey.self) { value in
-                        getHeight(value)
-                    }
-                }
-            }
-    }
-}
-
 struct PrayerFeedView: View {
     @State private var showSubmit: Bool = false
     @State private var showEdit: Bool = false
@@ -34,7 +17,7 @@ struct PrayerFeedView: View {
     
     @Environment(UserProfileHolder.self) var userHolder
     var person: Person
-    @State private var height: CGFloat = 0
+    @State private var height: CGFloat = 500
 
     var body: some View {
         NavigationStack {
@@ -54,45 +37,43 @@ struct PrayerFeedView: View {
                         if userHolder.pinnedPrayerRequests.isEmpty == false {
                             PrayerFeedPinnedView(person: person)
                                 .tag(0)
-                                .getSizeOfView { height = $0 }
+                                .getSizeOfView {
+                                    height = $0
+                                }
                         }
                         PrayerFeedCurrentView(person: person)
                             .tag(1)
-                            .getSizeOfView { height = $0 }
+                            .getSizeOfView {
+                                height = $0
+                            }
                         PrayerFeedAnsweredView(person: person)
                             .tag(2)
-                            .getSizeOfView { height = $0 }
+                            .getSizeOfView {
+                                height = $0
+                            }
                     }
-                    .tabViewStyle(PageTabViewStyle())
+                    .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                     .frame(idealHeight: height)
-                    .tabViewStyle(.page(indexDisplayMode: .never))
-                    
                     .sheet(isPresented: $showSubmit, onDismiss: {
                     }, content: {
                         SubmitPrayerRequestForm(person: person)
                     })
                 }
-    //
-    //                .task {
-    //                    if userHolder.pinnedPrayerRequests.isEmpty {
-    //                        selectedPage = 1
-    //                    } else {
-    //                        selectedPage = 1
-    //                    }
-    //                }
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button(action: { showSubmit.toggle()
-                        }) {
-                            Image(systemName: "plus")
-                        }
-                        .padding(.trailing, 15)
-                    }
-                }
-                .navigationTitle("prayer feed")
-                .navigationBarTitleDisplayMode(.automatic)
-                .scrollIndicators(.hidden)
             }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button(action: { showSubmit.toggle()
+                    }) {
+                        Image(systemName: "plus")
+                    }
+                    .padding(.trailing, 15)
+                }
+            }
+            .navigationTitle("prayer feed")
+            .navigationBarTitleDisplayMode(.automatic)
+            .scrollIndicators(.hidden)
+//            .scrollTargetBehavior(.paging)
+//            .scrollTargetLayout()
         }
     }
 }
@@ -109,7 +90,7 @@ struct FeedRequestsRowView: View {
     var answeredFilter: String
     
     var body: some View {
-        VStack {
+        LazyVStack {
             NavigationStack {
                 ForEach($prayerRequests) { prayerRequest in
                     LazyVStack {
@@ -136,6 +117,10 @@ struct FeedRequestsRowView: View {
             PrayerRequestFormView(person: userHolder.person, prayerRequest: $prayerRequestVar)
         })
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+//        .getSizeOfView {
+//            self.height = $0
+//            print(height)
+//        }
     }
 }
 
@@ -145,11 +130,8 @@ struct PrayerFeedAnsweredView: View {
 //    @Binding var height: CGFloat
     
     var body: some View {
-        LazyVStack {
-            FeedRequestsRowView(person: person, answeredFilter: "answered")
-            Spacer()
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        FeedRequestsRowView(person: person, answeredFilter: "answered")
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
@@ -159,11 +141,8 @@ struct PrayerFeedCurrentView: View {
 //    @Binding var height: CGFloat
 //    
     var body: some View {
-        LazyVStack {
-            FeedRequestsRowView(person: person, answeredFilter: "current")
-            Spacer()
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        FeedRequestsRowView(person: person, answeredFilter: "current")
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
@@ -173,19 +152,34 @@ struct PrayerFeedPinnedView: View {
 //    @Binding var height: CGFloat
     
     var body: some View {
-        LazyVStack {
-            FeedRequestsRowView(person: person, answeredFilter: "pinned")
-            Spacer()
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        FeedRequestsRowView(person: person, answeredFilter: "pinned")
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
-struct HeightPreferenceKey: PreferenceKey {
-    static let defaultValue: CGFloat = 0
+struct SizePreferenceKey: PreferenceKey {
+    static let defaultValue: CGFloat = .zero
     
     static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
         value = nextValue()
+    }
+}
+
+extension View {
+    @ViewBuilder
+    func getSizeOfView(_ getHeight: @escaping (CGFloat) -> ()) -> some View {
+        self
+            .background {
+                GeometryReader { geometry in
+                    Color.clear.preference(
+                        key: SizePreferenceKey.self,
+                        value: geometry.size.height
+                    )
+                    .onPreferenceChange(SizePreferenceKey.self) { value in
+                        getHeight(value)
+                    }
+                }
+            }
     }
 }
 
