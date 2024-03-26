@@ -63,7 +63,6 @@ struct PrayerFeedView: View {
                             .tag(2)
                             .getSizeOfView { height = $0 }
                     }
-                    .frame(alignment: .top)
                     .tabViewStyle(PageTabViewStyle())
                     .frame(idealHeight: height)
                     .tabViewStyle(.page(indexDisplayMode: .never))
@@ -110,7 +109,7 @@ struct FeedRequestsRowView: View {
     var answeredFilter: String
     
     var body: some View {
-        LazyVStack {
+        VStack {
             NavigationStack {
                 ForEach($prayerRequests) { prayerRequest in
                     LazyVStack {
@@ -137,7 +136,6 @@ struct FeedRequestsRowView: View {
             PrayerRequestFormView(person: userHolder.person, prayerRequest: $prayerRequestVar)
         })
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        Spacer()
     }
 }
 
@@ -147,7 +145,11 @@ struct PrayerFeedAnsweredView: View {
 //    @Binding var height: CGFloat
     
     var body: some View {
-        FeedRequestsRowView(person: person, answeredFilter: "answered")
+        LazyVStack {
+            FeedRequestsRowView(person: person, answeredFilter: "answered")
+            Spacer()
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
@@ -157,7 +159,11 @@ struct PrayerFeedCurrentView: View {
 //    @Binding var height: CGFloat
 //    
     var body: some View {
-        FeedRequestsRowView(person: person, answeredFilter: "current")
+        LazyVStack {
+            FeedRequestsRowView(person: person, answeredFilter: "current")
+            Spacer()
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
@@ -167,7 +173,11 @@ struct PrayerFeedPinnedView: View {
 //    @Binding var height: CGFloat
     
     var body: some View {
-        FeedRequestsRowView(person: person, answeredFilter: "pinned")
+        LazyVStack {
+            FeedRequestsRowView(person: person, answeredFilter: "pinned")
+            Spacer()
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
