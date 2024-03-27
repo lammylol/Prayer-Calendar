@@ -11,71 +11,202 @@ struct PrayerFeedView: View {
     @State private var showSubmit: Bool = false
     @State private var showEdit: Bool = false
     @State private var selectedPage: Int = 1
+
+    @State private var selectedTab: Tab? = .current
+    @State private var tabProgress: CGFloat = 0
     
 //    @State var pinnedPrayerRequests: [PrayerRequest] = []
     @State var prayerRequestVar: PrayerRequest = PrayerRequest.blank
     
     @Environment(UserProfileHolder.self) var userHolder
+    @Environment(\.colorScheme) private var scheme
+    
     var person: Person
-    @State private var height: CGFloat = 500
 
     var body: some View {
         NavigationStack {
-            ScrollView {
+//            ScrollView(.vertical) {
                 VStack {
-                    Picker("", selection: $selectedPage) {
-                        if userHolder.pinnedPrayerRequests.isEmpty == false {
-                            Text("Pinned").tag(0)
-                        }
-                        Text("Current").tag(1)
-                        Text("Testimonies").tag(2)
-                    }
-                    .pickerStyle(.segmented)
-                    .padding(.top, 10)
+                    //Custom Tab Bar
+                    CustomTabBar()
+                    //                PrayerFeedCurrentView(person: person)
                     
-                    TabView(selection: $selectedPage) {
-                        if userHolder.pinnedPrayerRequests.isEmpty == false {
-                            PrayerFeedPinnedView(person: person)
-                                .tag(0)
-                                .getSizeOfView {
-                                    height = $0
+                    // Paging View
+                    GeometryReader {
+                        let size = $0.size
+                        
+                        ScrollView(.horizontal) {
+                            HStack(spacing: 0) {
+                                if userHolder.pinnedPrayerRequests.isEmpty == false {
+                                    PrayerFeedPinnedView(person: person)
+                                        .containerRelativeFrame(.horizontal)
+                                        .id(Tab.pinned)
                                 }
+                                PrayerFeedCurrentView(person: person)
+                                    .containerRelativeFrame(.horizontal)
+                                    .id(Tab.current)
+                                PrayerFeedAnsweredView(person: person)
+                                    .containerRelativeFrame(.horizontal)
+                                    .id(Tab.answered)
+                            }
+                            .offsetX { value in
+                                let progress = -value / (size.width * CGFloat(Tab.allCases.count - 1))
+                                tabProgress = max(min(progress, 1), 0)
+                            }
                         }
-                        PrayerFeedCurrentView(person: person)
-                            .tag(1)
-                            .getSizeOfView {
-                                height = $0
-                            }
-                        PrayerFeedAnsweredView(person: person)
-                            .tag(2)
-                            .getSizeOfView {
-                                height = $0
-                            }
+                        .scrollPosition(id: $selectedTab)
+                        .scrollTargetBehavior(.paging)
                     }
-                    .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-                    .frame(idealHeight: height)
-                    .sheet(isPresented: $showSubmit, onDismiss: {
-                    }, content: {
-                        SubmitPrayerRequestForm(person: person)
-                    })
                 }
-            }
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button(action: { showSubmit.toggle()
-                    }) {
-                        Image(systemName: "plus")
-                    }
-                    .padding(.trailing, 15)
-                }
-            }
-            .navigationTitle("prayer feed")
-            .navigationBarTitleDisplayMode(.automatic)
-            .scrollIndicators(.hidden)
-//            .scrollTargetBehavior(.paging)
-//            .scrollTargetLayout()
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                .navigationTitle("prayer feed")
+//                .frame(height: 500)
+//            }
         }
     }
+    
+    @ViewBuilder
+    func CustomTabBar() -> some View {
+        @State var array = [Tab.Type]()
+        
+        HStack(spacing: 0) {
+            ForEach(Tab.allCases, id: \.rawValue) { tab in
+                HStack(spacing: 10) {
+                    Text(tab.rawValue)
+                        .font(.callout)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 10)
+                .contentShape(.capsule)
+                .onTapGesture {
+                    //Updating Tab
+                    withAnimation(.snappy) {
+                        selectedTab = tab
+                    }
+                }
+            }
+        }
+//        .task {
+//            if userHolder.pinnedPrayerRequests.isEmpty == false {
+//                ForEach(Tab.AllCases) { case in
+//                    array.append(case)
+//                }
+//            }
+//        }
+        .tabMask(tabProgress)
+        // Scrollable Active Tab Indicator
+        .background {
+            GeometryReader {
+                let size = $0.size
+                let capsuleWidth = size.width / CGFloat(Tab.allCases.count)
+                
+                Capsule()
+                    .fill(scheme == .dark ? .black : .white)
+                    .frame(width: capsuleWidth)
+                    .offset(x: tabProgress * (size.width - capsuleWidth))
+            }
+        }
+        .background(.gray.opacity(0.1), in: .capsule)
+        .padding(.horizontal, 15)
+    }
+    
+//        NavigationStack {
+//            TabView(selection: $selectedPage) {
+//                if userHolder.pinnedPrayerRequests.isEmpty == false {
+//                    PrayerFeedPinnedView(person: person, selectedPage: $selectedPage)
+//                        .tag(0)
+//                }
+//                PrayerFeedCurrentView(person: person, selectedPage: $selectedPage)
+//                    .tag(1)
+//                PrayerFeedAnsweredView(person: person, selectedPage: $selectedPage)
+//                    .tag(2)
+//            }
+//            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+//            .navigationTitle("Prayer Feed")
+//            .navigationBarTitleDisplayMode(.automatic)
+//        }
+//            
+//        NavigationStack {
+//            ScrollView {
+//                VStack {
+//                    Picker("", selection: $selectedPage) {
+//                        if userHolder.pinnedPrayerRequests.isEmpty == false {
+//                            Text("Pinned").tag(0)
+//                        }
+//                        Text("Current").tag(1)
+//                        Text("Testimonies").tag(2)
+//                    }
+//                    .pickerStyle(.segmented)
+//                    .padding(.top, 10)
+//                    
+//                    TabView(selection: $selectedPage) {
+//                        if userHolder.pinnedPrayerRequests.isEmpty == false {
+//                            PrayerFeedPinnedView(person: person)
+////                            FeedRequestsRowView(person: person, answeredFilter: "pinned")
+//                                .fixedSize(horizontal: false, vertical: true)
+//                                .getSizeOfView(getHeight: { size in
+//                                    sizeArray[0] = size
+//                                })
+//                                .tag(0)
+////                                .getSizeOfView {
+////                                    height = $0
+////                                }
+//                        }
+////                        FeedRequestsRowView(person: person, answeredFilter: "current")
+//                        PrayerFeedCurrentView(person: person)
+//                            .fixedSize(horizontal: false, vertical: true)
+//                            .getSizeOfView(getHeight: { size in
+//                                sizeArray[1] = size
+//                                if initialHeight == 0 {
+//                                    initialHeight = size.height
+//                                }
+//                            })
+//                            .tag(1)
+////                            .getSizeOfView {
+////                                height = $0
+////                            }
+//                        
+//                        PrayerFeedAnsweredView(person: person)
+////                        FeedRequestsRowView(person: person, answeredFilter: "answered")
+//                            .fixedSize(horizontal: false, vertical: true)
+//                            .getSizeOfView(getHeight: { size in
+//                                sizeArray[2] = size
+//                            })
+//                            .tag(2)
+////                            .getSizeOfView {
+////                                height = $0
+////                            }
+//                    }
+//                    .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+//                    .frame(height: height)
+//                    .frame(maxWidth: .infinity)
+//                    .sheet(isPresented: $showSubmit, onDismiss: {
+//                    }, content: {
+//                        SubmitPrayerRequestForm(person: person)
+//                    })
+//                    .onChange(of: selectedPage) {
+//                        height = sizeArray[selectedPage].height
+//                    }
+//                    .onChange(of: initialHeight) { oldValue, newValue in
+//                        height = newValue
+//                    }
+//                }
+//            }
+//            .toolbar {
+//                ToolbarItem(placement: .topBarTrailing) {
+//                    Button(action: { showSubmit.toggle()
+//                    }) {
+//                        Image(systemName: "plus")
+//                    }
+//                    .padding(.trailing, 15)
+//                }
+//            }
+//            .navigationTitle("prayer feed")
+//            .navigationBarTitleDisplayMode(.automatic)
+//            .scrollIndicators(.hidden)
+////            .scrollTargetBehavior(.paging)
+////            .scrollTargetLayout()
+//        }
 }
 
 struct FeedRequestsRowView: View {
@@ -88,6 +219,8 @@ struct FeedRequestsRowView: View {
     @Environment(UserProfileHolder.self) var userHolder
     var person: Person
     var answeredFilter: String
+//    @Binding var selectedPage: Int
+    
     
     var body: some View {
         LazyVStack {
@@ -117,21 +250,22 @@ struct FeedRequestsRowView: View {
             PrayerRequestFormView(person: userHolder.person, prayerRequest: $prayerRequestVar)
         })
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-//        .getSizeOfView {
-//            self.height = $0
-//            print(height)
-//        }
     }
 }
 
 struct PrayerFeedAnsweredView: View {
     // view to only see 'answered' prayers
     var person: Person
+//    @Binding var selectedPage: Int
+    @Environment(UserProfileHolder.self) var userHolder
+    
 //    @Binding var height: CGFloat
     
     var body: some View {
-        FeedRequestsRowView(person: person, answeredFilter: "answered")
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        ScrollView {
+            FeedRequestsRowView(person: person, answeredFilter: "answered")
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
@@ -139,10 +273,14 @@ struct PrayerFeedCurrentView: View {
     // view to see 'current' prayers
     var person: Person
 //    @Binding var height: CGFloat
-//    
+//    @Binding var selectedPage: Int
+    @Environment(UserProfileHolder.self) var userHolder
+//
     var body: some View {
-        FeedRequestsRowView(person: person, answeredFilter: "current")
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        ScrollView {
+            FeedRequestsRowView(person: person, answeredFilter: "current")
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
@@ -150,16 +288,19 @@ struct PrayerFeedPinnedView: View {
     // view to only see 'pinned' prayers
     var person: Person
 //    @Binding var height: CGFloat
+//    @Binding var selectedPage: Int
+    @Environment(UserProfileHolder.self) var userHolder
     
     var body: some View {
-        FeedRequestsRowView(person: person, answeredFilter: "pinned")
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        ScrollView {
+            FeedRequestsRowView(person: person, answeredFilter: "pinned")
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
-struct SizePreferenceKey: PreferenceKey {
+struct OffsetKey: PreferenceKey {
     static let defaultValue: CGFloat = .zero
-    
     static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
         value = nextValue()
     }
@@ -167,22 +308,42 @@ struct SizePreferenceKey: PreferenceKey {
 
 extension View {
     @ViewBuilder
-    func getSizeOfView(_ getHeight: @escaping (CGFloat) -> ()) -> some View {
+    func offsetX(completion: @escaping (CGFloat) -> ()) -> some View {
         self
-            .background {
-                GeometryReader { geometry in
-                    Color.clear.preference(
-                        key: SizePreferenceKey.self,
-                        value: geometry.size.height
-                    )
-                    .onPreferenceChange(SizePreferenceKey.self) { value in
-                        getHeight(value)
-                    }
+            .overlay {
+                GeometryReader {
+                    let minX = $0.frame(in: .scrollView(axis: .horizontal)).minX
+                    
+                    Color.clear
+                        .preference(key: OffsetKey.self, value: minX)
+                        .onPreferenceChange(OffsetKey.self, perform: completion)
                 }
             }
     }
+    
+    @ViewBuilder
+    func tabMask(_ tabProgress: CGFloat) -> some View {
+        
+        ZStack {
+            self
+                .foregroundStyle(.gray)
+            
+            self
+                .symbolVariant(.fill)
+                .mask {
+                    GeometryReader {
+                        let size = $0.size
+                        let capsuleWidth = size.width / CGFloat(Tab.allCases.count)
+                        
+                        Capsule()
+                            .frame(width: capsuleWidth)
+                            .offset(x: tabProgress * (size.width - capsuleWidth))
+                    }
+                }
+        }
+    }
 }
-
-#Preview {
-    PrayerFeedView(person: Person(username: ""))
-}
+//
+//#Preview {
+//    PrayerFeedView(person: Person(username: ""))
+//}

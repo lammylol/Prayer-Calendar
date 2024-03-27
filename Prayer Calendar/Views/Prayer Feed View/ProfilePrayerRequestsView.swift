@@ -20,10 +20,10 @@ struct ProfilePrayerRequestsView: View {
     @State var prayerRequests = [PrayerRequest]()
     
     let db = Firestore.firestore()
-    
-    func handleTap(prayerRequest: PrayerRequest) async {
-        prayerRequestVar = prayerRequest
-    }
+//    
+//    func handleTap(prayerRequest: PrayerRequest) async {
+//        prayerRequestVar = prayerRequest
+//    }
     
     var body: some View {
         LazyVStack {
