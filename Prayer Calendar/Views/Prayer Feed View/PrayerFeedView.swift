@@ -37,41 +37,52 @@ struct PrayerFeedView: View {
                     GeometryReader {
                         let size = $0.size
                         
-//                        ScrollView(.horizontal) {
-                            //                            GeometryReader { geo in
+                        ScrollView(.horizontal) {
                             HStack(spacing: 0) {
-//                                if userHolder.pinnedPrayerRequests.isEmpty == false {
-//                                    PrayerFeedPinnedView(person: person, height: $height)
-//                                        .containerRelativeFrame(.horizontal)
-//                                        .id(Tab.pinned)
-//                                        .fixedSize(horizontal: false, vertical: true)
-//                                }
-//                                PrayerFeedCurrentView(person: person, height: $height)
-//                                    .containerRelativeFrame(.horizontal)
-//                                    .id(Tab.current)
-//                                    .fixedSize(horizontal: false, vertical: true)
+                                PrayerFeedCurrentView(person: person, height: $height)
+                                    .containerRelativeFrame(.horizontal)
+                                    .id(Tab.current)
                                 PrayerFeedAnsweredView(person: person, height: $height)
                                     .containerRelativeFrame(.horizontal)
                                     .id(Tab.answered)
+                            }
+                        }
+                        .scrollPosition(id: $selectedTab)
+                        .scrollTargetBehavior(.paging)
+                            //                            GeometryReader { geo in
+//                            HStack(spacing: 0) {
+////                                if userHolder.pinnedPrayerRequests.isEmpty == false {
+////                                    PrayerFeedPinnedView(person: person, height: $height)
+////                                        .containerRelativeFrame(.horizontal)
+////                                        .id(Tab.pinned)
+////                                        .fixedSize(horizontal: false, vertical: true)
+////                                }
+                                PrayerFeedCurrentView(person: person, height: $height)
+                                    .containerRelativeFrame(.horizontal)
+                                    .id(Tab.current)
                                     .fixedSize(horizontal: false, vertical: true)
-                            }
-                            .offsetX { value in
-                                let progress = -value / (size.width * CGFloat(Tab.allCases.count - 1))
-                                tabProgress = max(min(progress, 1), 0)
-                            }
+////                                PrayerFeedAnsweredView(person: person, height: $height)
+////                                    .containerRelativeFrame(.horizontal)
+////                                    .id(Tab.answered)
+////                                    .fixedSize(horizontal: false, vertical: true)
+//                            }
+//                            .offsetX { value in
+//                                let progress = -value / (size.width * CGFloat(Tab.allCases.count - 1))
+//                                tabProgress = max(min(progress, 1), 0)
+//                            }
                             //                                .frame(idealHeight: height)
                             //                            }
 //                        }
-//                        .scrollPosition(id: $selectedTab)
 //                        .onChange(of: selectedTab) {
 //                            self.height = height
 //                        }
-//                        .scrollTargetBehavior(.paging)
+//
                     }
+                    .frame(minHeight: height, alignment: .top) // necessary to hold frame while in GeometryReader and ScrollView
                 }
 //                .frame(height: height)
 //                .fixedSize(horizontal: false, vertical: true)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .navigationTitle("prayer feed")
             }
         }
@@ -235,13 +246,11 @@ struct FeedRequestsRowView: View {
     
     
     var body: some View {
-        LazyVStack {
-            NavigationStack {
-                ForEach($prayerRequests) { prayerRequest in
-                    LazyVStack {
-                        PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "feed")
-                        Divider()
-                    }
+        NavigationStack {
+            ForEach($prayerRequests) { prayerRequest in
+                LazyVStack {
+                    PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "feed")
+                    Divider()
                 }
             }
         }
@@ -261,7 +270,7 @@ struct FeedRequestsRowView: View {
         }, content: {
             PrayerRequestFormView(person: userHolder.person, prayerRequest: $prayerRequestVar)
         })
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
     }
 }
 
@@ -274,13 +283,7 @@ struct PrayerFeedAnsweredView: View {
     @Binding var height: CGFloat
     
     var body: some View {
-//        ScrollView {
-        LazyVStack {
-            FeedRequestsRowView(person: person, answeredFilter: "answered")
-                .fixedSize(horizontal: false, vertical: true)
-        }
-//        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        FeedRequestsRowView(person: person, answeredFilter: "answered")
         .getSizeOfView(completion: {
             height = $0
         })
@@ -296,13 +299,7 @@ struct PrayerFeedCurrentView: View {
     @Environment(UserProfileHolder.self) var userHolder
 //
     var body: some View {
-//        ScrollView {
-        LazyVStack {
-            FeedRequestsRowView(person: person, answeredFilter: "current")
-                .fixedSize(horizontal: false, vertical: true)
-        }
-//        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        FeedRequestsRowView(person: person, answeredFilter: "current")
         .getSizeOfView(completion: {
             height = $0
         })
