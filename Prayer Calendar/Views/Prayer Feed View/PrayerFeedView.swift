@@ -12,7 +12,8 @@ struct PrayerFeedView: View {
     @State private var showEdit: Bool = false
     @State private var selectedPage: Int = 1
 
-    @State private var selectedTab: Tab? = Tab.current
+//    @State private var selectedTab: Tab? = Tab.current
+    @State private var selectedTab: Int = 1
     @State private var tabProgress: CGFloat = 0
     @State private var height: CGFloat = 0
     @State private var sizeArray: [CGFloat] = [.zero, .zero, .zero]
@@ -28,115 +29,161 @@ struct PrayerFeedView: View {
     var body: some View {
         NavigationStack {
             ScrollView(.vertical) {
-                VStack {
-                    //Custom Tab Bar
-                    CustomTabBar(pinned: userHolder.pinnedPrayerRequests)
-                    
-                    // Paging View
-                    GeometryReader {
-                        let size = $0.size
-                        
-                        ScrollView(.horizontal) {
-                            HStack(spacing: 0) {
-                                if userHolder.pinnedPrayerRequests.isEmpty == false {
-                                    PrayerFeedPinnedView(person: person, height: $height)
-                                        .containerRelativeFrame(.horizontal)
-                                        .id(Tab.pinned)
-                                }
-                                PrayerFeedCurrentView(person: person, height: $height)
-                                    .containerRelativeFrame(.horizontal)
-                                    .id(Tab.current)
-                                PrayerFeedAnsweredView(person: person, height: $height)
-                                    .containerRelativeFrame(.horizontal)
-                                    .id(Tab.answered)
-                            }
-                            .offsetX { value in
-                                let progress = -value / (size.width * CGFloat(Tab.allCases.count - 1))
-                                tabProgress = max(min(progress, 1), 0)
-                            }
-                        }
-                        .scrollPosition(id: $selectedTab)
-                        .scrollTargetBehavior(.paging)
-//                        .onChange(of: selectedTab) {
-//                            self.height = height
-//                        }
-//
-                    }
-                    .frame(minHeight: height, alignment: .top) // necessary to hold frame while in GeometryReader and ScrollView
+                // title hides when you scroll down
+                HStack {
+                    Text("prayer feed")
+                        .font(.largeTitle)
+                        .bold()
+                        .padding(.leading, 20)
+                    Spacer()
                 }
-//                .frame(height: height)
-//                .fixedSize(horizontal: false, vertical: true)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .navigationTitle("prayer feed")
+                .offset(y: 15)
+                LazyVStack(alignment: .leading, pinnedViews: [.sectionHeaders]) {
+                    // Pinned section
+                    Section( header:
+                        //Custom Tab Bar
+                        CustomTabBarNew(selectedTab: $selectedTab, pinned: userHolder.pinnedPrayerRequests)
+                        .background(Color.white)
+                    ) {
+                        VStack {
+                            // Paging View
+                            GeometryReader { geo in
+                                TabView(selection: $selectedTab) {
+                                    if userHolder.pinnedPrayerRequests.isEmpty == false {
+                                        PrayerFeedPinnedView(person: person, height: $height)
+                                            .containerRelativeFrame(.horizontal)
+                                            .tag(0)
+                                    }
+                                    PrayerFeedCurrentView(person: person, height: $height)
+                                        .containerRelativeFrame(.horizontal)
+                                        .tag(1)
+                                    PrayerFeedAnsweredView(person: person, height: $height)
+                                        .containerRelativeFrame(.horizontal)
+                                        .tag(2)
+                                }
+                                .tabViewStyle(.page(indexDisplayMode: .never))
+                                    
+//                                ScrollView(.horizontal) {
+//                                    HStack(spacing: 0) {
+//                                        if userHolder.pinnedPrayerRequests.isEmpty == false {
+//                                            PrayerFeedPinnedView(person: person, height: $height)
+//                                                .containerRelativeFrame(.horizontal)
+//                                                .id(Tab.pinned)
+//                                        }
+//                                        PrayerFeedCurrentView(person: person, height: $height)
+//                                            .containerRelativeFrame(.horizontal)
+//                                            .id(Tab.current)
+//                                        PrayerFeedAnsweredView(person: person, height: $height)
+//                                            .containerRelativeFrame(.horizontal)
+//                                            .id(Tab.answered)
+//                                    }
+//                                    .offsetX { value in
+//                                        if userHolder.pinnedPrayerRequests.isEmpty == false {
+//                                            let progress = -value / (size.width * CGFloat(3 - 1))
+//                                            tabProgress = max(min(progress, 1), 0)
+//                                        } else {
+//                                            let progress = -value / (size.width * CGFloat(2 - 1))
+//                                            tabProgress = max(min(progress, 1), 0)
+//                                        }
+//                                    }
+//                                }
+//                                .scrollPosition(id: $selectedTab)
+//                                .scrollTargetBehavior(.paging)
+                                //                        .onChange(of: selectedTab) {
+                                //                            self.height = height
+                                //                        }
+                                //
+                            }
+                            .frame(minHeight: height, alignment: .top) // necessary to hold frame while in GeometryReader and ScrollView
+                        }
+                        //                .frame(height: height)
+                        //                .fixedSize(horizontal: false, vertical: true)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    }
+                }
             }
+            .clipped()
         }
     }
     
-    @ViewBuilder
-    func CustomTabBar(pinned: [PrayerRequest]) -> some View {
-        var tabs: [Tab] = []
-        
-        HStack(spacing: 0) {
-            if pinned.isEmpty == true {
-                ForEach([Tab.pinned, Tab.current, Tab.answered], id: \.rawValue) { tab in
-                    HStack(spacing: 10) {
-                        Text(tab.rawValue)
-                            .font(.callout)
-                            .font(.system(size: 10))
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 10)
-                    .onTapGesture {
-                        //Updating Tab
-                        withAnimation(.snappy) {
-                            selectedTab = tab
-                        }
-                    }
-                    
-                }
-            } else {
-                ForEach([Tab.current, Tab.answered], id: \.rawValue) { tab in
-                    HStack(spacing: 10) {
-                        Text(tab.rawValue)
-                            .font(.callout)
-                            .font(.system(size: 10))
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 10)
-                    .onTapGesture {
-                        //Updating Tab
-                        withAnimation(.snappy) {
-                            selectedTab = tab
-                        }
-                    }
-                }
-            }
-        }
-//        .task {
+//    @ViewBuilder
+//    func CustomTabBar(pinned: [PrayerRequest]) -> some View {
+//        VStack {
 //            if pinned.isEmpty == false {
-//                tabs = [Tab.pinned, Tab.current, Tab.answered]
+//                HStack(spacing: 0) {
+//                    ForEach([Tab.pinned, Tab.current, Tab.answered], id: \.rawValue) { tab in
+//                        HStack(spacing: 10) {
+//                            Text(tab.rawValue)
+//                                .font(.callout)
+//                                .font(.system(size: 10))
+//                        }
+//                        .frame(maxWidth: .infinity)
+//                        .padding(.vertical, 10)
+//                        .onTapGesture {
+//                            //Updating Tab
+//                            withAnimation(.snappy) {
+//                                selectedTab = tab
+//                            }
+//                        }
+//                        
+//                    }
+//                }
+//                .tabMask(tabProgress, tabs: [Tab.pinned, Tab.current, Tab.answered])
+//                .background {
+//                    GeometryReader {
+//                        let size = $0.size
+//                        let capsuleWidth = size.width / CGFloat(3)
+//                        
+//                        Rectangle()
+//                            .fill(scheme == .dark ? .white : .gray)
+//                            .frame(width: capsuleWidth, height: 3)
+//                            .offset(x: tabProgress * (size.width - capsuleWidth), y: 40)
+//                    }
+//                }
 //            } else {
-//                tabs = [Tab.current, Tab.answered]
+//                HStack(spacing: 0) {
+//                    ForEach([Tab.current, Tab.answered], id: \.rawValue) { tab in
+//                        HStack(spacing: 10) {
+//                            Text(tab.rawValue)
+//                                .font(.callout)
+//                                .font(.system(size: 10))
+//                        }
+//                        .frame(maxWidth: .infinity)
+//                        .padding(.vertical, 10)
+//                        .onTapGesture {
+//                            //Updating Tab
+//                            withAnimation(.snappy) {
+//                                selectedTab = tab
+//                            }
+//                        }
+//                    }
+//                }
+//                .tabMask(tabProgress, tabs: [Tab.current, Tab.answered])
+//                .background {
+//                    GeometryReader {
+//                        let size = $0.size
+//                        let capsuleWidth = size.width / CGFloat(2)
+//                        
+//                        Rectangle()
+//                            .fill(scheme == .dark ? .white : .gray)
+//                            .frame(width: capsuleWidth, height: 3)
+//                            .offset(x: tabProgress * (size.width - capsuleWidth), y: 40)
+//                    }
+//                }
 //            }
 //        }
-        .tabMask(tabProgress, tabs: tabs)
-        
-        // Scrollable Active Tab Indicator
-        .background {
-            GeometryReader {
-                let size = $0.size
-                let capsuleWidth = size.width / CGFloat(Tab.allCases.count)
-                
-                Rectangle()
-                    .fill(scheme == .dark ? .white : .gray)
-                    .frame(width: capsuleWidth, height: 3)
-                    .offset(x: tabProgress * (size.width - capsuleWidth), y: 40)
-            }
-        }
-//        .background(.gray.opacity(0.1), in: .capsule)
-        .padding(.horizontal, 15)
-    }
+//    
+//        // Scrollable Active Tab Indicator
+//
+////        .background(.gray.opacity(0.1), in: .capsule)
+//        .padding(.horizontal, 15)
+//    }
+//    
 }
+    
+        // Scrollable Active Tab Indicator
+
+//        .background(.gray.opacity(0.1), in: .capsule)
 
 struct FeedRequestsRowView: View {
     @State private var showEdit: Bool = false
@@ -282,7 +329,7 @@ extension View {
                 .mask {
                     GeometryReader {
                         let size = $0.size
-                        let capsuleWidth = size.width / CGFloat(Tab.allCases.count)
+                        let capsuleWidth = size.width / CGFloat(tabs.count)
                         
                         Capsule()
                             .frame(width: capsuleWidth)

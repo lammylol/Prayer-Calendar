@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7A0AFA862BB777510051A4E0 /* CustomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A0AFA852BB777510051A4E0 /* CustomTabBar.swift */; };
+		7A0AFA882BB777750051A4E0 /* TabBarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A0AFA872BB777750051A4E0 /* TabBarButton.swift */; };
 		7A12A9CE2B87FA3B00707E3C /* PrayerUpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A12A9CD2B87FA3B00707E3C /* PrayerUpdateView.swift */; };
 		7A27B7B62B2FE0EB00FF72FC /* CreateProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A27B7B52B2FE0EA00FF72FC /* CreateProfileView.swift */; };
 		7A285BAA2B959D5000BAF4C0 /* ForgotPassword.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A285BA92B959D5000BAF4C0 /* ForgotPassword.swift */; };
@@ -72,6 +74,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7A0AFA852BB777510051A4E0 /* CustomTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBar.swift; sourceTree = "<group>"; };
+		7A0AFA872BB777750051A4E0 /* TabBarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarButton.swift; sourceTree = "<group>"; };
 		7A12A9CD2B87FA3B00707E3C /* PrayerUpdateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerUpdateView.swift; sourceTree = "<group>"; };
 		7A27B7B52B2FE0EA00FF72FC /* CreateProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateProfileView.swift; sourceTree = "<group>"; };
 		7A285BA92B959D5000BAF4C0 /* ForgotPassword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPassword.swift; sourceTree = "<group>"; };
@@ -146,6 +150,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7A0AFA842BB7773A0051A4E0 /* Custom Tab Bar */ = {
+			isa = PBXGroup;
+			children = (
+				7A0AFA852BB777510051A4E0 /* CustomTabBar.swift */,
+				7A0AFA872BB777750051A4E0 /* TabBarButton.swift */,
+			);
+			path = "Custom Tab Bar";
+			sourceTree = "<group>";
+		};
 		7A285B9F2B959B1B00BAF4C0 /* Data Holders */ = {
 			isa = PBXGroup;
 			children = (
@@ -203,6 +216,7 @@
 		7A285BA42B959B7B00BAF4C0 /* Prayer Feed View */ = {
 			isa = PBXGroup;
 			children = (
+				7A0AFA842BB7773A0051A4E0 /* Custom Tab Bar */,
 				7A8D40B42B44A9CF00B029E6 /* PrayerFeedView.swift */,
 				7A5C72302AFEBADE00A75636 /* ProfilePrayerRequestsView.swift */,
 				7A5C72322AFF5D9E00A75636 /* PrayerRequestRow.swift */,
@@ -467,6 +481,7 @@
 			files = (
 				7A416B7B2AFC71CB00249BB3 /* UIHelper.swift in Sources */,
 				7A5C72312AFEBADE00A75636 /* ProfilePrayerRequestsView.swift in Sources */,
+				7A0AFA882BB777750051A4E0 /* TabBarButton.swift in Sources */,
 				7A4F26352AD0D2B600FB086C /* ProfileView.swift in Sources */,
 				7A7CA4772B7E9FB5001922AA /* SettingsSecurityView.swift in Sources */,
 				7A92577C2B686BCF00D5EF35 /* ProfilePictureAvatar.swift in Sources */,
@@ -485,6 +500,7 @@
 				7AF4CF422B66F9370068908E /* PrayerFeedHelper.swift in Sources */,
 				7A5C72352AFF5E3100A75636 /* PrayerRequest.swift in Sources */,
 				7AFD17EA2B822C7C0015CD96 /* PrayerUpdateHelper.swift in Sources */,
+				7A0AFA862BB777510051A4E0 /* CustomTabBar.swift in Sources */,
 				7A4F26372AD0D2B600FB086C /* PrayerCalendarView.swift in Sources */,
 				7A4F26392AD0D2B600FB086C /* CalendarHelper.swift in Sources */,
 				7A4F263A2AD0D2B600FB086C /* MonthStruct.swift in Sources */,
