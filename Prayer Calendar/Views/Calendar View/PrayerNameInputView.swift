@@ -58,7 +58,13 @@ struct PrayerNameInputView: View {
                 if self.isFocused == true {
                     ToolbarItem(placement: .topBarTrailing) {
                         Button(action: {
-                            submitList(inputText: prayerList, userID: userHolder.person.userID, existingInput: dataHolder.prayerList)
+                            do { 
+                                try submitList(inputText: prayerList, userID: userHolder.person.userID, existingInput: dataHolder.prayerList)
+                            } catch PrayerPersonRetrievalError.incorrectUsername {
+                                saved = "Invalid username entered"
+                            } catch {
+                                saved = error.localizedDescription
+                            }
                         }) {
                             Text("Save")
                                 .offset(x: -4)
@@ -78,7 +84,7 @@ struct PrayerNameInputView: View {
     }
     
     //function to submit prayer list to firestore. This will update users' prayer list for retrieval into prayer calendar and it will also tie a friend to this user if the username is linked.
-    func submitList(inputText: String, userID: String, existingInput: String) {
+    func submitList(inputText: String, userID: String, existingInput: String) throws {
         let inputList = inputText.split(separator: "\n").map(String.init)
 
         let db = Firestore.firestore()
@@ -130,22 +136,30 @@ struct PrayerNameInputView: View {
             
             for usernameOrName in insertions {
                 if usernameOrName.contains("/") == false { // This checks if the person is a linked account or not. If it was linked, usernameOrName would be a username. Usernames cannot have special characters in them.
-                    let person = await PrayerPersonHelper().retrieveUserInfoFromUsername(person: Person(username: usernameOrName), userHolder: userHolder) // retrieve the "person" structure based on their username. Will return back user info.
-                    
-                    // Update the friends list of the person who you have now added to your list. Their friends list is updated, so that when they post, it will add to your feed. At the same time, any of their existing requests will also populate into your feed.
-                    let refFriends = db.collection("users").document(person.userID).collection("friendsList").document(userHolder.person.userID)
-                    do {
-                        if try await refFriends.getDocument().exists == false {
-                            try await refFriends.setData([
-                                "username": userHolder.person.username
-                            ])
-                            await updateFriendHistoricalPrayersIntoFeed(userID: userID, person: person)
+                    do { 
+                        let person = try await PrayerPersonHelper().retrieveUserInfoFromUsername(person: Person(username: usernameOrName), userHolder: userHolder) // retrieve the "person" structure based on their username. Will return back user info.
+                        
+                        guard person.userID != "" else {
+                            throw PrayerPersonRetrievalError.incorrectUsername
                         }
+                        // Update the friends list of the person who you have now added to your list. Their friends list is updated, so that when they post, it will add to your feed. At the same time, any of their existing requests will also populate into your feed.
+                        let refFriends = db.collection("users").document(person.userID).collection("friendsList").document(userHolder.person.userID)
+                        
+                        do {
+                            if try await refFriends.getDocument().exists == false {
+                                try await refFriends.setData([
+                                    "username": userHolder.person.username
+                                ])
+                                await updateFriendHistoricalPrayersIntoFeed(userID: userID, person: person)
+                            }
+                        } catch {
+                            print("error update friend: username")
+                        }
+                        
+                        linkedFriends.append(person.firstName + " " + person.lastName) // for printing purposes.
                     } catch {
-                        print("error update friend: username")
+                        print(error.localizedDescription)
                     }
-                    
-                    linkedFriends.append(person.firstName + " " + person.lastName) // for printing purposes.
                     
                 } else { //else is for any names you have added which do not have a username; under your account and not linked.
                     
@@ -156,8 +170,11 @@ struct PrayerNameInputView: View {
             for usernameOrName in removals {
                 if usernameOrName.contains("/") == false { // This checks if the person is a linked account or not. If it was linked, usernameOrName would be a username. Usernames cannot have special characters in them.
                     
-                    let person = await PrayerPersonHelper().retrieveUserInfoFromUsername(person: Person(username: usernameOrName), userHolder: userHolder) // retrieve the "person" structure based on their username. Will return back user info.
+                    let person = try await PrayerPersonHelper().retrieveUserInfoFromUsername(person: Person(username: usernameOrName), userHolder: userHolder) // retrieve the "person" structure based on their username. Will return back user info.
                     
+                    guard person.userID != "" else {
+                        throw PrayerPersonRetrievalError.incorrectUsername
+                    }
                     // Update the friends list of the person who you have now removed from your list. Their friends list is updated, so that when they post, it will not add to your feed.
                     let refFriends = db.collection("users").document(person.userID).collection("friendsList").document(userHolder.person.userID)
                     try await refFriends.delete()

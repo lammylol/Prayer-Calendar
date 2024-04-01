@@ -11,6 +11,7 @@ import FirebaseFirestore
 
 enum PrayerPersonRetrievalError: Error {
     case noUsername
+    case incorrectUsername
 //    case errorRetrievingFromFirebase
 }
 
@@ -77,7 +78,7 @@ class PrayerPersonHelper {
     }
     
     // Retrieve requested userID off of username
-    func retrieveUserInfoFromUsername(person: Person, userHolder: UserProfileHolder) async -> Person {
+    func retrieveUserInfoFromUsername(person: Person, userHolder: UserProfileHolder) async throws -> Person {
         var userID = ""
         var firstName = person.firstName
         var lastName = person.lastName
@@ -100,14 +101,13 @@ class PrayerPersonHelper {
                         firstName = document.get("firstName") as? String ?? ""
                         lastName = document.get("lastName") as? String ?? ""
                     } else {
-                        print("Error Retrieving User ID. Document does not exist")
+                        throw PrayerPersonRetrievalError.noUsername
                     }
                 }
             } catch {
                     print("Error getting document: \(error)")
             }
         }
-        
         print("username: \(person.username); userID: \(userID); firstName: \(firstName); lastName: \(lastName)")
         return Person(userID: userID, username: person.username, firstName: firstName, lastName: lastName)
     }

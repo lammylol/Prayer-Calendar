@@ -90,7 +90,7 @@ struct ProfilePrayerRequestsView: View {
         }
         .task {
             do {
-                person = await PrayerPersonHelper().retrieveUserInfoFromUsername(person: person, userHolder: userHolder)
+                person = try await PrayerPersonHelper().retrieveUserInfoFromUsername(person: person, userHolder: userHolder)
                 prayerRequests = try await PrayerRequestHelper().getPrayerRequests(userID: person.userID, person: person)
                 print("Success retrieving prayer requests for \(person.userID)")
             } catch PrayerRequestRetrievalError.noUserID {
