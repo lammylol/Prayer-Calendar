@@ -3,6 +3,7 @@ Prayer Calendar App on Swift
 
 <img width="1204" alt="Screenshot 2023-11-02 at 8 23 13 AM" src="https://github.com/lammylol/Prayer-Calendar/assets/44993071/669810be-6829-4dfd-b5fd-41297521480b">
 
+//
 
 An application used to glorify God by encouraging the act of prayer across the globe. Our vision is to cultivate a culture of prayer across all communities, bring encouragement to all peoples by praying for one another, and see God’s captivating love for each person through his response to our prayers.
 
