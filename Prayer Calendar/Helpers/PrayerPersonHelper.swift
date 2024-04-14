@@ -12,7 +12,7 @@ import FirebaseFirestore
 enum PrayerPersonRetrievalError: Error {
     case noUsername
     case incorrectUsername
-//    case errorRetrievingFromFirebase
+    case errorRetrievingFromFirebase
 }
 
 class PrayerPersonHelper {
@@ -133,5 +133,32 @@ class PrayerPersonHelper {
         return check
     }
     
-
+    func updateUserData(userID: String, prayStartDate: Date, prayerList: String) {
+        //Create user data in personal doc.
+        let db = Firestore.firestore()
+        
+        let ref = db.collection("users").document(userID)
+        
+        ref.updateData([
+            "userID": userID,
+            "prayStartDate": prayStartDate,
+            "prayerList": prayerList
+        ])
+    }
+    
+    //Adding a friend - this updates the historical prayer feed
+    func updateFriendHistoricalPrayersIntoFeed(userID: String, person: Person) async throws {
+        //In this scenario, userID is the userID of the person retrieving data from the 'person'.
+        do {
+            //user is retrieving prayer requests of the friend: person.userID and person: person.
+            let prayerRequests = try await PrayerRequestHelper().getPrayerRequests(userID: person.userID, person: person)
+            
+            //for each prayer request, user is taking the friend's prayer request and updating them to their own feed. The user becomes the 'friend' of the person.
+            for prayer in prayerRequests {
+                PrayerRequestHelper().updatePrayerFeed(prayerRequest: prayer, person: person, friendID: userID, updateFriend: true)
+            }
+        } catch {
+            throw PrayerPersonRetrievalError.errorRetrievingFromFirebase
+        }
+    }
 }

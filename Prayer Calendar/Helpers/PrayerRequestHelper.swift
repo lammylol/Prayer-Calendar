@@ -260,6 +260,8 @@ class PrayerRequestHelper {
                 "latestUpdateDatePosted": prayerRequest.latestUpdateDatePosted,
                 "latestUpdateType": prayerRequest.latestUpdateType
             ])
+            print(prayerRequest.id)
+            print(friendID)
         } else {
             let ref = db.collection("prayerFeed").document(person.userID).collection("prayerRequests").document(prayerRequest.id)
             ref.setData([

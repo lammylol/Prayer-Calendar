@@ -27,7 +27,7 @@ extension UserProfileHolder {
 }
 
 @Observable class PrayerListHolder {
-    var usedrID: String = "" // unknown if needed anymore.
+    var userID: String = "" // unknown if needed anymore.
     var prayerList: String = ""
     var prayStartDate = Date()
 }

@@ -37,7 +37,7 @@ struct PrayerCalendarView: View {
                             Text("")
                                 .toolbar() {
                                     ToolbarItem(placement: .automatic) {
-                                        NavigationLink(destination: PrayerNameInputView(dataHolder: prayerListHolder)){
+                                        NavigationLink(destination: PrayerNameInputView(prayerListHolder: prayerListHolder)){
                                             Text("edit")
                                                 .bold()
                                                 .font(.system(size: 14))
