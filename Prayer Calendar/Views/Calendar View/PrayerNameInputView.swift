@@ -137,20 +137,16 @@ struct PrayerNameInputView: View {
             for usernameOrName in insertions {
                 if usernameOrName.contains("/") == false { // This checks if the person is a linked account or not. If it was linked, usernameOrName would be a username. Usernames cannot have special characters in them.
                     
-                        var person = Person.blank
+                    var person = Person.blank
                         
-                        do {
-                            person = try await PrayerPersonHelper().retrieveUserInfoFromUsername(person: Person(username: usernameOrName), userHolder: userHolder) // retrieve the "person" structure based on their username. Will return back user info.
-                        } catch {
-                            throw error
-                        }
+                    guard await PrayerPersonHelper().checkIfUsernameExists(username: usernameOrName) == true else {
+                        throw PrayerPersonRetrievalError.incorrectUsername
+                    }
+                    
+                    person = try await PrayerPersonHelper().retrieveUserInfoFromUsername(person: Person(username: usernameOrName), userHolder: userHolder) // retrieve the "person" structure based on their username. Will return back user info.
                         
-                        guard person.userID.isEmpty == false else {
-                            throw PrayerPersonRetrievalError.incorrectUsername
-                        }
-                        
-                        // Update the friends list of the person who you have now added to your list. Their friends list is updated, so that when they post, it will add to your feed. At the same time, any of their existing requests will also populate into your feed.
-                        let refFriends = db.collection("users").document(person.userID).collection("friendsList").document(userHolder.person.userID)
+                    // Update the friends list of the person who you have now added to your list. Their friends list is updated, so that when they post, it will add to your feed. At the same time, any of their existing requests will also populate into your feed.
+                    let refFriends = db.collection("users").document(person.userID).collection("friendsList").document(userHolder.person.userID)
                         
                     do {
                         let document = try await refFriends.getDocument()
@@ -166,7 +162,7 @@ struct PrayerNameInputView: View {
                         print(error.localizedDescription)
                     }
                         
-                        linkedFriends.append(person.firstName + " " + person.lastName) // for printing purposes.
+                    linkedFriends.append(person.firstName + " " + person.lastName) // for printing purposes.
                 } else { //else is for any names you have added which do not have a username; under your account and not linked.
                     
                     // Fetch all historical prayers from that person into your feed, noting that these do not have a linked username. So you need to pass in your own userID into that person for the function to retrieve out of your prayerFeed/youruserID.
@@ -177,6 +173,8 @@ struct PrayerNameInputView: View {
                     }
                 }
             }
+        
+        print("Linked Friends: " + linkedFriends.description)
             
             for usernameOrName in removals {
                 if usernameOrName.contains("/") == false { // This checks if the person is a linked account or not. If it was linked, usernameOrName would be a username. Usernames cannot have special characters in them.
