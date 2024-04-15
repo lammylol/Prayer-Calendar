@@ -50,6 +50,7 @@ struct PrayerNameInputView: View {
                 Spacer()
                 Text(savedText())
                     .font(Font.system(size: 12))
+                    .foregroundStyle(Color.red)
                 Spacer()
             }
             .navigationTitle("Prayer Calendar List")
@@ -82,18 +83,18 @@ struct PrayerNameInputView: View {
         Task {
             do {
                 try await submitPrayerList(inputText: prayerList, prayStartDate: prayStartDate, userHolder: userHolder, existingInput: prayerListHolder.prayerList)
+                
+                saved = "Saved"
+                self.isFocused = false // removes focus so keyboard disappears
+//                dismiss() //dismiss view
+                
             } catch PrayerPersonRetrievalError.incorrectUsername {
-                print("invalid username entered")
                 saved = "invalid username entered"
+                print("invalid username entered")
 //                prayerList = prayerListHolder.prayerList
 //                prayStartDate = prayerListHolder.prayStartDate
             } catch {
                 print("error: \(error.localizedDescription)")
-            }
-            
-            if saved == "saved" {
-                self.isFocused = false // removes focus so keyboard disappears
-                dismiss() //dismiss view
             }
         }
     }
@@ -210,16 +211,17 @@ struct PrayerNameInputView: View {
 //            //reset local dataHolder
 //            prayerListHolder.prayerList = prayerList/*.joined(separator: "\n")*/
 //            prayerListHolder.prayStartDate = prayStartDate
-            saved = "Saved"
+//            saved = "Saved"
     }
     
     //Function to changed "saved" text. When user saves textEditor, saved will appear until the user clicks back into textEditor, then the words "saved" should disappear. This will also occur when cancel is selected.
     func savedText() -> String {
-        if self.isFocused == true {
-            return ""
-        } else {
-            return saved
-        }
+        return saved
+//        if self.isFocused == false {
+//            return ""
+//        } else {
+//            return saved
+//        }
     }
 }
 
