@@ -34,16 +34,19 @@ struct PrayerFeedView: View {
                     Text("prayer feed")
                         .font(.largeTitle)
                         .bold()
-                        .padding(.leading, 20)
+                        .padding(.leading, 16)
                     Spacer()
                 }
                 .offset(y: 15)
+                .padding(.top, 27)
                 LazyVStack(alignment: .leading, pinnedViews: [.sectionHeaders]) {
                     // Pinned section
                     Section( header:
                         //Custom Tab Bar
                         CustomTabBarNew(selectedTab: $selectedTab, pinned: userHolder.pinnedPrayerRequests)
-                        .background(Color.white)
+                        .background(
+                            scheme == .dark ? .black : .white
+                        )
                     ) {
                         VStack {
                             // Paging View

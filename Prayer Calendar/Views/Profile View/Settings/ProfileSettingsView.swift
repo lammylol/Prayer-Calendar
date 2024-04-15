@@ -17,7 +17,7 @@ struct ProfileSettingsView: View {
     var body: some View {
             Form {
                 Section {
-                    HStack {
+                    HStack (alignment: .center) {
                         Spacer()
                         VStack {
                             ProfilePictureAvatar(firstName: userHolder.person.firstName, lastName: userHolder.person.lastName, imageSize: 40, fontSize: 20)
@@ -25,11 +25,11 @@ struct ProfileSettingsView: View {
                         }
                         Spacer()
                     }
-                }
-                Section {
+                    .alignmentGuide(.listRowSeparatorLeading) { _ in 0 } // extends automatic separator divider. If not, it looks weird.
+                    
                     NavigationStack {
-                        NavigationLink(destination: ProfileSettingsChangePasswordView()){
-                            Text("Change Password")
+                        NavigationLink(destination: AccountSettings()){
+                            Text("Account Settings")
                         }
                     }
                 }
@@ -65,6 +65,53 @@ enum PasswordChangeError: Error {
     case invalidNewPasswordLength
 }
 
+struct DeleteButton: View {
+    @Environment(UserProfileHolder.self) var userHolder
+    @State private var isPresentingConfirm: Bool = false
+
+    var body: some View {
+        Button("Delete Account", role: .destructive) {
+            isPresentingConfirm = true
+        }
+        .confirmationDialog("Are you sure?",
+                            isPresented: $isPresentingConfirm) {
+            Button("Delete Account and Sign Out", role: .destructive) {
+                Task {
+                    do {
+                        try await PrayerPersonHelper().deletePerson(userID: userHolder.person.userID, friendsList: userHolder.friendsList)
+                        ProfileSettingsView().signOut()
+                        ProfileSettingsView().resetInfo()
+                    } catch {
+                        print(error)
+                    }
+                }
+            }
+        } message: {
+            Text("Are you sure you would like to delete your account? Deleting account will remove all history of prayer requests both in your account and in any friend feeds, and will not be able to be restored.")
+        }
+    }
+}
+
+struct AccountSettings: View {
+    @Environment(UserProfileHolder.self) var userHolder
+    
+    var body: some View {
+        Form {
+            Section {
+                NavigationStack {
+                    NavigationLink(destination: ProfileSettingsChangePasswordView()){
+                        Text("Change Password")
+                    }
+                }
+            }
+            Section {
+                DeleteButton()
+            }
+        }
+        .navigationTitle("Account Settings")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+}
 
 struct ProfileSettingsChangePasswordView: View {
     @Environment(UserProfileHolder.self) var userHolder
@@ -113,7 +160,6 @@ struct ProfileSettingsChangePasswordView: View {
     }
     
     func changePassword(currentPassword: String, newPassword: String) throws -> Void {
-        
         guard currentPassword == userHolder.userPassword else {
             throw PasswordChangeError.wrongCurrentPassword
         }

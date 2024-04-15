@@ -56,7 +56,7 @@ extension PrayerRequest {
             firstName: "",
             lastName: "",
             priority: "",
-            isPinned: true,
+            isPinned: false,
             prayerRequestTitle: "",
             latestUpdateText: "",
             latestUpdateDatePosted: Date(),

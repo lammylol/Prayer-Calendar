@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import FirebaseFirestore
+import FirebaseAuth
 
 enum PrayerPersonRetrievalError: Error {
     case noUsername
@@ -160,6 +161,64 @@ class PrayerPersonHelper {
             }
         } catch {
             throw PrayerPersonRetrievalError.errorRetrievingFromFirebase
+        }
+    }
+    
+    func deletePerson(userID: String, friendsList: [String]) async throws {
+        let db = Firestore.firestore()
+        
+        do {
+            // delete from prayer requests list.
+            let prayerRequests = try await db.collection("prayerRequests").whereField("userID", isEqualTo: userID).getDocuments()
+            
+            for request in prayerRequests.documents {
+                try await request.reference.delete()
+            }
+           
+            // delete prayerFeed
+            let prayerFeedUser = db.collection("prayerFeed").document(userID)
+            try await prayerFeedUser.delete()
+            
+            let prayerFeedRef = try await db.collection("prayerFeed").document(userID).collection("friendsList").getDocuments()
+            for request in prayerFeedRef.documents {
+                try await request.reference.delete()
+            }
+            
+            let prayerFeedRef2 = try await db.collection("prayerFeed").document(userID).collection("prayerList").getDocuments()
+            for request in prayerFeedRef2.documents {
+                try await request.reference.delete()
+            }
+            
+            // delete from friend's feed
+            if friendsList.isEmpty == false {
+                for friendID in friendsList {
+                    let prayerRequests = try await db.collection("prayerFeed").document(friendID).collection("prayerRequests").whereField("userID", isEqualTo: userID).getDocuments()
+                    
+                    for request in prayerRequests.documents {
+                        try await request.reference.delete()
+                    }
+                }
+            }
+            
+            // delete users info data.
+            let ref = db.collection("users").document(userID)
+            try await ref.delete()
+            
+            let userFriendsListRef = try await db.collection("users").document(userID).collection("friendsList").getDocuments()
+            for request in userFriendsListRef.documents {
+                try await request.reference.delete()
+            }
+            
+            let userPrayerListRef = try await db.collection("users").document(userID).collection("prayerList").getDocuments()
+            for request in userPrayerListRef.documents {
+                try await request.reference.delete()
+            }
+            
+            // remove firebase account
+            try await Auth.auth().currentUser?.delete()
+            
+        } catch {
+            throw error
         }
     }
 }
