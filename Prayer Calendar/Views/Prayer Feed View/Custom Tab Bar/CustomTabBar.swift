@@ -12,26 +12,36 @@ struct CustomTabBarNew: View {
     @Binding var selectedTab: Int
     @State var pinned: [PrayerRequest]
     @Environment(UserProfileHolder.self) var userHolder
+    @Environment(PrayerRequestViewModel.self) var viewModel
     
     var body: some View {
         HStack(alignment: .center) {
             if userHolder.pinnedPrayerRequests.isEmpty == false {
                 Button {
-                    selectedTab = 0
+                    Task {
+                        selectedTab = 0
+                        try await viewModel.statusFilter(option: .pinned)
+                    }
                 } label: {
                     TabBarButton(type: "Pinned", isSelected: selectedTab == 0)
                 }
             }
             
             Button {
-                selectedTab = 1
+                Task {
+                    selectedTab = 1
+                    try await viewModel.statusFilter(option: .current)
+                }
             } label: {
                 TabBarButton(type: "Current",  isSelected: selectedTab == 1)
                 
             }
             
             Button {
-                selectedTab = 2
+                Task {
+                    selectedTab = 2
+                    try await viewModel.statusFilter(option: .current)
+                }
             } label: {
                 TabBarButton(type: "Answered",  isSelected: selectedTab == 2)
             }

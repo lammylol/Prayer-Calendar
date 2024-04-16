@@ -17,16 +17,16 @@ enum PrayerPersonRetrievalError: Error {
 }
 
 class PrayerPersonHelper {
+    let db = Firestore.firestore()
     
 //    This function retrieves PrayerList data from Firestore.
     func getPrayerList(userHolder: UserProfileHolder, prayerListHolder: PrayerListHolder) async {
-            let ref = Firestore.firestore()
-            .collection("users").document(userHolder.person.userID)
+            let ref = db.collection("users").document(userHolder.person.userID)
             
             ref.getDocument{(document, error) in
                 if let document = document, document.exists {
                     
-                    let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
+//                    let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
 //                    print("Document data: " + dataDescription)
                     
                     //Update Dataholder with PrayStartDate from Firestore
@@ -88,8 +88,6 @@ class PrayerPersonHelper {
             userID = userHolder.person.userID
         } else {
             do {
-                let db = Firestore.firestore()
-                
                 let ref = try await db.collection("users").whereField("username", isEqualTo: person.username).getDocuments()
                 
                 for document in ref.documents {
@@ -116,8 +114,6 @@ class PrayerPersonHelper {
     func checkIfUsernameExists(username: String) async -> Bool {
         var check = Bool()
         
-        let db = Firestore.firestore()
-        
         do {
             let ref = try await db.collection("users").whereField("username", isEqualTo: username).getDocuments()
             
@@ -136,8 +132,6 @@ class PrayerPersonHelper {
     
     func updateUserData(userID: String, prayStartDate: Date, prayerList: String) {
         //Create user data in personal doc.
-        let db = Firestore.firestore()
-        
         let ref = db.collection("users").document(userID)
         
         ref.updateData([
@@ -165,8 +159,6 @@ class PrayerPersonHelper {
     }
     
     func deletePerson(userID: String, friendsList: [String]) async throws {
-        let db = Firestore.firestore()
-        
         do {
             // delete from prayer requests list.
             let prayerRequests = try await db.collection("prayerRequests").whereField("userID", isEqualTo: userID).getDocuments()

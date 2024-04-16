@@ -18,11 +18,11 @@ enum PrayerRequestRetrievalError: Error {
 }
 
 class PrayerRequestHelper {
-    
+    let db = Firestore.firestore()
+
     //Retrieve prayer requests from Firestore
     func getPrayerRequests(userID: String, person: Person) async throws -> [PrayerRequest] {
         var prayerRequests = [PrayerRequest]()
-        let db = Firestore.firestore()
         
         guard userID != "" else {
             throw PrayerRequestRetrievalError.noUserID
@@ -69,7 +69,6 @@ class PrayerRequestHelper {
             throw PrayerRequestRetrievalError.noPrayerRequestID
         }
         
-        let db = Firestore.firestore()
         let ref = db.collection("prayerRequests").document(prayerRequest.id)
         var prayerRequest = PrayerRequest.blank
         var isPinned = prayerRequest.isPinned // Need to save separately because isPinned is not stored in larger 'prayer requests' collection. Only within a user's feed.
@@ -111,7 +110,6 @@ class PrayerRequestHelper {
         
     // this function enables the creation and submission of a new prayer request. It does three things: 1) add to user collection of prayer requests, 2) add to prayer requests collection, and 3) adds the prayer request to all friends of the person only if the prayer request is the user's main profile.
     func createPrayerRequest(userID: String, datePosted: Date, person: Person, prayerRequestText: String, prayerRequestTitle: String, priority: String, friendsList: [String]) {
-        let db = Firestore.firestore()
         
         var isMyProfile: Bool
         if person.username != "" && person.userID == userID {
@@ -201,8 +199,6 @@ class PrayerRequestHelper {
     
     // This function enables an edit to a prayer requests off of a selected prayer request.
     func editPrayerRequest(prayerRequest: PrayerRequest, person: Person, friendsList: [String]) {
-        let db = Firestore.firestore()
-        
         var isMyProfile: Bool
         if person.username != "" && person.userID == prayerRequest.userID {
             isMyProfile = true
@@ -242,8 +238,6 @@ class PrayerRequestHelper {
     
     // This function updates the prayer feed of all users who are friends of the person.
     func updatePrayerFeed(prayerRequest: PrayerRequest, person: Person, friendID: String, updateFriend: Bool) {
-        let db = Firestore.firestore()
-        
         if updateFriend == true {
             let ref = db.collection("prayerFeed").document(friendID).collection("prayerRequests").document(prayerRequest.id)
             ref.setData([
@@ -284,8 +278,6 @@ class PrayerRequestHelper {
     
     // this function updates the prayer requests collection carrying all prayer requests. Takes in the prayer request being updated, and the person who is being updated for.
     func updatePrayerRequestsDataCollection(prayerRequest: PrayerRequest, person: Person) {
-        let db = Firestore.firestore()
-        
         let ref =
         db.collection("prayerRequests").document(prayerRequest.id)
         
@@ -304,8 +296,6 @@ class PrayerRequestHelper {
     
     //person passed in for the feed is the user. prayer passed in for the profile view is the person being viewed.
     func deletePrayerRequest(prayerRequest: PrayerRequest, person: Person, friendsList: [String]) {
-        let db = Firestore.firestore()
-        
         let ref = db.collection("users").document(person.userID).collection("prayerList").document("\(prayerRequest.firstName.lowercased())_\(prayerRequest.lastName.lowercased())").collection("prayerRequests").document(prayerRequest.id)
         
         ref.delete() { err in
@@ -330,8 +320,6 @@ class PrayerRequestHelper {
     
     // This function is used only for deleting from prayer feed. ie. No longer needed, or deleted prayer request.
     func deleteRequestFromFeed(prayerRequest: PrayerRequest, person: Person, friendsList: [String]) {
-        let db = Firestore.firestore()
-        
         var isMyProfile: Bool
         if person.username != "" && person.userID == prayerRequest.userID {
             isMyProfile = true
@@ -370,8 +358,6 @@ class PrayerRequestHelper {
     }
     
     func togglePinned(person: Person, prayerRequest: PrayerRequest, toggle: Bool) {
-        let db = Firestore.firestore()
-        
         let ref = db.collection("prayerFeed").document(person.userID).collection("prayerRequests").document(prayerRequest.id)
         ref.updateData([
             "isPinned": toggle

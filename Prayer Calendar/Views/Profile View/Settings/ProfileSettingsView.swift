@@ -60,11 +60,6 @@ struct ProfileSettingsView: View {
     }
 }
 
-enum PasswordChangeError: Error {
-    case wrongCurrentPassword
-    case invalidNewPasswordLength
-}
-
 struct DeleteButton: View {
     @Environment(UserProfileHolder.self) var userHolder
     @State private var isPresentingConfirm: Bool = false
@@ -110,65 +105,6 @@ struct AccountSettings: View {
         }
         .navigationTitle("Account Settings")
         .navigationBarTitleDisplayMode(.inline)
-    }
-}
-
-struct ProfileSettingsChangePasswordView: View {
-    @Environment(UserProfileHolder.self) var userHolder
-    @State var currentPassword = ""
-    @State var newPassword = ""
-    @State var errorText = ""
-    
-    var body: some View {
-        Form {
-            Section(header: Text("Current Password")) {
-                HStack{
-                    Text("Current Password")
-                    SecureField("", text: $currentPassword)
-                }
-            }
-            Section(header: Text("New Password")) {
-                HStack{
-                    Text("New Password")
-                    SecureField("", text: $newPassword)
-                }
-            }
-            Section {
-                Button(action: {
-                    do {
-                        try changePassword(currentPassword: currentPassword, newPassword: newPassword)
-                        userHolder.userPassword = newPassword
-                        errorText = "Password successfully changed."
-                        print("Password successfully changed.")
-                        currentPassword = ""
-                        newPassword = ""
-                    } catch PasswordChangeError.wrongCurrentPassword {
-                        errorText = "Current password is incorrect. Please enter the correct password in order to change to your new password."
-                    } catch PasswordChangeError.invalidNewPasswordLength {
-                        errorText = "New password must be longer than 8 letters."
-                    } catch {
-                        print(error)
-                    }
-                }) {
-                    Text("Change Password")
-                        .foregroundStyle(.blue)
-                }
-            }
-        }
-        .navigationTitle("Change Password")
-        .navigationBarTitleDisplayMode(.inline)
-    }
-    
-    func changePassword(currentPassword: String, newPassword: String) throws -> Void {
-        guard currentPassword == userHolder.userPassword else {
-            throw PasswordChangeError.wrongCurrentPassword
-        }
-        
-        guard newPassword.count > 8 else {
-            throw PasswordChangeError.invalidNewPasswordLength
-        }
-        
-        Auth.auth().currentUser?.updatePassword(to: newPassword)
     }
 }
 

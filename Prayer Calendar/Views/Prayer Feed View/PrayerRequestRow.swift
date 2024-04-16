@@ -12,7 +12,6 @@ struct PrayerRequestRow: View {
     @Binding var prayerRequest: PrayerRequest
     let profileOrPrayerFeed: String
     @Environment(UserProfileHolder.self) var userHolder
-//    @State var editToggle: Bool
     
     var body: some View {
         NavigationLink(destination: PrayerRequestFormView(person: Person(userID: prayerRequest.userID, username: prayerRequest.username, firstName: prayerRequest.firstName, lastName: prayerRequest.lastName), prayerRequest: $prayerRequest)) {
