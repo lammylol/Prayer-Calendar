@@ -51,24 +51,24 @@ struct PrayerFeedView: View {
                     ) {
                         VStack {
                             // Paging View
-                            PrayerFeedCurrentView(person: person, height: $height)
-                                .containerRelativeFrame(.horizontal)
-                                .tag(1)
-//                            GeometryReader { geo in
-//                                TabView(selection: $selectedTab) {
-//                                    if userHolder.pinnedPrayerRequests.isEmpty == false {
-//                                        PrayerFeedPinnedView(person: person, height: $height)
-//                                            .containerRelativeFrame(.horizontal)
-//                                            .tag(0)
-//                                    }
-//                                    PrayerFeedCurrentView(person: person, height: $height)
-//                                        .containerRelativeFrame(.horizontal)
-//                                        .tag(1)
-//                                    PrayerFeedAnsweredView(person: person, height: $height)
-//                                        .containerRelativeFrame(.horizontal)
-//                                        .tag(2)
-//                                }
-//                                .tabViewStyle(.page(indexDisplayMode: .never))
+//                            PrayerFeedCurrentView(person: person, height: $height)
+//                                .containerRelativeFrame(.horizontal)
+//                                .tag(1)
+                            GeometryReader { geo in
+                                TabView(selection: $selectedTab) {
+                                    if userHolder.pinnedPrayerRequests.isEmpty == false {
+                                        PrayerFeedPinnedView(person: person, height: $height)
+                                            .containerRelativeFrame(.horizontal)
+                                            .tag(0)
+                                    }
+                                    PrayerFeedCurrentView(person: person, height: $height)
+                                        .containerRelativeFrame(.horizontal)
+                                        .tag(1)
+                                    PrayerFeedAnsweredView(person: person, height: $height)
+                                        .containerRelativeFrame(.horizontal)
+                                        .tag(2)
+                                }
+                                .tabViewStyle(.page(indexDisplayMode: .never))
                                     
 //                                ScrollView(.horizontal) {
 //                                    HStack(spacing: 0) {
@@ -100,8 +100,8 @@ struct PrayerFeedView: View {
                                 //                            self.height = height
                                 //                        }
                                 //
-//                            }
-                            /*.frame(minHeight: height, alignment: .top)*/ // necessary to hold frame while in GeometryReader and ScrollView
+                            }
+                            .frame(minHeight: height, alignment: .top) // necessary to hold frame while in GeometryReader and ScrollView
                         }
                         //                .frame(height: height)
                         //                .fixedSize(horizontal: false, vertical: true)
@@ -119,41 +119,39 @@ struct FeedRequestsRowView: View {
     @State var prayerRequests: [PrayerRequest] = []
     @State var prayerRequestVar: PrayerRequest = PrayerRequest.blank
     
-    @StateObject var viewModel = PrayerRequestViewModel()
+//    @Environment(PrayerRequestViewModel.self) var viewModel
+    @State var viewModel: PrayerRequestViewModel = PrayerRequestViewModel()
     @Environment(UserProfileHolder.self) var userHolder
     
     var person: Person
     var answeredFilter: String
     
     var body: some View {
+//        @Bindable var viewModel = viewModel // to enable binding for it.
+        
         NavigationStack {
             ForEach($viewModel.prayerRequests) { prayerRequest in
                 LazyVStack {
                     PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "feed")
                     Divider()
                 }
+                
                 if prayerRequest.id == viewModel.prayerRequests.last?.id {
                     ProgressView()
                         .onAppear {
-                            viewModel.getPrayerRequests()
+                            viewModel.getPrayerRequests(person: person)
                         }
                 }
             }
         }
         .task {
-            viewModel.getPrayerRequests()
-            print(viewModel.prayerRequests)
-            print(answeredFilter)
-//            do {
-//                prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID, answeredFilter: answeredFilter)
-//            } catch {
-//                print("error retrieving prayerfeed")
-//            }
+            viewModel.getPrayerRequests(person: person)
+            print(viewModel.prayerRequests.description)
         }
         .sheet(isPresented: $showEdit, onDismiss: {
             Task {
                 do {
-                    viewModel.getPrayerRequests()
+                    viewModel.getPrayerRequests(person: person)
 //                    prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID, answeredFilter: answeredFilter)
                 }
             }
@@ -187,12 +185,20 @@ struct PrayerFeedCurrentView: View {
     
 //    @Binding var selectedPage: Int
     @Environment(UserProfileHolder.self) var userHolder
+    @Environment(PrayerRequestViewModel.self) var viewModel
 //
     var body: some View {
         FeedRequestsRowView(person: person, answeredFilter: "current")
         .getSizeOfView(completion: {
             height = $0
         })
+//        .task {
+//            do { 
+//                try await viewModel.statusFilter(option: .current, person: person)
+//            } catch {
+//                print(error)
+//            }
+//        }
     }
 }
 

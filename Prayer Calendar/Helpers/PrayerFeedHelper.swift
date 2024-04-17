@@ -114,6 +114,7 @@ class PrayerFeedHelper {
     }
     
     func getPrayerRequestFeed(userID: String, answeredFilter: String, count: Int, lastDocument: DocumentSnapshot?) async throws -> ([PrayerRequest], DocumentSnapshot?) {
+        
         guard userID != "" else {
             throw PrayerRequestRetrievalError.noUserID
         }
@@ -135,19 +136,18 @@ class PrayerFeedHelper {
         
         if let lastDocument {
             querySnapshot =
-                try await prayerFeed
+            try await prayerFeed
                 .limit(to: count)
                 .start(afterDocument: lastDocument)
                 .getDocuments()
         } else {
             querySnapshot =
-                try await prayerFeed
+            try await prayerFeed
                 .limit(to: count)
                 .getDocuments()
         }
-        
         print(querySnapshot.count)
-        
         return getPrayerRequests(querySnapshot: querySnapshot)
+//        print("prayerRequests: " + prayerRequests.0.description)
     }
 }

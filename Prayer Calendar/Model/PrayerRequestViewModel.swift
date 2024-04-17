@@ -9,10 +9,10 @@ import Foundation
 import SwiftUI
 import FirebaseFirestore
 
-@Observable final class PrayerRequestViewModel: ObservableObject {
+@Observable final class PrayerRequestViewModel {
     var prayerRequests: [PrayerRequest] = []
     var lastDocument: DocumentSnapshot? = nil
-    var selectedStatus: statusFilter = .none
+    var selectedStatus: statusFilter = .current
     var person: Person = Person()
     
     enum statusFilter: String, CaseIterable {
@@ -22,22 +22,26 @@ import FirebaseFirestore
         case pinned
         case none
         
-        var statusKey: String? {
+        var statusKey: String {
             return self.rawValue
         }
     }
     
-    func statusFilter(option: statusFilter) async throws {
+    func statusFilter(option: statusFilter, person: Person) async throws {
         self.selectedStatus = option
+        self.lastDocument = nil
         self.prayerRequests = []
-        self.getPrayerRequests()
+        self.getPrayerRequests(person: person)
     }
     
-    func getPrayerRequests() {
+    func getPrayerRequests(person: Person) {
         Task {
-            let (newPrayerRequests, lastDocument) = try await PrayerFeedHelper().getPrayerRequestFeed(userID: person.userID, answeredFilter: selectedStatus.statusKey!, count: 10, lastDocument: lastDocument)
+            let (newPrayerRequests, lastDocument) = try await PrayerFeedHelper().getPrayerRequestFeed(userID: person.userID, answeredFilter: selectedStatus.statusKey, count: 10, lastDocument: lastDocument)
             prayerRequests.append(contentsOf: newPrayerRequests)
-            self.lastDocument = lastDocument
+            print("last document: " + String(lastDocument?.documentID ?? ""))
+            if let lastDocument {
+                self.lastDocument = lastDocument
+            }
         }
     }
 }
