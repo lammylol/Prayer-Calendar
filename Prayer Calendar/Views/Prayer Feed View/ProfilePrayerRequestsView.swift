@@ -56,7 +56,7 @@ struct ProfilePrayerRequestsView: View {
             Divider()
             
             NavigationStack {
-                ForEach($prayerRequests) { prayerRequest in
+                ForEach(prayerRequests) { prayerRequest in
                     VStack{
 //                        NavigationLink(destination: PrayerRequestFormView(person: person, prayerRequest: prayerRequest)) {
                         PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "profile")

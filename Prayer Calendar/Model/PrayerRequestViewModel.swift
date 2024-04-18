@@ -36,7 +36,7 @@ import FirebaseFirestore
     
     func getPrayerRequests(person: Person) {
         Task {
-            let (newPrayerRequests, lastDocument) = try await PrayerFeedHelper().getPrayerRequestFeed(userID: person.userID, answeredFilter: selectedStatus.statusKey, count: 10, lastDocument: lastDocument)
+            let (newPrayerRequests, lastDocument) = try await PrayerFeedHelper().getPrayerRequestFeed(userID: person.userID, answeredFilter: selectedStatus.statusKey, count: 6, lastDocument: lastDocument)
             prayerRequests.append(contentsOf: newPrayerRequests)
             print("last document: " + String(lastDocument?.documentID ?? ""))
             if let lastDocument {

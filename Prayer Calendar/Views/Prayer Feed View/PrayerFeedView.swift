@@ -29,87 +29,90 @@ struct PrayerFeedView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView(.vertical) {
-                // title hides when you scroll down
-                HStack {
-                    Text("prayer feed")
-                        .font(.largeTitle)
-                        .bold()
-                        .padding(.leading, 16)
-                    Spacer()
-                }
-                .offset(y: 15)
-                .padding(.top, 27)
-                LazyVStack(alignment: .leading, pinnedViews: [.sectionHeaders]) {
-                    // Pinned section
-                    Section( header:
-                        //Custom Tab Bar
-                             CustomTabBarNew(selectedTab: $selectedTab, pinned: userHolder.pinnedPrayerRequests)
-                        .background(
-                            scheme == .dark ? .black : .white
-                        )
-                    ) {
-                        VStack {
-                            // Paging View
+            PrayerFeedCurrentView(person: person, height: $height)
+                .containerRelativeFrame(.horizontal)
+                .tag(1)
+//            ScrollView(.vertical) {
+//                // title hides when you scroll down
+//                HStack {
+//                    Text("prayer feed")
+//                        .font(.largeTitle)
+//                        .bold()
+//                        .padding(.leading, 16)
+//                    Spacer()
+//                }
+//                .offset(y: 15)
+//                .padding(.top, 27)
+//                LazyVStack(alignment: .leading, pinnedViews: [.sectionHeaders]) {
+//                    // Pinned section
+//                    Section( header:
+//                        //Custom Tab Bar
+//                             CustomTabBarNew(selectedTab: $selectedTab, pinned: userHolder.pinnedPrayerRequests)
+//                        .background(
+//                            scheme == .dark ? .black : .white
+//                        )
+//                    ) {
+//                        VStack {
+//                            // Paging View
 //                            PrayerFeedCurrentView(person: person, height: $height)
 //                                .containerRelativeFrame(.horizontal)
 //                                .tag(1)
-                            GeometryReader { geo in
-                                TabView(selection: $selectedTab) {
-                                    if userHolder.pinnedPrayerRequests.isEmpty == false {
-                                        PrayerFeedPinnedView(person: person, height: $height)
-                                            .containerRelativeFrame(.horizontal)
-                                            .tag(0)
-                                    }
-                                    PrayerFeedCurrentView(person: person, height: $height)
-                                        .containerRelativeFrame(.horizontal)
-                                        .tag(1)
-                                    PrayerFeedAnsweredView(person: person, height: $height)
-                                        .containerRelativeFrame(.horizontal)
-                                        .tag(2)
-                                }
-                                .tabViewStyle(.page(indexDisplayMode: .never))
-                                    
-//                                ScrollView(.horizontal) {
-//                                    HStack(spacing: 0) {
-//                                        if userHolder.pinnedPrayerRequests.isEmpty == false {
-//                                            PrayerFeedPinnedView(person: person, height: $height)
-//                                                .containerRelativeFrame(.horizontal)
-//                                                .id(Tab.pinned)
-//                                        }
-//                                        PrayerFeedCurrentView(person: person, height: $height)
-//                                            .containerRelativeFrame(.horizontal)
-//                                            .id(Tab.current)
-//                                        PrayerFeedAnsweredView(person: person, height: $height)
-//                                            .containerRelativeFrame(.horizontal)
-//                                            .id(Tab.answered)
-//                                    }
-//                                    .offsetX { value in
-//                                        if userHolder.pinnedPrayerRequests.isEmpty == false {
-//                                            let progress = -value / (size.width * CGFloat(3 - 1))
-//                                            tabProgress = max(min(progress, 1), 0)
-//                                        } else {
-//                                            let progress = -value / (size.width * CGFloat(2 - 1))
-//                                            tabProgress = max(min(progress, 1), 0)
-//                                        }
-//                                    }
-//                                }
-//                                .scrollPosition(id: $selectedTab)
-//                                .scrollTargetBehavior(.paging)
-                                //                        .onChange(of: selectedTab) {
-                                //                            self.height = height
-                                //                        }
-                                //
-                            }
-                            .frame(minHeight: height, alignment: .top) // necessary to hold frame while in GeometryReader and ScrollView
-                        }
-                        //                .frame(height: height)
-                        //                .fixedSize(horizontal: false, vertical: true)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    }
-                }
-            }
-            .clipped()
+////                            GeometryReader { geo in
+////                                TabView(selection: $selectedTab) {
+////                                    if userHolder.pinnedPrayerRequests.isEmpty == false {
+////                                        PrayerFeedPinnedView(person: person, height: $height)
+////                                            .containerRelativeFrame(.horizontal)
+////                                            .tag(0)
+////                                    }
+////                                    PrayerFeedCurrentView(person: person, height: $height)
+////                                        .containerRelativeFrame(.horizontal)
+////                                        .tag(1)
+////                                    PrayerFeedAnsweredView(person: person, height: $height)
+////                                        .containerRelativeFrame(.horizontal)
+////                                        .tag(2)
+////                                }
+////                                .tabViewStyle(.page(indexDisplayMode: .never))
+////                                    
+////                                ScrollView(.horizontal) {
+////                                    HStack(spacing: 0) {
+////                                        if userHolder.pinnedPrayerRequests.isEmpty == false {
+////                                            PrayerFeedPinnedView(person: person, height: $height)
+////                                                .containerRelativeFrame(.horizontal)
+////                                                .id(Tab.pinned)
+////                                        }
+////                                        PrayerFeedCurrentView(person: person, height: $height)
+////                                            .containerRelativeFrame(.horizontal)
+////                                            .id(Tab.current)
+////                                        PrayerFeedAnsweredView(person: person, height: $height)
+////                                            .containerRelativeFrame(.horizontal)
+////                                            .id(Tab.answered)
+////                                    }
+////                                    .offsetX { value in
+////                                        if userHolder.pinnedPrayerRequests.isEmpty == false {
+////                                            let progress = -value / (size.width * CGFloat(3 - 1))
+////                                            tabProgress = max(min(progress, 1), 0)
+////                                        } else {
+////                                            let progress = -value / (size.width * CGFloat(2 - 1))
+////                                            tabProgress = max(min(progress, 1), 0)
+////                                        }
+////                                    }
+////                                }
+////                                .scrollPosition(id: $selectedTab)
+////                                .scrollTargetBehavior(.paging)
+//                                //                        .onChange(of: selectedTab) {
+//                                //                            self.height = height
+//                                //                        }
+//                                //
+////                            }
+///*                            .frame(minHeight: height, alignment: .top)*/ // necessary to hold frame while in GeometryReader and ScrollView
+//                        }
+//                        //                .frame(height: height)
+//                        //                .fixedSize(horizontal: false, vertical: true)
+//                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+//                    }
+//                }
+//            }
+//            .clipped()
         }
     }
 }
@@ -119,8 +122,8 @@ struct FeedRequestsRowView: View {
     @State var prayerRequests: [PrayerRequest] = []
     @State var prayerRequestVar: PrayerRequest = PrayerRequest.blank
     
-//    @Environment(PrayerRequestViewModel.self) var viewModel
-    @State var viewModel: PrayerRequestViewModel = PrayerRequestViewModel()
+    @Environment(PrayerRequestViewModel.self) var viewModel
+//    @State var viewModel: PrayerRequestViewModel = PrayerRequestViewModel()
     @Environment(UserProfileHolder.self) var userHolder
     
     var person: Person
@@ -130,12 +133,11 @@ struct FeedRequestsRowView: View {
 //        @Bindable var viewModel = viewModel // to enable binding for it.
         
         NavigationStack {
-            ForEach($viewModel.prayerRequests) { prayerRequest in
+            ForEach(viewModel.prayerRequests) { prayerRequest in
                 LazyVStack {
                     PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "feed")
                     Divider()
                 }
-                
                 if prayerRequest.id == viewModel.prayerRequests.last?.id {
                     ProgressView()
                         .onAppear {
@@ -143,7 +145,25 @@ struct FeedRequestsRowView: View {
                         }
                 }
             }
+//            List {
+//                ForEach(viewModel.prayerRequests) { prayerRequest in
+//                    LazyVStack {
+//                        PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "feed")
+//                        Divider()
+//                        if prayerRequest.id == viewModel.prayerRequests.last?.id {
+//                            ProgressView()
+//                                .onAppear {
+//                                    viewModel.getPrayerRequests(person: person)
+//                                }
+//                        }
+//                    }
+//                }
+//            }
+//            .scrollDismissesKeyboard(.immediately)
+//            .scrollContentBackground(.hidden)
+//            .listStyle(.plain)
         }
+//        .environment(viewModel)
         .task {
             viewModel.getPrayerRequests(person: person)
             print(viewModel.prayerRequests.description)

@@ -10,7 +10,7 @@ import SwiftUI
 
 
 struct PrayerRequestRow: View {
-    @Binding var prayerRequest: PrayerRequest
+    @State var prayerRequest: PrayerRequest
     let profileOrPrayerFeed: String
     @Environment(UserProfileHolder.self) var userHolder
     
