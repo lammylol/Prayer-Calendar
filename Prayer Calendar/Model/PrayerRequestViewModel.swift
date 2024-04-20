@@ -36,12 +36,16 @@ import FirebaseFirestore
     
     func getPrayerRequests(person: Person) {
         Task {
-            let (newPrayerRequests, lastDocument) = try await PrayerFeedHelper().getPrayerRequestFeed(userID: person.userID, answeredFilter: selectedStatus.statusKey, count: 6, lastDocument: lastDocument)
-            prayerRequests.append(contentsOf: newPrayerRequests)
-            print("last document: " + String(lastDocument?.documentID ?? ""))
-            if let lastDocument {
-                self.lastDocument = lastDocument
+            do {
+                let (newPrayerRequests, lastDocument) = try await PrayerFeedHelper().getPrayerRequestFeed(userID: person.userID, answeredFilter: selectedStatus.statusKey, count: 6, lastDocument: lastDocument)
+                prayerRequests.append(contentsOf: newPrayerRequests)
+                if lastDocument != nil {
+                    self.lastDocument = lastDocument
+                }
+            } catch {
+                print(error)
             }
+            print("last document: " + String(lastDocument?.documentID ?? ""))
         }
     }
 }
