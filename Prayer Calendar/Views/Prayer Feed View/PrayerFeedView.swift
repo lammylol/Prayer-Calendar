@@ -28,14 +28,6 @@ struct PrayerFeedView: View {
     var person: Person
     
     var body: some View {
-//        NavigationStack {
-//            ScrollView(.vertical) {
-//                FeedRequestsRowView(person: person, answeredFilter: "current")
-//            }
-//            .frame(maxWidth: .infinity, maxHeight: .infinity)
-//        }
-//    }
-//}
         NavigationStack {
             ScrollView(.vertical) {
                 //             title hides when you scroll down
