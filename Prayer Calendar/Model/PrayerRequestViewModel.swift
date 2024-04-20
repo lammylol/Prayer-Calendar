@@ -41,6 +41,8 @@ import FirebaseFirestore
                 prayerRequests.append(contentsOf: newPrayerRequests)
                 if lastDocument != nil {
                     self.lastDocument = lastDocument
+                } else {
+                    self.lastDocument = nil
                 }
             } catch {
                 print(error)

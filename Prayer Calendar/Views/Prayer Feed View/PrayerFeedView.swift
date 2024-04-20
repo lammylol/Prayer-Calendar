@@ -142,6 +142,7 @@ struct FeedRequestsRowView: View {
                         ProgressView()
                             .onAppear {
                                 print("prayerRequest ID: "+prayerRequest.id)
+                                print("viewModel.lastDocument: "+String(viewModel.lastDocument?.documentID ?? ""))
                                 viewModel.getPrayerRequests(person: person)
                             }
                     }
