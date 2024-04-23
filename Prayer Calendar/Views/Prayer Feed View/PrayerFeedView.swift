@@ -23,25 +23,58 @@ struct PrayerFeedView: View {
     @State var prayerRequestVar: PrayerRequest = PrayerRequest.blank
     
     @Environment(UserProfileHolder.self) var userHolder
+    @Environment(PrayerRequestViewModel.self) var viewModel
     @Environment(\.colorScheme) private var scheme
+    
     
     var person: Person
     
     var body: some View {
         NavigationStack {
             ScrollView(.vertical) {
-                //             title hides when you scroll down
-                    HStack {
-                        Text("prayer feed")
-                            .font(.largeTitle)
-                            .bold()
-                            .padding(.leading, 16)
-                        Spacer()
+            //             title hides when you scroll down
+                HStack {
+                    Text("prayer feed")
+                        .font(.largeTitle)
+                        .bold()
+                        .padding(.leading, 16)
+                    Spacer()
+                }
+                .offset(y: 15)
+                .padding(.top, 27)
+                
+                LazyVStack(alignment: .leading, pinnedViews: [.sectionHeaders]) {
+                    // Pinned section
+                    Section (
+                        header:
+                            //Custom Tab Bar
+                        CustomTabBarNew(selectedTab: $selectedTab, pinned: userHolder.pinnedPrayerRequests)
+                            .background(
+                                scheme == .dark ? .black : .white
+                            )
+                    ){
+                        TabView(selection: $selectedTab) {
+                            if userHolder.pinnedPrayerRequests.isEmpty == false {
+                                PrayerFeedPinnedView(person: person, height: $height)
+                                    .containerRelativeFrame(.horizontal)
+                                    .tag(0)
+                            }
+                            PrayerFeedCurrentView(person: person, height: $height)
+                                .containerRelativeFrame(.horizontal)
+                                .tag(1)
+                            PrayerFeedAnsweredView(person: person, height: $height)
+                                .containerRelativeFrame(.horizontal)
+                                .tag(2)
+                        }
+                        .frame(minHeight: height, alignment: .top)
                     }
-                    .offset(y: 15)
-                    .padding(.top, 27)
-                    
-                    PrayerFeedCurrentView(person: person, height: $height)
+                }
+            }
+            .id(viewModel.scrollViewID)
+            .clipped()
+        }
+    }
+}
                 
 //                    LazyVStack(alignment: .leading, pinnedViews: [.sectionHeaders]) {
 //                        // Pinned section
@@ -112,11 +145,6 @@ struct PrayerFeedView: View {
 //                            }
 //                        }
 //                    }
-            }
-            .clipped()
-        }
-    }
-}
 
 struct FeedRequestsRowView: View {
     @State private var showEdit: Bool = false
@@ -124,42 +152,45 @@ struct FeedRequestsRowView: View {
     @State var prayerRequestVar: PrayerRequest = PrayerRequest.blank
     
     @Environment(PrayerRequestViewModel.self) var viewModel
-//    @State var viewModel: PrayerRequestViewModel = PrayerRequestViewModel()
+    //    @State var viewModel: PrayerRequestViewModel = PrayerRequestViewModel()
     @Environment(UserProfileHolder.self) var userHolder
     
     var person: Person
     var answeredFilter: String
     
     var body: some View {
-//        @Bindable var viewModel = viewModel // to enable binding for it.
-            LazyVStack {
-                ForEach(viewModel.prayerRequests) { prayerRequest in
-                    VStack {
-                        PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "feed")
-                        Divider()
-                    }
-                    if prayerRequest.id == viewModel.lastDocument?.documentID {
-                        ProgressView()
-                            .onAppear {
-                                print("prayerRequest ID: "+prayerRequest.id)
-                                print("viewModel.lastDocument: "+String(viewModel.lastDocument?.documentID ?? ""))
-                                viewModel.getPrayerRequests(person: person)
+        //        @Bindable var viewModel = viewModel // to enable binding for it.
+        ZStack {
+            if viewModel.isLoading {
+                ProgressView()
+            } else {
+                LazyVStack {
+                    ForEach(viewModel.prayerRequests) { prayerRequest in
+                        VStack {
+                            PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "feed")
+                            Divider()
+                        }
+                        //  if prayerRequest.id == viewModel.lastDocument?.documentID {
+                        .task {
+                            //   print("prayerRequest ID: "+prayerRequest.id)
+                            //   print("viewModel.lastDocument: "+String(viewModel.lastDocument?.documentID ?? ""))
+                            if viewModel.hasReachedEnd(of: prayerRequest) && !viewModel.isFetching {
+                                await viewModel.getNextPrayerRequests(person: person)
                             }
+                        }
                     }
                 }
             }
-                //            .scrollDismissesKeyboard(.immediately)
-                //            .scrollContentBackground(.hidden)
-//        .environment(viewModel)
+        }
+        //            .scrollDismissesKeyboard(.immediately)
+        //            .scrollContentBackground(.hidden)
+        //        .environment(viewModel)
         .task {
-            viewModel.getPrayerRequests(person: person)
+            await viewModel.getPrayerRequests(person: person)
         }
         .sheet(isPresented: $showEdit, onDismiss: {
             Task {
-                do {
-                    viewModel.getPrayerRequests(person: person)
-//                    prayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: person.userID, answeredFilter: answeredFilter)
-                }
+                await viewModel.getPrayerRequests(person: person)
             }
         }, content: {
             PrayerRequestFormView(person: userHolder.person, prayerRequest: $prayerRequestVar)
