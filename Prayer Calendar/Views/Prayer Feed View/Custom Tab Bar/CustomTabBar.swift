@@ -20,7 +20,7 @@ struct CustomTabBarNew: View {
                 Button {
                     Task {
                         selectedTab = 0
-                        try await viewModel.statusFilter(option: .pinned, person: userHolder.person)
+//                        try await viewModel.statusFilter(option: .pinned, person: userHolder.person)
                     }
                 } label: {
                     TabBarButton(type: "Pinned", isSelected: selectedTab == 0)
@@ -30,7 +30,7 @@ struct CustomTabBarNew: View {
             Button {
                 Task {
                     selectedTab = 1
-                    try await viewModel.statusFilter(option: .current, person: userHolder.person)
+//                    try await viewModel.statusFilter(option: .current, person: userHolder.person)
                 }
             } label: {
                 TabBarButton(type: "Current",  isSelected: selectedTab == 1)
@@ -40,7 +40,7 @@ struct CustomTabBarNew: View {
             Button {
                 Task {
                     selectedTab = 2
-                    try await viewModel.statusFilter(option: .answered, person: userHolder.person)
+//                    try await viewModel.statusFilter(option: .answered, person: userHolder.person)
                 }
             } label: {
                 TabBarButton(type: "Answered",  isSelected: selectedTab == 2)

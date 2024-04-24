@@ -27,6 +27,10 @@ import FirebaseFirestore
         viewState == .fetching
     }
     
+    var isFinished: Bool {
+        viewState == .finished
+    }
+    
     enum statusFilter: String, CaseIterable {
         case answered
         case current
@@ -40,11 +44,13 @@ import FirebaseFirestore
     }
     
     func statusFilter(option: statusFilter, person: Person) async throws {
-        self.selectedStatus = option
+//        self.selectedStatus = option
         self.lastDocument = nil
         self.prayerRequests = []
+//        if self.isFinished {
+            await self.getPrayerRequests(person: person)
+//        }
 //        self.scrollViewID = UUID()
-//        await self.getPrayerRequests(person: person)
     }
     
     func getPrayerRequests(person: Person) async {
@@ -62,11 +68,11 @@ import FirebaseFirestore
             if lastDocument != nil {
                 self.lastDocument = lastDocument
             }
+            
+            print("last document: " + String(lastDocument?.documentID ?? ""))
         } catch {
             print(error)
         }
-        print("last document: " + String(lastDocument?.documentID ?? ""))
-        
     }
     
     func getNextPrayerRequests(person: Person) async {
@@ -86,11 +92,12 @@ import FirebaseFirestore
             if lastDocument != nil {
                 self.lastDocument = lastDocument
             }
+            
+            print("last document: " + String(lastDocument?.documentID ?? ""))
 
         } catch {
             print(error)
         }
-        print("last document: " + String(lastDocument?.documentID ?? ""))
 
     }
     
