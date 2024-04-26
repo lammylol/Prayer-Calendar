@@ -135,6 +135,7 @@ struct PrayerRequestRow: View {
         }
         
         PrayerRequestHelper().togglePinned(person: userHolder.person, prayerRequest: prayerRequest, toggle: isPinnedToggle)
+        userHolder.refresh = true
     }
     
     func removeFromFeed(){

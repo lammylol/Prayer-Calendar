@@ -88,7 +88,11 @@ struct PrayerFeedView: View {
             .id(viewModel.scrollViewID)
             .clipped()
             .refreshable {
-                await viewModel.getPrayerRequests(person: person)
+                Task {
+                    do {
+                        userHolder.refresh = true
+                    }
+                }
             }
         }
     }
@@ -179,8 +183,18 @@ struct FeedRequestsRowView: View {
     
     var body: some View {
         ZStack {
-            if viewModel.isLoading {
-                ProgressView()
+            if viewModel.isLoading || userHolder.refresh {
+                if userHolder.refresh == true { // only if refreshable is activated, then task must run, but progress is hidden
+                    Text("")
+                        .task {
+                            if userHolder.refresh == true {
+                                await viewModel.getPrayerRequests(person: person) // activate on refreshable
+                                userHolder.refresh = false
+                            }
+                        }
+                } else {
+                    ProgressView()
+                }
             } else {
                 LazyVStack {
                     ForEach(viewModel.prayerRequests) { prayerRequest in
@@ -209,9 +223,6 @@ struct FeedRequestsRowView: View {
                 self.height = height
             }
         }
-//        .getSizeOfView(completion: {
-//            height = $0
-//        })
         .sheet(isPresented: $showEdit, onDismiss: {
             Task {
                 await viewModel.getPrayerRequests(person: person)
