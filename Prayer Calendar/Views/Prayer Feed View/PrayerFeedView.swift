@@ -57,25 +57,39 @@ struct PrayerFeedView: View {
                             TabView(selection: $selectedTab) {
                                 if userHolder.pinnedPrayerRequests.isEmpty == false {
                                     PrayerFeedPinnedView(person: person, height: $height)
+                                        .getSizeOfView(completion: {
+                                            sizeArray[0] = $0
+                                        })
                                         .containerRelativeFrame(.horizontal)
                                         .tag(0)
                                 }
                                 PrayerFeedCurrentView(person: person, height: $height)
+                                    .getSizeOfView(completion: {
+                                        sizeArray[1] = $0
+                                    })
                                     .containerRelativeFrame(.horizontal)
                                     .tag(1)
                                 PrayerFeedAnsweredView(person: person, height: $height)
+                                    .getSizeOfView(completion: {
+                                        sizeArray[2] = $0
+                                    })
                                     .containerRelativeFrame(.horizontal)
                                     .tag(2)
                             }
                             .tabViewStyle(.page(indexDisplayMode: .never))
-//                            .frame(height: geo.size.height, alignment: .top)
+//                            .onChange(of: selectedTab) {
+//                                self.height = sizeArray[selectedTab]
+//                            }
                         }
-                        .frame(minHeight: height, alignment: .top)
+                        .frame(minHeight: sizeArray[selectedTab], alignment: .top)
                     }
                 }
             }
             .id(viewModel.scrollViewID)
             .clipped()
+            .refreshable {
+                await viewModel.getPrayerRequests(person: person)
+            }
         }
     }
 }
@@ -158,12 +172,12 @@ struct FeedRequestsRowView: View {
 //    @Environment(PrayerRequestViewModel.self) var viewModel
     @State var viewModel: PrayerRequestViewModel
     @Environment(UserProfileHolder.self) var userHolder
+    @Binding var height: CGFloat
     
     var person: Person
     var answeredFilter: String
     
     var body: some View {
-        //        @Bindable var viewModel = viewModel // to enable binding for it.
         ZStack {
             if viewModel.isLoading {
                 ProgressView()
@@ -185,20 +199,19 @@ struct FeedRequestsRowView: View {
                 }
             }
         }
-        //            .scrollDismissesKeyboard(.immediately)
-        //            .scrollContentBackground(.hidden)
-        //        .environment(viewModel)
+        .scrollDismissesKeyboard(.immediately)
+        .scrollContentBackground(.hidden)
         .task {
-            if answeredFilter == "current" {
-                viewModel.selectedStatus = .current
-            } else if answeredFilter == "answered" {
-                viewModel.selectedStatus = .answered
+            if viewModel.prayerRequests.isEmpty {
+                await viewModel.getPrayerRequests(person: person)
             } else {
-                viewModel.selectedStatus = .pinned
+                self.viewModel.prayerRequests = viewModel.prayerRequests
+                self.height = height
             }
-            
-            await viewModel.getPrayerRequests(person: person)
         }
+//        .getSizeOfView(completion: {
+//            height = $0
+//        })
         .sheet(isPresented: $showEdit, onDismiss: {
             Task {
                 await viewModel.getPrayerRequests(person: person)
@@ -221,10 +234,10 @@ struct PrayerFeedAnsweredView: View {
     @State var viewModel: PrayerRequestViewModel = PrayerRequestViewModel()
     
     var body: some View {
-        FeedRequestsRowView(viewModel: viewModel, person: person, answeredFilter: "answered")
-            .getSizeOfView(completion: {
-                height = $0
-            })
+        FeedRequestsRowView(viewModel: viewModel, height: $height, person: person, answeredFilter: "answered")
+            .task {
+                viewModel.selectedStatus = .answered
+            }
     }
 }
 
@@ -238,10 +251,10 @@ struct PrayerFeedCurrentView: View {
     @State var viewModel: PrayerRequestViewModel = PrayerRequestViewModel()
 //
     var body: some View {
-        FeedRequestsRowView(viewModel: viewModel, person: person, answeredFilter: "current")
-        .getSizeOfView(completion: {
-            height = $0
-        })
+        FeedRequestsRowView(viewModel: viewModel, height: $height, person: person, answeredFilter: "current")
+            .task {
+                viewModel.selectedStatus = .current
+            }
     }
 }
 
@@ -255,10 +268,10 @@ struct PrayerFeedPinnedView: View {
     @Environment(UserProfileHolder.self) var userHolder
     
     var body: some View {
-        FeedRequestsRowView(viewModel: viewModel, person: person, answeredFilter: "pinned")
-        .getSizeOfView(completion: {
-            height = $0
-        })
+        FeedRequestsRowView(viewModel: viewModel, height: $height, person: person, answeredFilter: "pinned")
+            .task {
+                viewModel.selectedStatus = .pinned
+            }
     }
 }
 
