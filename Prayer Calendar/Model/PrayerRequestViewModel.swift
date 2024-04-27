@@ -54,7 +54,6 @@ import FirebaseFirestore
     }
     
     func getPrayerRequests(person: Person) async {
-        
         viewState = .loading
         defer { viewState = .finished }
         

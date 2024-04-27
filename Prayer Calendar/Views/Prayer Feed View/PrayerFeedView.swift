@@ -77,6 +77,9 @@ struct PrayerFeedView: View {
                                     .tag(2)
                             }
                             .tabViewStyle(.page(indexDisplayMode: .never))
+                            .onAppear {
+                                UIScrollView.appearance().isScrollEnabled = false
+                            }
 //                            .onChange(of: selectedTab) {
 //                                self.height = sizeArray[selectedTab]
 //                            }
@@ -248,6 +251,7 @@ struct PrayerFeedAnsweredView: View {
         FeedRequestsRowView(viewModel: viewModel, height: $height, person: person, answeredFilter: "answered")
             .task {
                 viewModel.selectedStatus = .answered
+                self.height = height
             }
     }
 }
@@ -265,6 +269,7 @@ struct PrayerFeedCurrentView: View {
         FeedRequestsRowView(viewModel: viewModel, height: $height, person: person, answeredFilter: "current")
             .task {
                 viewModel.selectedStatus = .current
+                self.height = height
             }
     }
 }
@@ -282,6 +287,7 @@ struct PrayerFeedPinnedView: View {
         FeedRequestsRowView(viewModel: viewModel, height: $height, person: person, answeredFilter: "pinned")
             .task {
                 viewModel.selectedStatus = .pinned
+                self.height = height
             }
     }
 }
