@@ -43,24 +43,27 @@ import FirebaseFirestore
         }
     }
     
-    func statusFilter(option: statusFilter, person: Person) async throws {
+    func statusFilter(option: statusFilter, user: Person, person: Person, profileOrFeed: String) async throws {
 //        self.selectedStatus = option
         self.lastDocument = nil
         self.prayerRequests = []
 //        if self.isFinished {
-            await self.getPrayerRequests(person: person)
+        await self.getPrayerRequests(user: user, person: person, profileOrFeed: profileOrFeed)
 //        }
 //        self.scrollViewID = UUID()
     }
     
-    func getPrayerRequests(person: Person) async {
+    func getPrayerRequests(user: Person, person: Person, profileOrFeed: String) async {
         viewState = .loading
         defer { viewState = .finished }
         
         do {
 //            try await self.statusFilter(option: selectedStatus, person: person)
-            let (newPrayerRequests, lastDocument) = try await PrayerFeedHelper().getPrayerRequestFeed(userID: person.userID, answeredFilter: selectedStatus.statusKey, count: 6, lastDocument: nil)
+//            var newPrayerRequests = [PrayerRequest]()
+//            var lastDocument: DocumentSnapshot?
             
+            let (newPrayerRequests, lastDocument) = try await PrayerFeedHelper().getPrayerRequestFeed(user: user, person: person, answeredFilter: selectedStatus.statusKey, count: 6, lastDocument: nil, profileOrFeed: profileOrFeed)
+
             prayerRequests = newPrayerRequests
             self.queryCount = newPrayerRequests.count
             
@@ -74,7 +77,7 @@ import FirebaseFirestore
         }
     }
     
-    func getNextPrayerRequests(person: Person) async {
+    func getNextPrayerRequests(user: Person, person: Person, profileOrFeed: String) async {
         
         guard queryCount == 6 else { return }
             
@@ -82,7 +85,7 @@ import FirebaseFirestore
         defer { viewState = .finished }
         
         do {
-            let (newPrayerRequests, lastDocument) = try await PrayerFeedHelper().getPrayerRequestFeed(userID: person.userID, answeredFilter: selectedStatus.statusKey, count: 6, lastDocument: lastDocument)
+            let (newPrayerRequests, lastDocument) = try await PrayerFeedHelper().getPrayerRequestFeed(user: user, person: person, answeredFilter: selectedStatus.statusKey, count: 6, lastDocument: lastDocument, profileOrFeed: profileOrFeed)
             
             self.queryCount = newPrayerRequests.count
             

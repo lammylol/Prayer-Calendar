@@ -77,8 +77,8 @@ struct PrayerFeedView: View {
                                     .tag(2)
                             }
                             .tabViewStyle(.page(indexDisplayMode: .never))
-                            .onAppear {
-                                UIScrollView.appearance().isScrollEnabled = false
+                            .onPreferenceChange(HeightKey.self) { minHeight in
+                              sizeArray[selectedTab] = minHeight
                             }
 //                            .onChange(of: selectedTab) {
 //                                self.height = sizeArray[selectedTab]
@@ -171,73 +171,6 @@ struct PrayerFeedView: View {
 //                        }
 //                    }
 
-struct FeedRequestsRowView: View {
-    @State private var showEdit: Bool = false
-    @State var prayerRequests: [PrayerRequest] = []
-    @State var prayerRequestVar: PrayerRequest = PrayerRequest.blank
-    
-//    @Environment(PrayerRequestViewModel.self) var viewModel
-    @State var viewModel: PrayerRequestViewModel
-    @Environment(UserProfileHolder.self) var userHolder
-    @Binding var height: CGFloat
-    
-    var person: Person
-    var answeredFilter: String
-    
-    var body: some View {
-        ZStack {
-            if viewModel.isLoading || userHolder.refresh {
-                if userHolder.refresh == true { // only if refreshable is activated, then task must run, but progress is hidden
-                    Text("")
-                        .task {
-                            if userHolder.refresh == true {
-                                await viewModel.getPrayerRequests(person: person) // activate on refreshable
-                                userHolder.refresh = false
-                            }
-                        }
-                } else {
-                    ProgressView()
-                }
-            } else {
-                LazyVStack {
-                    ForEach(viewModel.prayerRequests) { prayerRequest in
-                        VStack {
-                            PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "feed")
-                            Divider()
-                        }
-                        .task {
-                            //   print("prayerRequest ID: "+prayerRequest.id)
-                            //   print("viewModel.lastDocument: "+String(viewModel.lastDocument?.documentID ?? ""))
-                            if viewModel.hasReachedEnd(of: prayerRequest) && !viewModel.isFetching {
-                                await viewModel.getNextPrayerRequests(person: person)
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        .scrollDismissesKeyboard(.immediately)
-        .scrollContentBackground(.hidden)
-        .task {
-            if viewModel.prayerRequests.isEmpty {
-                await viewModel.getPrayerRequests(person: person)
-            } else {
-                self.viewModel.prayerRequests = viewModel.prayerRequests
-                self.height = height
-            }
-        }
-        .sheet(isPresented: $showEdit, onDismiss: {
-            Task {
-                await viewModel.getPrayerRequests(person: person)
-            }
-        }, content: {
-            PrayerRequestFormView(person: userHolder.person, prayerRequest: $prayerRequestVar)
-        })
-        
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-    }
-}
-
 struct PrayerFeedAnsweredView: View {
     // view to only see 'answered' prayers
     var person: Person
@@ -248,7 +181,7 @@ struct PrayerFeedAnsweredView: View {
     @State var viewModel: PrayerRequestViewModel = PrayerRequestViewModel()
     
     var body: some View {
-        FeedRequestsRowView(viewModel: viewModel, height: $height, person: person, answeredFilter: "answered")
+        FeedRequestsRowView(viewModel: viewModel, height: $height, person: person, profileOrFeed: "feed")
             .task {
                 viewModel.selectedStatus = .answered
                 self.height = height
@@ -266,7 +199,7 @@ struct PrayerFeedCurrentView: View {
     @State var viewModel: PrayerRequestViewModel = PrayerRequestViewModel()
 //
     var body: some View {
-        FeedRequestsRowView(viewModel: viewModel, height: $height, person: person, answeredFilter: "current")
+        FeedRequestsRowView(viewModel: viewModel, height: $height, person: person, profileOrFeed: "feed")
             .task {
                 viewModel.selectedStatus = .current
                 self.height = height
@@ -284,7 +217,7 @@ struct PrayerFeedPinnedView: View {
     @Environment(UserProfileHolder.self) var userHolder
     
     var body: some View {
-        FeedRequestsRowView(viewModel: viewModel, height: $height, person: person, answeredFilter: "pinned")
+        FeedRequestsRowView(viewModel: viewModel, height: $height, person: person, profileOrFeed: "feed")
             .task {
                 viewModel.selectedStatus = .pinned
                 self.height = height

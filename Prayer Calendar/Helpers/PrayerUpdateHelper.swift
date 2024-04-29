@@ -19,7 +19,7 @@ class PrayerUpdateHelper {
         }
         
         do {
-            let prayerRequestUpdates = db.collection("prayerRequests").document(prayerRequest.id).collection("updates").order(by: "datePosted", descending: true)
+            let prayerRequestUpdates = db.collection("prayerRequests").document(prayerRequest.id).collection("updates").order(by: "datePosted", descending: false)
             
             let querySnapshot = try await prayerRequestUpdates.getDocuments()
             

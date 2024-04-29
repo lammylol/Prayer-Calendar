@@ -17,7 +17,7 @@ enum PrayerRequestRetrievalError: Error {
     case errorRetrievingFromFirebase
 }
 
-class PrayerRequestHelper {
+class ProfilePrayerRequestHelper {
     let db = Firestore.firestore()
 
     //Retrieve prayer requests from Firestore

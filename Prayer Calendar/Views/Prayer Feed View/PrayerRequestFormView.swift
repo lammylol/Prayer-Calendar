@@ -116,7 +116,7 @@ struct PrayerRequestFormView: View {
             .task {
                 do {
                     print("isPinned: " + prayerRequest.isPinned.description)
-                    prayerRequest = try await PrayerRequestHelper().getPrayerRequest(prayerRequest: prayerRequest)
+                    prayerRequest = try await ProfilePrayerRequestHelper().getPrayerRequest(prayerRequest: prayerRequest)
                     prayerRequestUpdates = try await PrayerUpdateHelper().getPrayerRequestUpdates(prayerRequest: prayerRequest, person: person)
                     print(prayerRequestUpdates)
                     print("isPinned: " + prayerRequest.isPinned.description)
@@ -130,7 +130,7 @@ struct PrayerRequestFormView: View {
                 Task {
                     do {
                         prayerRequestUpdates = try await PrayerUpdateHelper().getPrayerRequestUpdates(prayerRequest: prayerRequest, person: person)
-                        prayerRequest = try await PrayerRequestHelper().getPrayerRequest(prayerRequest: prayerRequest)
+                        prayerRequest = try await ProfilePrayerRequestHelper().getPrayerRequest(prayerRequest: prayerRequest)
                     } catch {
                         print("error retrieving updates.")
                     }
@@ -166,7 +166,7 @@ struct PrayerRequestFormView: View {
     }
     
     func updatePrayerRequest(prayerRequest: PrayerRequest) {
-        PrayerRequestHelper().editPrayerRequest(prayerRequest: prayerRequest, person: person, friendsList: userHolder.friendsList)
+        ProfilePrayerRequestHelper().editPrayerRequest(prayerRequest: prayerRequest, person: person, friendsList: userHolder.friendsList)
         self.prayerRequest = prayerRequest
         
         print("Saved")
@@ -174,7 +174,7 @@ struct PrayerRequestFormView: View {
     }
     
     func deletePrayerRequest() {
-        PrayerRequestHelper().deletePrayerRequest(prayerRequest: prayerRequest, person: person, friendsList: userHolder.friendsList)
+        ProfilePrayerRequestHelper().deletePrayerRequest(prayerRequest: prayerRequest, person: person, friendsList: userHolder.friendsList)
 
         print("Deleted")
         dismiss()
@@ -230,7 +230,7 @@ struct EditPrayerRequestTextView: View {
     }
                 
     func updatePrayerRequest(prayerRequestVar: PrayerRequest) {
-        PrayerRequestHelper().editPrayerRequest(prayerRequest: prayerRequest, person: person, friendsList: userHolder.friendsList)
+        ProfilePrayerRequestHelper().editPrayerRequest(prayerRequest: prayerRequest, person: person, friendsList: userHolder.friendsList)
         
         print("Saved")
         dismiss()

@@ -134,7 +134,7 @@ struct PrayerRequestRow: View {
             userHolder.pinnedPrayerRequests.removeAll(where: { $0.id == prayerRequest.id})
         }
         
-        PrayerRequestHelper().togglePinned(person: userHolder.person, prayerRequest: prayerRequest, toggle: isPinnedToggle)
+        ProfilePrayerRequestHelper().togglePinned(person: userHolder.person, prayerRequest: prayerRequest, toggle: isPinnedToggle)
         userHolder.refresh = true
     }
     

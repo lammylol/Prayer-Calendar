@@ -30,15 +30,6 @@ struct ProfileView: View {
                                     NavigationLink(destination: ProfileSettingsView()) {
                                         Image(systemName: "gear")
                                     }
-//                                ToolbarItem(){
-//                                    Button(action: {
-//                                        Task {
-//                                            await ReloadPrayerRequests().updateRequests()
-//                                        }
-//                                    }) {Text("Run Data Migration")
-//                                    }
-//                                    .padding(.top, 10)
-//                                }
                             }
                         }
                     
@@ -58,6 +49,13 @@ struct ProfileView: View {
             }
             .navigationTitle(person.firstName + " " + person.lastName)
             .navigationBarTitleDisplayMode(.automatic)
+            .refreshable {
+                Task {
+                    do {
+                        userHolder.refresh = true
+                    }
+                }
+            }
         }
     }
     

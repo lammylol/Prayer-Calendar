@@ -153,7 +153,7 @@ struct SignInView: View {
             } else {
                 Task {
                     let userID = Auth.auth().currentUser!.uid
-                    await getUserInfo(userID: userID, email: email)
+                    await getUserInfo(person: Person(userID: userID), email: email)
                     userHolder.isLoggedIn = true
                     userHolder.userPassword = password
                     email = ""
@@ -171,13 +171,13 @@ struct SignInView: View {
 //    }
     
         //  This function retrieves Userinfo data from Firestore.
-    func getUserInfo(userID: String, email: String) async {
+    func getUserInfo(person: Person, email: String) async {
         
         let db = Firestore.firestore()
 //        let ref = db.collection("users").document(userID)
 //        
         do {
-            let ref = db.collection("users").document(userID)
+            let ref = db.collection("users").document(person.userID)
             
             let document = try await ref.getDocument()
                     
@@ -193,7 +193,11 @@ struct SignInView: View {
             print("/username: " + prayerPerson.username)
             
             userHolder.person = prayerPerson
-            userHolder.pinnedPrayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: userID, answeredFilter: "pinned")
+//            userHolder.pinnedPrayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: userID, answeredFilter: "pinned")
+            
+            let (pinnedPrayerRequests, lastDocument) = try await PrayerFeedHelper().getPrayerRequestFeed(user: userHolder.person, person: person, answeredFilter: "pinned", count: 5, lastDocument: nil, profileOrFeed: "feed")
+            
+            userHolder.pinnedPrayerRequests = pinnedPrayerRequests
             
             print("//username: " + userHolder.person.username)
         } catch {
@@ -202,7 +206,7 @@ struct SignInView: View {
                 
 
         do {
-            let friendsListRef = db.collection("users").document(userID).collection("friendsList")
+            let friendsListRef = db.collection("users").document(person.userID).collection("friendsList")
             let querySnapshot = try await friendsListRef.getDocuments()
 
             //append FriendsListArray in userHolder
