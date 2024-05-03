@@ -78,6 +78,8 @@ class PrayerFeedHelper {
             prayerFeed = getAllPrayerRequestsByStatusQuery(user: user, person: person, status: "Answered", profileOrFeed: profileOrFeed)
         } else if answeredFilter == "current" {
             prayerFeed = getAllPrayerRequestsByStatusQuery(user: user, person: person, status: "Current", profileOrFeed: profileOrFeed)
+        } else if answeredFilter == "noLongerNeeded" {
+            prayerFeed = getAllPrayerRequestsByStatusQuery(user: user, person: person, status: "No Longer Needed", profileOrFeed: profileOrFeed)
         } else if answeredFilter == "pinned" { //if 'pinned'
             prayerFeed = getAllPrayerRequestsQuery(user: user, person: person, profileOrFeed: profileOrFeed)
                 .whereField("isPinned", isEqualTo: true)
