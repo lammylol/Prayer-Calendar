@@ -10,6 +10,7 @@ import SwiftUI
 
 struct CalendarCell: View {
     @Environment(\.colorScheme) var colorScheme
+    @Environment(UserProfileHolder.self) var userHolder
     
     let count: Int
     let startingSpaces: Int
@@ -135,9 +136,9 @@ struct CalendarCell: View {
     }
 
 }
-
-struct CalendarCell_Previews: PreviewProvider {
-    static var previews: some View {
-        CalendarCell(count: 1, startingSpaces: 1, daysInMonth: 1, daysInPrevMonth: 1, date: Date(), prayerStartingSpaces: 1, prayerList: "Matt", prayerRange: 1)
-    }
-}
+//
+//struct CalendarCell_Previews: PreviewProvider {
+//    static var previews: some View {
+//        CalendarCell(count: 1, startingSpaces: 1, daysInMonth: 1, daysInPrevMonth: 1, date: Date(), prayerStartingSpaces: 1, prayerList: "Matt", prayerRange: 1)
+//    }
+//}

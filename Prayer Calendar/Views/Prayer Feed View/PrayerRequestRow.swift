@@ -126,7 +126,7 @@ struct PrayerRequestRow: View {
     func pinPrayerRequest(){
         var isPinnedToggle = prayerRequest.isPinned
         isPinnedToggle.toggle()
-        prayerRequest.isPinned = isPinnedToggle
+        self.prayerRequest.isPinned = isPinnedToggle
         
         if isPinnedToggle == true {
             userHolder.pinnedPrayerRequests.append(prayerRequest)
@@ -135,7 +135,7 @@ struct PrayerRequestRow: View {
         }
         
         ProfilePrayerRequestHelper().togglePinned(person: userHolder.person, prayerRequest: prayerRequest, toggle: isPinnedToggle)
-        userHolder.refresh = true
+//        userHolder.refresh = true
     }
     
     func removeFromFeed(){

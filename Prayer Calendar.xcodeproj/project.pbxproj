@@ -188,8 +188,8 @@
 			children = (
 				7AE46BD42B10100D0034DAD6 /* Person.swift */,
 				7A5C72342AFF5E3100A75636 /* PrayerRequest.swift */,
-				E0564A092BB379DE00D21DB3 /* Tab.swift */,
 				7A4986672BCE2AE200C0A936 /* PrayerRequestViewModel.swift */,
+				E0564A092BB379DE00D21DB3 /* Tab.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";

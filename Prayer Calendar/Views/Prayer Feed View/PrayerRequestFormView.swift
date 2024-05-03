@@ -53,7 +53,8 @@ struct PrayerRequestFormView: View {
                                     .padding(.top, 8)
                                     .foregroundStyle(Color.gray)
                             }
-                            NavigationLink(destination: EditPrayerRequestTextView(person: person, prayerRequest: prayerRequest)) {
+                            NavigationLink(destination: EditPrayerRequestTextView(person: person, prayerRequest: $prayerRequest)) {
+                                // Navigation to edit text. Not binding because we want it to only update upon submission.
                                 Text(prayerRequest.prayerRequestText)
                             }
                         }
@@ -115,8 +116,9 @@ struct PrayerRequestFormView: View {
             .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: .infinity)
             .task {
                 do {
-                    print("isPinned: " + prayerRequest.isPinned.description)
+//                    print("isPinned: " + prayerRequest.isPinned.description)
                     prayerRequest = try await ProfilePrayerRequestHelper().getPrayerRequest(prayerRequest: prayerRequest)
+//                    self.prayerRequest = prayerRequest
                     prayerRequestUpdates = try await PrayerUpdateHelper().getPrayerRequestUpdates(prayerRequest: prayerRequest, person: person)
                     print(prayerRequestUpdates)
                     print("isPinned: " + prayerRequest.isPinned.description)
@@ -130,7 +132,7 @@ struct PrayerRequestFormView: View {
                 Task {
                     do {
                         prayerRequestUpdates = try await PrayerUpdateHelper().getPrayerRequestUpdates(prayerRequest: prayerRequest, person: person)
-                        prayerRequest = try await ProfilePrayerRequestHelper().getPrayerRequest(prayerRequest: prayerRequest)
+//                        prayerRequest = try await ProfilePrayerRequestHelper().getPrayerRequest(prayerRequest: prayerRequest)
                     } catch {
                         print("error retrieving updates.")
                     }
@@ -186,7 +188,8 @@ struct EditPrayerRequestTextView: View {
     @Environment(\.dismiss) var dismiss
     
     var person: Person
-    @State var prayerRequest: PrayerRequest
+    @Binding var prayerRequest: PrayerRequest
+    @State private var prayerRequestOriginalText: String = ""
     
     var body: some View {
         NavigationView {
@@ -207,9 +210,19 @@ struct EditPrayerRequestTextView: View {
                 }
             }
         }
+//        .task {
+//            prayerRequestOriginalText = prayerRequest.prayerRequestText
+//        }
         .toolbar {
+//            ToolbarItem(placement: .topBarLeading) {
+//                Button("Back") {
+//                    prayerRequest.prayerRequestText = prayerRequestOriginalText
+//                    dismiss()
+//                }
+//            }
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button(action: {
+//                    dismiss()
                     updatePrayerRequest(prayerRequestVar: prayerRequest)
                 }) {
                     Text("Update")
@@ -231,7 +244,6 @@ struct EditPrayerRequestTextView: View {
                 
     func updatePrayerRequest(prayerRequestVar: PrayerRequest) {
         ProfilePrayerRequestHelper().editPrayerRequest(prayerRequest: prayerRequest, person: person, friendsList: userHolder.friendsList)
-        
         print("Saved")
         dismiss()
     }

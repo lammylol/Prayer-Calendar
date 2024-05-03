@@ -55,7 +55,12 @@ struct FeedRequestsRowView: View {
         .scrollContentBackground(.hidden)
         .task {
             if viewModel.prayerRequests.isEmpty {
-                await viewModel.getPrayerRequests(user: userHolder.person, person: person, profileOrFeed: profileOrFeed)
+                do {
+                    let person = try await PrayerPersonHelper().retrieveUserInfoFromUsername(person: person, userHolder: userHolder) // retrieve the userID from the username submitted only if username is not your own. Will return user's userID if there is a valid username. If not, will return user's own.
+                    await viewModel.getPrayerRequests(user: userHolder.person, person: person, profileOrFeed: profileOrFeed)
+                } catch {
+                    print(error.localizedDescription)
+                }
             } else {
                 self.viewModel.prayerRequests = viewModel.prayerRequests
                 self.height = height
@@ -63,7 +68,15 @@ struct FeedRequestsRowView: View {
         }
         .sheet(isPresented: $showEdit, onDismiss: {
             Task {
-                await viewModel.getPrayerRequests(user: userHolder.person, person: person, profileOrFeed: profileOrFeed)
+                do {
+                    if viewModel.prayerRequests.isEmpty || userHolder.refresh == true {
+                        await viewModel.getPrayerRequests(user: userHolder.person, person: person, profileOrFeed: "profile")
+                    } else {
+                        self.viewModel.prayerRequests = viewModel.prayerRequests
+                        self.height = height
+                    }
+                    print("Success retrieving prayer requests for \(person.userID)")
+                }
             }
         }, content: {
             PrayerRequestFormView(person: userHolder.person, prayerRequest: $prayerRequestVar)

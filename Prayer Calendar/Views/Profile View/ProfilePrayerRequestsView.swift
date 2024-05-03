@@ -12,21 +12,14 @@ import FirebaseFirestore
 
 struct ProfilePrayerRequestsView: View {
     @Environment(UserProfileHolder.self) var userHolder
+    @State var viewModel: PrayerRequestViewModel = PrayerRequestViewModel()
+    
+    @State var person: Person
     @State private var showSubmit: Bool = false
     @State private var showEdit: Bool = false
-    @State var person: Person
-    @State private var prayerFilter: String = "All"
-
-//    @State var prayerRequestVar: PrayerRequest = PrayerRequest.blank
-//    @State var prayerRequests = [PrayerRequest]()
-    @State var viewModel: PrayerRequestViewModel = PrayerRequestViewModel()
     @State private var height: CGFloat = 0
     
     let db = Firestore.firestore()
-//    
-//    func handleTap(prayerRequest: PrayerRequest) async {
-//        prayerRequestVar = prayerRequest
-//    }
     
     var body: some View {
         LazyVStack {
@@ -59,16 +52,6 @@ struct ProfilePrayerRequestsView: View {
             Divider()
             
             FeedRequestsRowView(viewModel: viewModel, height: $height, person: person, profileOrFeed: "profile")
-//            NavigationStack {
-//                ForEach(prayerRequests) { prayerRequest in
-//                    VStack{
-////                        NavigationLink(destination: PrayerRequestFormView(person: person, prayerRequest: prayerRequest)) {
-//                        PrayerRequestRow(prayerRequest: prayerRequest, profileOrPrayerFeed: "profile")
-////                        }
-//                        Divider()
-//                    }
-//                }
-//            }
         }
         .overlay {
             // Only show this if this account is saved under your userID.
@@ -95,31 +78,24 @@ struct ProfilePrayerRequestsView: View {
         .task {
             do {
                 viewModel.selectedStatus = .none
-                person = try await PrayerPersonHelper().retrieveUserInfoFromUsername(person: person, userHolder: userHolder)
-                await viewModel.getPrayerRequests(user: userHolder.person, person: person, profileOrFeed: "profile")
+//                        await viewModel.getPrayerRequests(user: userHolder.person, person: person, profileOrFeed: "profile")
+                print("Success retrieving prayer requests for \(person.userID)")
             } catch PrayerRequestRetrievalError.noUserID {
                 print("No User ID to retrieve prayer requests with.")
             } catch {
                 print("Error retrieving prayer requests.")
             }
-//                person = try await PrayerPersonHelper().retrieveUserInfoFromUsername(person: person, userHolder: userHolder)
-////                prayerRequests = try await PrayerRequestHelper().getPrayerRequests(userID: person.userID, person: person)
-//                print("Success retrieving prayer requests for \(person.userID)")
-//            } catch PrayerRequestRetrievalError.noUserID {
-//                print("No User ID to retrieve prayer requests with.")
-//            } catch {
-//                print("Error retrieving prayer requests.")
-//            }
         }
 //        .sheet(isPresented: $showEdit, onDismiss: {
 //            Task {
 //                do {
-//                    prayerRequests = try await PrayerRequestHelper().getPrayerRequests(userID: person.userID, person: person)
+//                    if viewModel.prayerRequests.isEmpty {
+//                        await viewModel.getPrayerRequests(user: userHolder.person, person: person, profileOrFeed: "profile")
+//                    } else {
+//                        self.viewModel.prayerRequests = viewModel.prayerRequests
+//                        self.height = height
+//                    }
 //                    print("Success retrieving prayer requests for \(person.userID)")
-//                } catch PrayerRequestRetrievalError.noUserID {
-//                    print("No User ID to retrieve prayer requests with.")
-//                } catch {
-//                    print("Error retrieving prayer requests.")
 //                }
 //            }
 //        }, content: {
@@ -128,16 +104,14 @@ struct ProfilePrayerRequestsView: View {
         .sheet(isPresented: $showSubmit, onDismiss: {
             Task {
                 do {
-                    await viewModel.getPrayerRequests(user: userHolder.person, person: person, profileOrFeed: "profile")
+                    if viewModel.prayerRequests.isEmpty {
+                        await viewModel.getPrayerRequests(user: userHolder.person, person: person, profileOrFeed: "profile")
+                    } else {
+                        self.viewModel.prayerRequests = viewModel.prayerRequests
+                        self.height = height
+                    }
+                    print("Success retrieving prayer requests for \(person.userID)")
                 }
-//                do {
-//                    prayerRequests = try await PrayerRequestHelper().getPrayerRequests(userID: person.userID, person: person)
-//                    print("Success retrieving prayer requests for \(person.userID)")
-//                } catch PrayerRequestRetrievalError.noUserID {
-//                    print("No User ID to retrieve prayer requests with.")
-//                } catch {
-//                    print("Error retrieving prayer requests.")
-//                }
             }
         }, content: {
             SubmitPrayerRequestForm(person: person)

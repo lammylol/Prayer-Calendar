@@ -41,10 +41,16 @@ struct ProfileView: View {
                     .font(.system(size: 14))
                     
                     Spacer()
-                
-                    ProfilePrayerRequestsView(person: person)
-                        .frame(maxHeight: .infinity)
-                        .padding(.top, 20)
+                    
+                    if userHolder.person.username == person.username {
+                        ProfilePrayerRequestsView(person: userHolder.person) // Leaving as a separate view for now in case need to implement tab view.
+                            .frame(maxHeight: .infinity)
+                            .padding(.top, 20)
+                    } else {
+                        ProfilePrayerRequestsView(person: person) // Leaving as a separate view for now in case need to implement tab view.
+                            .frame(maxHeight: .infinity)
+                            .padding(.top, 20)
+                    }
                 }
             }
             .navigationTitle(person.firstName + " " + person.lastName)
@@ -66,14 +72,6 @@ struct ProfileView: View {
             return "[Username]: \(person.username.capitalized)"
         }
     }
-
-//    func nameDisplay() -> String {
-//        if person.username != "" {
-//            return person.firstName + " " + person.lastName
-//        } else {
-//            return person.firstName + " " + person.lastName + " (private account)"
-//        }
-//    }
 }
 
 #Preview {

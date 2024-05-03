@@ -106,7 +106,7 @@ struct PrayerNameInputView: View {
             print("Prayer List Old: " + prayerListHolder.prayerList)
             print("Prayer List New: " + inputText)
             
-            let prayerNamesOld = PrayerPersonHelper().retrievePrayerPersonArray(prayerList: existingInput).map {
+        let prayerNamesOld = PrayerPersonHelper().retrievePrayerPersonArray(prayerList: existingInput).map {
                 if $0.username == "" {
                     $0.firstName + "/" + $0.lastName
                 } else {

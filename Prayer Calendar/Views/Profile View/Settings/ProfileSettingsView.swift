@@ -62,6 +62,7 @@ struct ProfileSettingsView: View {
 
 struct DeleteButton: View {
     @Environment(UserProfileHolder.self) var userHolder
+    @Environment(PrayerListHolder.self) var prayerListHolder
     @State private var isPresentingConfirm: Bool = false
 
     var body: some View {
@@ -74,8 +75,7 @@ struct DeleteButton: View {
                 Task {
                     do {
                         try await PrayerPersonHelper().deletePerson(userID: userHolder.person.userID, friendsList: userHolder.friendsList)
-                        ProfileSettingsView().signOut()
-                        ProfileSettingsView().resetInfo()
+                        signOut()
                     } catch {
                         print(error)
                     }
@@ -84,6 +84,21 @@ struct DeleteButton: View {
         } message: {
             Text("Are you sure you would like to delete your account? Deleting account will remove all history of prayer requests both in your account and in any friend feeds, and will not be able to be restored.")
         }
+    }
+    
+    func signOut() {
+        // Sign out from firebase and change loggedIn to return to SignInView.
+        try? Auth.auth().signOut()
+        resetInfo()
+    }
+
+    func resetInfo() {
+        userHolder.friendsList = []
+        userHolder.isLoggedIn = false
+
+        userHolder.person.userID = ""
+        prayerListHolder.prayerList = ""
+        prayerListHolder.prayStartDate = Date()
     }
 }
 

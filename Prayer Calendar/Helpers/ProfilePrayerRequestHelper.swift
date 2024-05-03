@@ -70,8 +70,8 @@ class ProfilePrayerRequestHelper {
         }
         
         let ref = db.collection("prayerRequests").document(prayerRequest.id)
+        let isPinned = prayerRequest.isPinned // Need to save separately because isPinned is not stored in larger 'prayer requests' collection. Only within a user's feed.
         var prayerRequest = PrayerRequest.blank
-        var isPinned = prayerRequest.isPinned // Need to save separately because isPinned is not stored in larger 'prayer requests' collection. Only within a user's feed.
         
         do {
             let document = try await ref.getDocument()

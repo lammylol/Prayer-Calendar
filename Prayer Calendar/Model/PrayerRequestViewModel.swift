@@ -58,10 +58,6 @@ import FirebaseFirestore
         defer { viewState = .finished }
         
         do {
-//            try await self.statusFilter(option: selectedStatus, person: person)
-//            var newPrayerRequests = [PrayerRequest]()
-//            var lastDocument: DocumentSnapshot?
-            
             let (newPrayerRequests, lastDocument) = try await PrayerFeedHelper().getPrayerRequestFeed(user: user, person: person, answeredFilter: selectedStatus.statusKey, count: 6, lastDocument: nil, profileOrFeed: profileOrFeed)
 
             prayerRequests = newPrayerRequests
@@ -98,7 +94,7 @@ import FirebaseFirestore
             print("last document: " + String(lastDocument?.documentID ?? ""))
 
         } catch {
-            print(error)
+            print(error.localizedDescription)
         }
 
     }
