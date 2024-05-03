@@ -124,6 +124,7 @@ struct ProfilePrayerRequestsView: View {
 struct StatusPicker: View {
     @State var viewModel: PrayerRequestViewModel
     @Environment(UserProfileHolder.self) var userHolder
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         Menu {
@@ -146,7 +147,8 @@ struct StatusPicker: View {
                 Text("No Longer Needed")
             }
         } label: {
-            Image(systemName: "line.3.horizontal.decrease.circle")
+            Image(systemName: "line.3.horizontal.decrease.circle.fill")
+                .foregroundStyle(colorScheme == .dark ? .white : .black)
 //            if viewModel.selectedStatus == .noLongerNeeded {
 //                Text("No Longer Needed")
 //                    .padding(.horizontal, 10)
