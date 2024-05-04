@@ -15,6 +15,7 @@ struct ProfileView: View {
     @State private var showSubmit: Bool = false
     @State private var showEditView: Bool = false
     @State var person: Person
+    @State var viewModel: PrayerRequestViewModel = PrayerRequestViewModel()
     
     @Environment(UserProfileHolder.self) var userHolder
     @Environment(PrayerListHolder.self) var dataHolder
@@ -25,10 +26,21 @@ struct ProfileView: View {
                 VStack {
                     Text("")
                         .toolbar {
-//                            if person.username == userHolder.person.username {
-                                ToolbarItem(placement: .topBarTrailing) {
-                                    NavigationLink(destination: ProfileSettingsView()) {
-                                        Image(systemName: "gear")
+                            // Only show this if the account has been created under your userID. Aka, can be your profile or another that you have created for someone.
+                            if person.username == "" || person.userID == userHolder.person.userID {
+                                ToolbarItemGroup(placement: .topBarTrailing) {
+                                        NavigationLink(destination: ProfileSettingsView()) {
+                                            Image(systemName: "gear")
+                                                .resizable()
+                                        }
+                                        .padding(.trailing, -10)
+                                        .padding(.top, 2)
+                                        
+                                        Button(action: {
+                                            showSubmit.toggle()
+                                        }) {
+                                            Image(systemName: "square.and.pencil")
+                                        }
                                     }
                             }
                         }
@@ -43,11 +55,11 @@ struct ProfileView: View {
                     Spacer()
                     
                     if userHolder.person.username == person.username {
-                        ProfilePrayerRequestsView(person: userHolder.person) // Leaving as a separate view for now in case need to implement tab view.
+                        ProfilePrayerRequestsView(viewModel: viewModel, person: userHolder.person) // Leaving as a separate view for now in case need to implement tab view.
                             .frame(maxHeight: .infinity)
                             .padding(.top, 20)
                     } else {
-                        ProfilePrayerRequestsView(person: person) // Leaving as a separate view for now in case need to implement tab view.
+                        ProfilePrayerRequestsView(viewModel: viewModel, person: person) // Leaving as a separate view for now in case need to implement tab view.
                             .frame(maxHeight: .infinity)
                             .padding(.top, 20)
                     }
@@ -62,14 +74,39 @@ struct ProfileView: View {
                     }
                 }
             }
+//            .task {
+//                if person.userID == "" {
+//                    do {
+//                        person = try await PrayerPersonHelper().retrieveUserInfoFromUsername(person: person, userHolder: userHolder)
+//                    } catch {
+//                        print(error.localizedDescription)
+//                    }
+//                }
+//            }
+            .sheet(isPresented: $showSubmit, onDismiss: {
+                Task {
+                    do {
+                        if viewModel.prayerRequests.isEmpty || userHolder.refresh == true {
+                            self.person = try await PrayerPersonHelper().retrieveUserInfoFromUsername(person: person, userHolder: userHolder) // retrieve the userID from the username submitted only if username is not your own. Will return user's userID if there is a valid username. If not, will return user's own.
+                            await viewModel.getPrayerRequests(user: userHolder.person, person: person, profileOrFeed: "profile")
+                        } else {
+                            self.viewModel.prayerRequests = viewModel.prayerRequests
+//                            self.height = height
+                        }
+                        print("Success retrieving prayer requests for \(person.userID)")
+                    }
+                }
+            }, content: {
+                SubmitPrayerRequestForm(person: person)
+            })
         }
     }
     
     func usernameDisplay() -> String {
         if person.username == "" {
-            return "[Private Account]: No active profile linked"
+            return "unlinked"
         } else {
-            return "[Username]: \(person.username.capitalized)"
+            return "username: \(person.username.capitalized)"
         }
     }
 }

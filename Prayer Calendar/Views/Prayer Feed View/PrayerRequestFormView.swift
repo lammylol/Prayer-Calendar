@@ -116,9 +116,7 @@ struct PrayerRequestFormView: View {
             .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: .infinity)
             .task {
                 do {
-//                    print("isPinned: " + prayerRequest.isPinned.description)
                     prayerRequest = try await ProfilePrayerRequestHelper().getPrayerRequest(prayerRequest: prayerRequest)
-//                    self.prayerRequest = prayerRequest
                     prayerRequestUpdates = try await PrayerUpdateHelper().getPrayerRequestUpdates(prayerRequest: prayerRequest, person: person)
                     print(prayerRequestUpdates)
                     print("isPinned: " + prayerRequest.isPinned.description)
@@ -177,7 +175,8 @@ struct PrayerRequestFormView: View {
     
     func deletePrayerRequest() {
         ProfilePrayerRequestHelper().deletePrayerRequest(prayerRequest: prayerRequest, person: person, friendsList: userHolder.friendsList)
-
+        userHolder.refresh = true
+        
         print("Deleted")
         dismiss()
     }
@@ -210,16 +209,7 @@ struct EditPrayerRequestTextView: View {
                 }
             }
         }
-//        .task {
-//            prayerRequestOriginalText = prayerRequest.prayerRequestText
-//        }
         .toolbar {
-//            ToolbarItem(placement: .topBarLeading) {
-//                Button("Back") {
-//                    prayerRequest.prayerRequestText = prayerRequestOriginalText
-//                    dismiss()
-//                }
-//            }
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button(action: {
 //                    dismiss()

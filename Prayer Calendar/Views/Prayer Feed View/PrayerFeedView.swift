@@ -80,9 +80,6 @@ struct PrayerFeedView: View {
                             .onPreferenceChange(HeightKey.self) { minHeight in
                               sizeArray[selectedTab] = minHeight
                             }
-//                            .onChange(of: selectedTab) {
-//                                self.height = sizeArray[selectedTab]
-//                            }
                         }
                         .frame(minHeight: sizeArray[selectedTab], alignment: .top)
                     }

@@ -16,7 +16,7 @@ struct FeedRequestsRowView: View {
     @Environment(UserProfileHolder.self) var userHolder
     @Binding var height: CGFloat
     
-    var person: Person
+    @State var person: Person
     @State var profileOrFeed: String = "feed"
     
     var body: some View {
@@ -26,8 +26,13 @@ struct FeedRequestsRowView: View {
                     Text("")
                         .task {
                             if userHolder.refresh == true {
-                                await viewModel.getPrayerRequests(user: userHolder.person, person: person, profileOrFeed: profileOrFeed) // activate on refreshable
-                                userHolder.refresh = false
+                                do {
+                                    self.person = try await PrayerPersonHelper().retrieveUserInfoFromUsername(person: person, userHolder: userHolder)
+                                    await viewModel.getPrayerRequests(user: userHolder.person, person: person, profileOrFeed: profileOrFeed) // activate on refreshable
+                                    userHolder.refresh = false
+                                } catch {
+                                    print(error.localizedDescription)
+                                }
                             }
                         }
                 } else {
@@ -56,7 +61,10 @@ struct FeedRequestsRowView: View {
         .task {
             if viewModel.prayerRequests.isEmpty {
                 do {
-                    let person = try await PrayerPersonHelper().retrieveUserInfoFromUsername(person: person, userHolder: userHolder) // retrieve the userID from the username submitted only if username is not your own. Will return user's userID if there is a valid username. If not, will return user's own.
+                    viewModel.viewState = .loading
+                    defer { viewModel.viewState = .finished }
+                    
+                    self.person = try await PrayerPersonHelper().retrieveUserInfoFromUsername(person: person, userHolder: userHolder)
                     await viewModel.getPrayerRequests(user: userHolder.person, person: person, profileOrFeed: profileOrFeed)
                 } catch {
                     print(error.localizedDescription)
@@ -69,7 +77,8 @@ struct FeedRequestsRowView: View {
         .sheet(isPresented: $showEdit, onDismiss: {
             Task {
                 do {
-                    if viewModel.prayerRequests.isEmpty || userHolder.refresh == true {
+                    if viewModel.prayerRequests.isEmpty {
+//                        self.person = try await PrayerPersonHelper().retrieveUserInfoFromUsername(person: person, userHolder: userHolder) // retrieve the userID from the username submitted only if username is not your own. Will return user's userID if there is a valid username. If not, will return user's own.
                         await viewModel.getPrayerRequests(user: userHolder.person, person: person, profileOrFeed: "profile")
                     } else {
                         self.viewModel.prayerRequests = viewModel.prayerRequests
