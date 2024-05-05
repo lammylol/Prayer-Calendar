@@ -16,6 +16,19 @@ import SwiftUI
     var userPassword: String = ""
     var pinnedPrayerRequests: [PrayerRequest] = []
     var refresh: Bool = false
+    var viewState: ViewState?
+    
+    var isLoading: Bool {
+        viewState == .loading
+    }
+    
+    var isFetching: Bool {
+        viewState == .fetching
+    }
+    
+    var isFinished: Bool {
+        viewState == .finished
+    }
 }
 
 extension UserProfileHolder {
@@ -24,6 +37,14 @@ extension UserProfileHolder {
         var isLoggedIn: Bool = true
         var friendsList: [String] = []
         var userPassword: String = "abcdefghjikdas"
+    }
+}
+
+extension UserProfileHolder {
+    enum ViewState {
+        case fetching
+        case loading
+        case finished
     }
 }
 

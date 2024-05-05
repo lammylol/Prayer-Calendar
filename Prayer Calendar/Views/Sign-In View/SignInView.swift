@@ -17,6 +17,7 @@ enum AuthError: Error {
 
 struct SignInView: View {
     @Environment(UserProfileHolder.self) var userHolder
+    @Environment(PrayerListHolder.self) var prayerListHolder
     @Environment(\.colorScheme) var colorScheme
     @State var email = ""
     @State var username = ""
@@ -28,7 +29,9 @@ struct SignInView: View {
     @State var passwordText: String = ""
     
     var body: some View {
-        if userHolder.isLoggedIn == false {
+        if userHolder.isLoggedIn == true && !userHolder.isLoading {
+            ContentView(selection: 1)
+        } else {
             NavigationView {
                 VStack(/*spacing: 20*/) {
                     Spacer()
@@ -125,50 +128,49 @@ struct SignInView: View {
                 }
             }.navigationViewStyle(.stack)
         }
-        else {
-            ContentView(selection: 1)
-        }
     }
     
     func signIn() {
-        Auth.auth().signIn(withEmail: email, password: password) { result, error in
-            if let error = error {
-                let err = error as NSError
-                if let authErrorCode = AuthErrorCode.Code(rawValue: err.code) {
-                    
-                    switch authErrorCode {
-                    case .userNotFound:
-                        errorMessage = "No account found with these credentials."
-                    case .wrongPassword:
-                        errorMessage = "Incorrect password entered. Please try again."
-                    case .invalidEmail:
-                        errorMessage = "Invalid email entered. Please enter a valid email."
-                    case .networkError:
-                        errorMessage = "A network error has occurred. Please try again later."
-                    default:
-                        errorMessage = "Invalid Credentials."
+        Task {
+            userHolder.viewState = .loading
+            defer { userHolder.viewState = .finished }
+            
+            Auth.auth().signIn(withEmail: email, password: password) { result, error in
+                if let error = error {
+                    let err = error as NSError
+                    if let authErrorCode = AuthErrorCode.Code(rawValue: err.code) {
+                        
+                        switch authErrorCode {
+                        case .userNotFound:
+                            errorMessage = "No account found with these credentials."
+                        case .wrongPassword:
+                            errorMessage = "Incorrect password entered. Please try again."
+                        case .invalidEmail:
+                            errorMessage = "Invalid email entered. Please enter a valid email."
+                        case .networkError:
+                            errorMessage = "A network error has occurred. Please try again later."
+                        default:
+                            errorMessage = "Invalid Credentials."
+                        }
                     }
-                }
-                print(errorMessage)
-            } else {
-                Task {
-                    let userID = Auth.auth().currentUser!.uid
-                    await getUserInfo(person: Person(userID: userID), email: email)
-                    userHolder.isLoggedIn = true
-                    userHolder.userPassword = password
-                    email = ""
-                    password = ""
-                    username = ""
-                    errorMessage = ""
+                    print(errorMessage)
+                } else {
+                    Task {
+                        let userID = Auth.auth().currentUser!.uid
+                        /*et userID:String = (result?.user.uid)!*/
+                        await getUserInfo(person: Person(userID: userID), email: email)
+                        await PrayerPersonHelper().getPrayerList(userHolder: userHolder, prayerListHolder: prayerListHolder)
+                        userHolder.isLoggedIn = true
+                        userHolder.userPassword = password
+                        email = ""
+                        password = ""
+                        username = ""
+                        errorMessage = ""
+                    }
                 }
             }
         }
     }
-    
-//    func signInWithGoogle() {
-//        let provider = GoogleAuthProvider().responds(to: <#T##Selector!#>)
-//        Google
-//    }
     
         //  This function retrieves Userinfo data from Firestore.
     func getUserInfo(person: Person, email: String) async {

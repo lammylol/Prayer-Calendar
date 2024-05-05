@@ -38,7 +38,7 @@ struct PrayerNameInputView: View {
                 .padding([.leading, .trailing], 85)
                 
                 Divider()
-                Text("Input your list below. To link to an active profile, paste a semicolon followed by the person's username.\n\nex. Matt; matt12345")
+                Text("Add the friends you would like to pray for by submitting their names below. Adding a friend will create a profile for them within your account, unless you link to an active profile. To link to an active account, enter the person's name, followed by a semicolon, followed by the person's username.\n\nex. Berry Lam; berry")
                     .italic()
                     .padding(.all, 10)
                     .font(.system(size: 14))
@@ -53,7 +53,7 @@ struct PrayerNameInputView: View {
                     .foregroundStyle(Color.red)
                 Spacer()
             }
-            .navigationTitle("Prayer Calendar List")
+            .navigationTitle("Friend List")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 if self.isFocused == true {

@@ -11,15 +11,6 @@ import FirebaseCore
 
 @main
 struct PrayerCalendarSwiftApp: App {
-//    @State private var userHolder = UserProfileHolder()
-//    @State private var dataHolder = PrayerListHolder()
-    
-//    let container: ModelContainer = {
-//        let schema = Schema([PrayerRequestViewModel.self])
-//        let config = ModelConfiguration(allowsSave: true)
-//        let container = try! ModelContainer(for: schema, configurations: config)
-//        return container
-//    }()
     
     init(){
         FirebaseApp.configure()
@@ -33,7 +24,6 @@ struct PrayerCalendarSwiftApp: App {
                 .environment(PrayerListHolder())
                 .environment(DateHolder())
                 .environment(PrayerRequestViewModel())
-//                .environment(PrayerRequestsHolder())
         }
     }
 }

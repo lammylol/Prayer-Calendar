@@ -17,9 +17,9 @@ struct TabBarButton: View {
         GeometryReader { geo in
             VStack (alignment: .center) {
                 Text(type)
-                    .font(.callout)
-                    .bold()
-                    .font(.system(size:9))
+//                    .font(.callout)
+//                    .bold()
+                    .font(.system(size: 16))
                     .foregroundStyle(textColor())
                     .frame(width: geo.size.width, height: geo.size.height)
                     .padding(.vertical, 3)
@@ -27,7 +27,7 @@ struct TabBarButton: View {
                 if isSelected == true {
                     Rectangle()
                         .fill(scheme == .dark ? .white : .gray)
-                        .frame(width: geo.size.width * 0.8, height: 3)
+                        .frame(width: geo.size.width * 0.7, height: 2)
                 }
             }
         }

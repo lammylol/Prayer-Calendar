@@ -130,7 +130,7 @@ struct PrayerRequestFormView: View {
                 Task {
                     do {
                         prayerRequestUpdates = try await PrayerUpdateHelper().getPrayerRequestUpdates(prayerRequest: prayerRequest, person: person)
-//                        prayerRequest = try await ProfilePrayerRequestHelper().getPrayerRequest(prayerRequest: prayerRequest)
+                        prayerRequest = try await ProfilePrayerRequestHelper().getPrayerRequest(prayerRequest: prayerRequest)
                     } catch {
                         print("error retrieving updates.")
                     }

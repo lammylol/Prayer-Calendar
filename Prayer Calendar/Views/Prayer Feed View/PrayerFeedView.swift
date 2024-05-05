@@ -34,14 +34,14 @@ struct PrayerFeedView: View {
             ScrollView(.vertical) {
             //             title hides when you scroll down
                 HStack {
-                    Text("prayer feed")
-                        .font(.largeTitle)
+                    Text("Feed")
+                        .font(.title3)
                         .bold()
-                        .padding(.leading, 16)
-                    Spacer()
+//                        .padding(.leading, 20)
+//                    Spacer()
                 }
-                .offset(y: 15)
-                .padding(.top, 27)
+                .offset(y: 10)
+//                .padding(.top, 27)
                 
                 LazyVStack(alignment: .leading, pinnedViews: [.sectionHeaders]) {
                     // Pinned section

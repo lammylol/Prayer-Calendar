@@ -19,17 +19,22 @@ struct PrayerCalendarView: View {
     var body: some View {
         NavigationStack{        //Navigation Stack.
 /*            ScrollView {  */      //ScrollView enables title to shrink.
+//                HStack {
+//                    Text("My Prayer Calendar")
+//                        .font(.title2)
+//                        .bold()
+//                        .padding(.leading, 20)
+//                        Spacer()
+//                }
+//                .offset(y: 10)
+    //                .padding(.top, 27)
+                
                 LazyVStack(alignment: .leading, spacing: 0, pinnedViews: .sectionHeaders) { // LazyStack to freeze the top header when scrolling down.
                     Section {
                         VStack (spacing: 0) {
                             calendarGrid
                                 .padding(.horizontal, 10)
                                 .padding(.top, 20)
-                                .task {
-                                    if userHolder.isLoggedIn == true {
-                                        await PrayerPersonHelper().getPrayerList(userHolder: userHolder, prayerListHolder: prayerListHolder)
-                                    }
-                                }
                         }
                         .background(Color.gray.opacity(0.05))
                     } header: { //Header that freezes for lazy stack.
@@ -38,17 +43,8 @@ struct PrayerCalendarView: View {
                                 .toolbar() {
                                     ToolbarItem(placement: .automatic) {
                                         NavigationLink(destination: PrayerNameInputView(prayerListHolder: prayerListHolder)){
-                                            Text("edit")
-                                                .bold()
-                                                .font(.system(size: 14))
-                                                .frame(width: 50, height: 25)
-                                                .background(
-                                                    RoundedRectangle(cornerRadius: 15)
-                                                        .fill(Color.blue)
-                                                )
-                                                .foregroundColor(.white)
+                                            friendsListText
                                         }
-//                                            Image(systemName: "list.bullet.rectangle")
                                         }
                                 }
                             DateScroller()
@@ -61,7 +57,7 @@ struct PrayerCalendarView: View {
                         }
                         .padding([.top, .bottom], 10)
                         .background(UIHelper().backgroundColor(colorScheme: colorScheme))
-                        .navigationTitle("prayer calendar")
+                        .navigationTitle("Prayer Calendar")
                         .navigationBarTitleDisplayMode(.automatic)
                         .navigationBarBackButtonHidden(true)
                         .toolbarBackground(UIHelper().backgroundColor(colorScheme: colorScheme), for: .navigationBar)
@@ -113,6 +109,20 @@ struct PrayerCalendarView: View {
                     }
                 }
             }
+        }
+    }
+    
+    @ViewBuilder
+    var friendsListText: some View {
+        if prayerListHolder.prayerList.isEmpty {
+            HStack {
+                Text("Add a Friend to Pray For -> ")
+                    .font(.system(size: 15))
+                    .foregroundColor(.blue)
+                Image(systemName: "list.bullet.circle")
+            }
+        } else {
+            Image(systemName: "list.bullet.circle")
         }
     }
 }
