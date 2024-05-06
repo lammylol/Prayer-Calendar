@@ -23,16 +23,14 @@ class PrayerPersonHelper {
     func getPrayerList(userHolder: UserProfileHolder, prayerListHolder: PrayerListHolder) async {
             let ref = db.collection("users").document(userHolder.person.userID)
             
-            ref.getDocument{(document, error) in
-                if let document = document, document.exists {
-                    
-//                    let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
-//                    print("Document data: " + dataDescription)
+            do {
+                let document = try await ref.getDocument()
+                if document.exists {
                     
                     //Update Dataholder with PrayStartDate from Firestore
                     let startDateTimeStamp = document.get("prayStartDate") as? Timestamp ?? Timestamp(date: Date())
                     prayerListHolder.prayStartDate = startDateTimeStamp.dateValue()
-                        
+                    
                     //Update Dataholder with PrayerList from Firestore
                     prayerListHolder.prayerList = document.get("prayerList") as? String ?? ""
                     
@@ -40,6 +38,8 @@ class PrayerPersonHelper {
                     print("Document does not exist")
                     prayerListHolder.prayerList = ""
                 }
+            } catch {
+                print(error.localizedDescription)
             }
     }
 

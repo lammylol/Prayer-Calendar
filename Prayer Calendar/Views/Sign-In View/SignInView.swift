@@ -27,6 +27,7 @@ struct SignInView: View {
     @State var errorMessage = ""
     @State var text: String = ""
     @State var passwordText: String = ""
+    @State private var height: CGFloat = 0
     
     var body: some View {
         if userHolder.isLoggedIn == true && !userHolder.isLoading {
@@ -42,41 +43,49 @@ struct SignInView: View {
                         .offset(x: -80)
                     
                     VStack {
-                        HStack {
-                            Text("Email: ")
-                                .padding(.leading, 40)
-                            MyTextView(placeholder: "", text: $email, textPrompt: "enter email", textFieldType: "text")
-                                .textContentType(.emailAddress)
-                        }
-                        
-                        Rectangle()
-                            .frame(height: 1)
-                            .padding([.leading, .trailing], 40)
-                        
-                        HStack {
-                            Text("Password: ")
-                                .padding(.leading, 40)
-                            MyTextView(placeholder: "", text: $password, textPrompt: "enter password", textFieldType: "secure")
-                                .textContentType(.password)
-                        }
-                        
-                        Rectangle()
-                            .frame(height: 1)
-                            .padding([.leading, .trailing], 40)
-                        
-                        HStack {
-                            Button(action: {
-                                showForgotPassword.toggle()
-                            }) {
-                                Text("Forgot Password?")
-                                    .foregroundStyle(.blue)
-                                    .font(.system(size: 16))
+                        ZStack {
+                            VStack {
+                                HStack {
+                                    Text("Email: ")
+                                        .padding(.leading, 40)
+                                    MyTextView(placeholder: "", text: $email, textPrompt: "enter email", textFieldType: "text")
+                                        .textContentType(.emailAddress)
+                                }
+                                Rectangle()
+                                    .frame(height: 1)
+                                    .padding([.leading, .trailing], 40)
                             }
-                            Spacer()
+                            
+                            VStack {
+                                Spacer()
+                                    .frame(height: 90)
+                                HStack {
+                                    Text("Password: ")
+                                        .padding(.leading, 40)
+                                    MyTextView(placeholder: "", text: $password, textPrompt: "enter password", textFieldType: "secure")
+                                        .textContentType(.password)
+                                }
+                            }
                         }
-                        .padding([.leading, .trailing], 40)
-                        .padding(.top, 5)
                     }
+                    .frame(height: 125)
+                    
+                    Rectangle()
+                        .frame(height: 1)
+                        .padding([.leading, .trailing], 40)
+                    
+                    HStack {
+                        Button(action: {
+                            showForgotPassword.toggle()
+                        }) {
+                            Text("Forgot Password?")
+                                .foregroundStyle(.blue)
+                                .font(.system(size: 16))
+                        }
+                        Spacer()
+                    }
+                    .padding([.leading, .trailing], 40)
+                    .padding(.top, 5)
                     
                     Button(action: {
                         Task {
