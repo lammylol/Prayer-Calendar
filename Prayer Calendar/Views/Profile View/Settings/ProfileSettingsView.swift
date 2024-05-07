@@ -73,9 +73,10 @@ struct DeleteButton: View {
                             isPresented: $isPresentingConfirm) {
             Button("Delete Account and Sign Out", role: .destructive) {
                 Task {
+                    defer { signOut() }
                     do {
+                        print(Auth.auth().currentUser?.uid)
                         try await PrayerPersonHelper().deletePerson(userID: userHolder.person.userID, friendsList: userHolder.friendsList)
-                        signOut()
                     } catch {
                         print(error)
                     }

@@ -21,15 +21,21 @@ class ProfilePrayerRequestHelper {
     let db = Firestore.firestore()
 
     //Retrieve prayer requests from Firestore
-    func getPrayerRequests(userID: String, person: Person) async throws -> [PrayerRequest] {
+    func getPrayerRequests(userID: String, person: Person, status: String?) async throws -> [PrayerRequest] {
         var prayerRequests = [PrayerRequest]()
         
         guard userID != "" else {
             throw PrayerRequestRetrievalError.noUserID
         }
         
+        var profiles: Query
+        
         do {
-            let profiles = db.collection("users").document(userID).collection("prayerList").document("\(person.firstName.lowercased())_\(person.lastName.lowercased())").collection("prayerRequests").order(by: "latestUpdateDatePosted", descending: true)
+            if status != nil {
+                profiles = db.collection("users").document(userID).collection("prayerList").document("\(person.firstName.lowercased())_\(person.lastName.lowercased())").collection("prayerRequests").whereField("status", isEqualTo: "Current").order(by: "latestUpdateDatePosted", descending: true)
+            } else {
+                profiles = db.collection("users").document(userID).collection("prayerList").document("\(person.firstName.lowercased())_\(person.lastName.lowercased())").collection("prayerRequests").order(by: "latestUpdateDatePosted", descending: true)
+            }
             
             let querySnapshot = try await profiles.getDocuments()
             

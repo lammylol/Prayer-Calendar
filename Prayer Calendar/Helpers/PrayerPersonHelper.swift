@@ -95,7 +95,7 @@ class PrayerPersonHelper {
                         //                    print("\(document.documentID) => \(document.data())")
                         if document.exists {
                             let dataDescription = document.data()
-                            print("Document data: \(dataDescription)")
+//                            print("Document data: \(dataDescription)")
                             
                             userID = document.get("userID") as? String ?? ""
                             firstName = document.get("firstName") as? String ?? ""
@@ -148,8 +148,9 @@ class PrayerPersonHelper {
         //In this scenario, userID is the userID of the person retrieving data from the 'person'.
         do {
             //user is retrieving prayer requests of the friend: person.userID and person: person.
-            let prayerRequests = try await ProfilePrayerRequestHelper().getPrayerRequests(userID: person.userID, person: person)
+            let prayerRequests = try await ProfilePrayerRequestHelper().getPrayerRequests(userID: person.userID, person: person, status: "Current")
             
+            print(prayerRequests.description)
             //for each prayer request, user is taking the friend's prayer request and updating them to their own feed. The user becomes the 'friend' of the person.
             for prayer in prayerRequests {
                 ProfilePrayerRequestHelper().updatePrayerFeed(prayerRequest: prayer, person: person, friendID: userID, updateFriend: true)
@@ -170,17 +171,9 @@ class PrayerPersonHelper {
                     try await request.reference.delete()
                 }
                 
-                // delete prayerFeed
-                let prayerFeedUser = db.collection("prayerFeed").document(userID)
-                try await prayerFeedUser.delete()
-                
-                let prayerFeedRef = try await db.collection("prayerFeed").document(userID).collection("friendsList").getDocuments()
+                // delete user's feed
+                let prayerFeedRef = try await db.collection("prayerFeed").document(userID).collection("prayerRequests").getDocuments()
                 for request in prayerFeedRef.documents {
-                    try await request.reference.delete()
-                }
-                
-                let prayerFeedRef2 = try await db.collection("prayerFeed").document(userID).collection("prayerList").getDocuments()
-                for request in prayerFeedRef2.documents {
                     try await request.reference.delete()
                 }
                 
@@ -195,7 +188,7 @@ class PrayerPersonHelper {
                     }
                 }
                 
-                // delete users info data.
+                // delete user's info data.
                 let userFriendsListRef = try await db.collection("users").document(userID).collection("friendsList").getDocuments()
                 for request in userFriendsListRef.documents {
                     try await request.reference.delete()

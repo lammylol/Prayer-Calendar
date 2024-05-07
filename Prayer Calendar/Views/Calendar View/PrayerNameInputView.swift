@@ -215,9 +215,9 @@ struct PrayerNameInputView: View {
             PrayerPersonHelper().updateUserData(userID: userHolder.person.userID, prayStartDate: prayStartDate, prayerList: prayerList)
                     
             
-//            //reset local dataHolder
-//            prayerListHolder.prayerList = prayerList/*.joined(separator: "\n")*/
-//            prayerListHolder.prayStartDate = prayStartDate
+            //reset local dataHolder
+            prayerListHolder.prayerList = prayerList/*.joined(separator: "\n")*/
+            prayerListHolder.prayStartDate = prayStartDate
 //            saved = "Saved"
     }
     
