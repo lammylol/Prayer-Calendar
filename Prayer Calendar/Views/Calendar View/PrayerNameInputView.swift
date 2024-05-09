@@ -13,7 +13,7 @@ struct PrayerNameInputView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(UserProfileHolder.self) var userHolder
     
-    @Bindable var prayerListHolder: PrayerListHolder // This holds things necessary for prayer list.
+    @Bindable var prayerListHolder: UserProfileHolder // This holds things necessary for prayer list.
 
     @State var prayStartDate: Date = Date()
     @State var prayerList: String = ""
@@ -21,7 +21,7 @@ struct PrayerNameInputView: View {
     @State var saved: String = ""
     @FocusState private var isFocused: Bool
     
-    init(prayerListHolder: PrayerListHolder) {
+    init(prayerListHolder: UserProfileHolder) {
         self.prayerListHolder = prayerListHolder
         _prayerList = State(initialValue: prayerListHolder.prayerList)
         _prayStartDate = State(initialValue: prayerListHolder.prayStartDate)
@@ -234,8 +234,8 @@ struct PrayerNameInputView: View {
 
 struct PrayerNameInputView_Previews: PreviewProvider {
     static var previews: some View {
-        PrayerNameInputView(prayerListHolder: PrayerListHolder())
-            .environment(PrayerListHolder())
+        PrayerNameInputView(prayerListHolder: UserProfileHolder())
+            .environment(UserProfileHolder())
             .environment(UserProfileHolder())
     }
 }

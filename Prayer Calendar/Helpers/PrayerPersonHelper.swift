@@ -20,7 +20,7 @@ class PrayerPersonHelper {
     let db = Firestore.firestore()
     
 //    This function retrieves PrayerList data from Firestore.
-    func getPrayerList(userHolder: UserProfileHolder, prayerListHolder: PrayerListHolder) async {
+    func getPrayerList(userHolder: UserProfileHolder) async {
             let ref = db.collection("users").document(userHolder.person.userID)
             
             do {
@@ -29,14 +29,14 @@ class PrayerPersonHelper {
                     
                     //Update Dataholder with PrayStartDate from Firestore
                     let startDateTimeStamp = document.get("prayStartDate") as? Timestamp ?? Timestamp(date: Date())
-                    prayerListHolder.prayStartDate = startDateTimeStamp.dateValue()
+                    userHolder.prayStartDate = startDateTimeStamp.dateValue()
                     
                     //Update Dataholder with PrayerList from Firestore
-                    prayerListHolder.prayerList = document.get("prayerList") as? String ?? ""
+                    userHolder.prayerList = document.get("prayerList") as? String ?? ""
                     
                 } else {
                     print("Document does not exist")
-                    prayerListHolder.prayerList = ""
+                    userHolder.prayerList = ""
                 }
             } catch {
                 print(error.localizedDescription)
@@ -211,4 +211,47 @@ class PrayerPersonHelper {
                 throw error
             }
         }}
+    
+    func getUserInfo(person: Person, userHolder: UserProfileHolder) async {
+        do {
+            let ref = db.collection("users").document(person.userID)
+            
+            let document = try await ref.getDocument()
+                    
+            let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
+            print("Document data: " + dataDescription)
+            
+            let firstName = document.get("firstName") as! String
+            let lastName = document.get("lastName") as! String
+            let username = document.get("username") as! String
+            let userID = document.get("userID") as! String
+            
+            let prayerPerson = Person(userID: userID, username: username, email: userHolder.email, firstName: firstName, lastName: lastName)
+            print("/username: " + prayerPerson.username)
+            
+            userHolder.person = prayerPerson
+            
+            let (pinnedPrayerRequests, lastDocument) = try await PrayerFeedHelper().getPrayerRequestFeed(user: userHolder.person, person: person, answeredFilter: "pinned", count: 5, lastDocument: nil, profileOrFeed: "feed")
+            
+            userHolder.pinnedPrayerRequests = pinnedPrayerRequests
+            
+            print("//username: " + userHolder.person.username)
+        } catch {
+            print("Error retrieving user info.")
+        }
+                
+
+        do {
+            let friendsListRef = db.collection("users").document(person.userID).collection("friendsList")
+            let querySnapshot = try await friendsListRef.getDocuments()
+
+            //append FriendsListArray in userHolder
+            for document in querySnapshot.documents {
+                print("\(document.documentID) => \(document.data())")
+                userHolder.friendsList.append(document.documentID)
+            }
+        } catch {
+          print("Error getting documents: \(error)")
+        }
+    }
 }

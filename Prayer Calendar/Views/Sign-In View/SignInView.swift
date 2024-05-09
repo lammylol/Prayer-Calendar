@@ -17,7 +17,7 @@ enum AuthError: Error {
 
 struct SignInView: View {
     @Environment(UserProfileHolder.self) var userHolder
-    @Environment(PrayerListHolder.self) var prayerListHolder
+    @Environment(DateHolder.self) var dateHolder
     @Environment(\.colorScheme) var colorScheme
     @State var email = ""
     @State var username = ""
@@ -30,120 +30,141 @@ struct SignInView: View {
     @State private var height: CGFloat = 0
     
     var body: some View {
-        if userHolder.isLoggedIn == true && !userHolder.isLoading {
-            ContentView(selection: 1)
-        } else {
-            NavigationView {
-                VStack(/*spacing: 20*/) {
+        Group {
+            if userHolder.isLoading {
+                VStack {
                     Spacer()
-                    
-                    Text("Welcome")
+                    Text("Prayer Calendar")
                         .font(.largeTitle)
-                        .bold()
-                        .offset(x: -80)
-                    
-                    VStack {
-                        ZStack {
-                            VStack {
-                                HStack {
-                                    Text("Email: ")
-                                        .padding(.leading, 40)
-                                    MyTextView(placeholder: "", text: $email, textPrompt: "enter email", textFieldType: "text")
-                                        .textContentType(.emailAddress)
-                                }
-                                Rectangle()
-                                    .frame(height: 1)
-                                    .padding([.leading, .trailing], 40)
-                            }
-                            
-                            VStack {
-                                Spacer()
-                                    .frame(height: 90)
-                                HStack {
-                                    Text("Password: ")
-                                        .padding(.leading, 40)
-                                    MyTextView(placeholder: "", text: $password, textPrompt: "enter password", textFieldType: "secure")
-                                        .textContentType(.password)
-                                }
-                            }
-                        }
-                    }
-                    .frame(height: 125)
-                    
-                    Rectangle()
-                        .frame(height: 1)
-                        .padding([.leading, .trailing], 40)
-                    
-                    HStack {
-                        Button(action: {
-                            showForgotPassword.toggle()
-                        }) {
-                            Text("Forgot Password?")
-                                .foregroundStyle(.blue)
-                                .font(.system(size: 16))
-                        }
-                        Spacer()
-                    }
-                    .padding([.leading, .trailing], 40)
-                    .padding(.top, 5)
-                    
-                    Button(action: {
-                        Task {
-                            signIn()
-                        }
-                    }) {Text("Sign In")
-                            .bold()
-                            .frame(height: 35)
-                            .frame(maxWidth: .infinity)
-                    }
-                    .background(
-                        RoundedRectangle(cornerRadius: 5)
-                            .fill(.blue)
-                    )
-                    .padding([.leading, .trailing], 40)
-                    .foregroundStyle(.white)
-                    .padding(.top, 30)
-                    
-                    if errorMessage != "" {
-                        Text(errorMessage)
-                            .font(.system(size: 16))
-                            .foregroundStyle(Color.red)
-                            .padding([.leading, .trailing], 40)
-                            .padding([.top, .bottom], 15)
-                    }
-                    
-                    HStack {
-                        Text("Don't have an account yet? ")
-                        Button(action: {
-                            showCreateAccount.toggle()
-                        }) {
-                            Text("Sign Up")
-                        }
-                    }
-                    .padding([.top, .bottom], 15)
-                    
+                        .multilineTextAlignment(.center)
                     Spacer()
-                    
                 }
-                .sheet(isPresented: $showCreateAccount, onDismiss: {
-                    errorMessage = ""
-                }) {
-                    CreateProfileView()
-                }
-                .sheet(isPresented: $showForgotPassword, onDismiss: {
-                    errorMessage = ""
-                }) {
-                    ForgotPassword()
-                }
-            }.navigationViewStyle(.stack)
+            } else if userHolder.isLoggedIn == .authenticated && userHolder.isFinished {
+                ContentView(selection: 1)
+            } else {
+                NavigationView {
+                    VStack(/*spacing: 20*/) {
+                        Spacer()
+                        
+                        Text("Welcome")
+                            .font(.largeTitle)
+                            .bold()
+                            .offset(x: -80)
+                        
+                        VStack {
+                            ZStack {
+                                VStack {
+                                    HStack {
+                                        Text("Email: ")
+                                            .padding(.leading, 40)
+                                        MyTextView(placeholder: "", text: $email, textPrompt: "enter email", textFieldType: "text")
+                                            .textContentType(.emailAddress)
+                                    }
+                                    Rectangle()
+                                        .frame(height: 1)
+                                        .padding([.leading, .trailing], 40)
+                                }
+                                
+                                VStack {
+                                    Spacer()
+                                        .frame(height: 90)
+                                    HStack {
+                                        Text("Password: ")
+                                            .padding(.leading, 40)
+                                        MyTextView(placeholder: "", text: $password, textPrompt: "enter password", textFieldType: "secure")
+                                            .textContentType(.password)
+                                    }
+                                }
+                            }
+                        }
+                        .frame(height: 125)
+                        
+                        Rectangle()
+                            .frame(height: 1)
+                            .padding([.leading, .trailing], 40)
+                        
+                        HStack {
+                            Button(action: {
+                                showForgotPassword.toggle()
+                            }) {
+                                Text("Forgot Password?")
+                                    .foregroundStyle(.blue)
+                                    .font(.system(size: 16))
+                            }
+                            Spacer()
+                        }
+                        .padding([.leading, .trailing], 40)
+                        .padding(.top, 5)
+                        
+                        Button(action: {
+                            Task {
+                                signIn()
+                            }
+                        }) {Text("Sign In")
+                                .bold()
+                                .frame(height: 35)
+                                .frame(maxWidth: .infinity)
+                        }
+                        .background(
+                            RoundedRectangle(cornerRadius: 5)
+                                .fill(.blue)
+                        )
+                        .padding([.leading, .trailing], 40)
+                        .foregroundStyle(.white)
+                        .padding(.top, 30)
+                        
+                        if errorMessage != "" {
+                            Text(errorMessage)
+                                .font(.system(size: 16))
+                                .foregroundStyle(Color.red)
+                                .padding([.leading, .trailing], 40)
+                                .padding([.top, .bottom], 15)
+                        }
+                        
+                        HStack {
+                            Text("Don't have an account yet? ")
+                            Button(action: {
+                                showCreateAccount.toggle()
+                            }) {
+                                Text("Sign Up")
+                            }
+                        }
+                        .padding([.top, .bottom], 15)
+                        
+                        Spacer()
+                        
+                    }
+                    .sheet(isPresented: $showCreateAccount, onDismiss: {
+                        errorMessage = ""
+                    }) {
+                        CreateProfileView()
+                    }
+                    .sheet(isPresented: $showForgotPassword, onDismiss: {
+                        errorMessage = ""
+                    }) {
+                        ForgotPassword()
+                    }
+                }.navigationViewStyle(.stack)
+            }
+        }
+        .task {
+            userHolder.viewState = .loading
+            defer { userHolder.viewState = .finished }
+            
+            dateHolder.date = Date() // Resets the view to current month
+            if userHolder.isLoggedIn == .authenticated {
+                let userID = Auth.auth().currentUser?.uid ?? ""
+                await PrayerPersonHelper().getUserInfo(person: Person(userID: userID), userHolder: userHolder)
+                await PrayerPersonHelper().getPrayerList(userHolder: userHolder)
+            }
         }
     }
     
     func signIn() {
         Task {
-            userHolder.viewState = .loading
-            defer { userHolder.viewState = .finished }
-            
+//            userHolder.viewState = .loading
+//            defer { userHolder.viewState = .finished }
+//            
             Auth.auth().signIn(withEmail: email, password: password) { result, error in
                 if let error = error {
                     let err = error as NSError
@@ -165,12 +186,17 @@ struct SignInView: View {
                     print(errorMessage)
                 } else {
                     Task {
-                        let userID = Auth.auth().currentUser!.uid
-                        /*et userID:String = (result?.user.uid)!*/
-                        await getUserInfo(person: Person(userID: userID), email: email)
-                        await PrayerPersonHelper().getPrayerList(userHolder: userHolder, prayerListHolder: prayerListHolder)
-                        userHolder.isLoggedIn = true
+                        userHolder.viewState = .loading
+                        defer { userHolder.viewState = .finished }
+                        
+//                        let userID = Auth.auth().currentUser!.uid
+                        userHolder.email = email
                         userHolder.userPassword = password
+                        
+                        let userID = Auth.auth().currentUser?.uid ?? ""
+                        await PrayerPersonHelper().getUserInfo(person: Person(userID: userID), userHolder: userHolder)
+                        await PrayerPersonHelper().getPrayerList(userHolder: userHolder)
+                        
                         email = ""
                         password = ""
                         username = ""
@@ -182,53 +208,51 @@ struct SignInView: View {
     }
     
         //  This function retrieves Userinfo data from Firestore.
-    func getUserInfo(person: Person, email: String) async {
-        
-        let db = Firestore.firestore()
-//        let ref = db.collection("users").document(userID)
+//    func getUserInfo(person: Person, email: String) async {
 //        
-        do {
-            let ref = db.collection("users").document(person.userID)
-            
-            let document = try await ref.getDocument()
-                    
-            let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
-            print("Document data: " + dataDescription)
-            
-            let firstName = document.get("firstName") as! String
-            let lastName = document.get("lastName") as! String
-            let username = document.get("username") as! String
-            let userID = document.get("userID") as! String
-            
-            let prayerPerson = Person(userID: userID, username: username, email: email, firstName: firstName, lastName: lastName)
-            print("/username: " + prayerPerson.username)
-            
-            userHolder.person = prayerPerson
-//            userHolder.pinnedPrayerRequests = try await PrayerFeedHelper().retrievePrayerRequestFeed(userID: userID, answeredFilter: "pinned")
-            
-            let (pinnedPrayerRequests, lastDocument) = try await PrayerFeedHelper().getPrayerRequestFeed(user: userHolder.person, person: person, answeredFilter: "pinned", count: 5, lastDocument: nil, profileOrFeed: "feed")
-            
-            userHolder.pinnedPrayerRequests = pinnedPrayerRequests
-            
-            print("//username: " + userHolder.person.username)
-        } catch {
-            print("Error retrieving user info.")
-        }
-                
-
-        do {
-            let friendsListRef = db.collection("users").document(person.userID).collection("friendsList")
-            let querySnapshot = try await friendsListRef.getDocuments()
-
-            //append FriendsListArray in userHolder
-            for document in querySnapshot.documents {
-                print("\(document.documentID) => \(document.data())")
-                userHolder.friendsList.append(document.documentID)
-            }
-        } catch {
-          print("Error getting documents: \(error)")
-        }
-    }
+//        let db = Firestore.firestore()
+////        
+//        do {
+//            let ref = db.collection("users").document(person.userID)
+//            
+//            let document = try await ref.getDocument()
+//                    
+//            let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
+//            print("Document data: " + dataDescription)
+//            
+//            let firstName = document.get("firstName") as! String
+//            let lastName = document.get("lastName") as! String
+//            let username = document.get("username") as! String
+//            let userID = document.get("userID") as! String
+//            
+//            let prayerPerson = Person(userID: userID, username: username, email: email, firstName: firstName, lastName: lastName)
+//            print("/username: " + prayerPerson.username)
+//            
+//            userHolder.person = prayerPerson
+//            
+//            let (pinnedPrayerRequests, lastDocument) = try await PrayerFeedHelper().getPrayerRequestFeed(user: userHolder.person, person: person, answeredFilter: "pinned", count: 5, lastDocument: nil, profileOrFeed: "feed")
+//            
+//            userHolder.pinnedPrayerRequests = pinnedPrayerRequests
+//            
+//            print("//username: " + userHolder.person.username)
+//        } catch {
+//            print("Error retrieving user info.")
+//        }
+//                
+//
+//        do {
+//            let friendsListRef = db.collection("users").document(person.userID).collection("friendsList")
+//            let querySnapshot = try await friendsListRef.getDocuments()
+//
+//            //append FriendsListArray in userHolder
+//            for document in querySnapshot.documents {
+//                print("\(document.documentID) => \(document.data())")
+//                userHolder.friendsList.append(document.documentID)
+//            }
+//        } catch {
+//          print("Error getting documents: \(error)")
+//        }
+//    }
 }
 
 

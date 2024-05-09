@@ -18,7 +18,7 @@ struct ProfileView: View {
     @State var viewModel: PrayerRequestViewModel = PrayerRequestViewModel()
     
     @Environment(UserProfileHolder.self) var userHolder
-    @Environment(PrayerListHolder.self) var dataHolder
+    @Environment(UserProfileHolder.self) var dataHolder
     
     var body: some View {
         NavigationStack {
@@ -114,5 +114,5 @@ struct ProfileView: View {
 #Preview {
     ProfileView(person: Person(userID: "aMq0YdteGEbYXWlSgxehVy7Fyrl2", username: "lammylol"))
         .environment(UserProfileHolder())
-        .environment(PrayerListHolder())
+        .environment(UserProfileHolder())
 }

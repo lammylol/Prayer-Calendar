@@ -9,26 +9,16 @@ import SwiftUI
 import SwiftData
 import FirebaseFirestore
 import FirebaseCore
+import FirebaseAuth
 
 struct PrayerCalendarView: View {
     @Environment(UserProfileHolder.self) var userHolder
-    @Environment(PrayerListHolder.self) var prayerListHolder
+    @Environment(UserProfileHolder.self) var prayerListHolder
     @Environment(DateHolder.self) var dateHolder
     @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         NavigationStack{        //Navigation Stack.
-/*            ScrollView {  */      //ScrollView enables title to shrink.
-//                HStack {
-//                    Text("My Prayer Calendar")
-//                        .font(.title2)
-//                        .bold()
-//                        .padding(.leading, 20)
-//                        Spacer()
-//                }
-//                .offset(y: 10)
-    //                .padding(.top, 27)
-                
                 LazyVStack(alignment: .leading, spacing: 0, pinnedViews: .sectionHeaders) { // LazyStack to freeze the top header when scrolling down.
                     Section {
                         VStack (spacing: 0) {
@@ -65,9 +55,15 @@ struct PrayerCalendarView: View {
                 }
 //        }
         }
-        .onAppear {
-            dateHolder.date = Date() // Resets the view to current month 
-        }
+//        .task {
+//            userHolder.viewState = .loading
+//            defer { userHolder.viewState = .finished }
+//            
+//            dateHolder.date = Date() // Resets the view to current month
+//            let userID = Auth.auth().currentUser?.uid ?? ""
+//            await PrayerPersonHelper().getUserInfo(person: Person(userID: userID), userHolder: userHolder)
+//            await PrayerPersonHelper().getPrayerList(userHolder: userHolder)
+//        }
     }
     
     var dayOfWeekStack: some View {
@@ -139,6 +135,6 @@ struct PrayerCalendarView_Previews: PreviewProvider {
     static var previews: some View {
         PrayerCalendarView()
             .environment(UserProfileHolder())
-            .environment(PrayerListHolder())
+            .environment(UserProfileHolder())
     }
 }

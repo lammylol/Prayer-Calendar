@@ -12,7 +12,7 @@ import FirebaseAuth
 // Settings page for user to edit profile information.
 struct ProfileSettingsView: View {
     @Environment(UserProfileHolder.self) var userHolder
-    @Environment(PrayerListHolder.self) var prayerListHolder
+    @Environment(UserProfileHolder.self) var prayerListHolder
     
     var body: some View {
             Form {
@@ -52,7 +52,6 @@ struct ProfileSettingsView: View {
 
     func resetInfo() {
         userHolder.friendsList = []
-        userHolder.isLoggedIn = false
 
         userHolder.person.userID = ""
         prayerListHolder.prayerList = ""
@@ -62,7 +61,7 @@ struct ProfileSettingsView: View {
 
 struct DeleteButton: View {
     @Environment(UserProfileHolder.self) var userHolder
-    @Environment(PrayerListHolder.self) var prayerListHolder
+    @Environment(UserProfileHolder.self) var prayerListHolder
     @State private var isPresentingConfirm: Bool = false
 
     var body: some View {
@@ -95,9 +94,8 @@ struct DeleteButton: View {
 
     func resetInfo() {
         userHolder.friendsList = []
-        userHolder.isLoggedIn = false
 
-        userHolder.person.userID = ""
+//        userHolder.person.userID = ""
         prayerListHolder.prayerList = ""
         prayerListHolder.prayStartDate = Date()
     }

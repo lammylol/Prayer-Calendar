@@ -11,7 +11,7 @@ import SwiftData
 
 struct ContentView: View {
     @Environment(UserProfileHolder.self) var userHolder
-    @Environment(PrayerListHolder.self) var prayerListHolder
+    @Environment(UserProfileHolder.self) var prayerListHolder
     @State var selection: Int
 //    @Environment(DateHolder.self) var dateHolder
     
@@ -42,7 +42,7 @@ struct ContentView: View {
 
 #Preview("Content View") {
     ContentView(selection: 1)
-        .environment(PrayerListHolder())
+        .environment(UserProfileHolder())
         .environment(UserProfileHolder())
 //        .environment(PrayerRequestsHolder())
 }

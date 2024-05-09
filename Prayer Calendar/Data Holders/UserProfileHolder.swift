@@ -7,16 +7,20 @@
 
 import Foundation
 import SwiftUI
+import FirebaseAuth
+import FirebaseFirestore
 
 @Observable class UserProfileHolder {
     // after sign-in, the 'person' will include userID, username, firstName, and lastName
     var person: Person = Person(username: "")
-    var isLoggedIn: Bool = false
     var friendsList: [String] = []
     var userPassword: String = ""
     var pinnedPrayerRequests: [PrayerRequest] = []
     var refresh: Bool = false
     var viewState: ViewState?
+    var prayerList: String = ""
+    var prayStartDate = Date()
+    var email: String = ""
     
     var isLoading: Bool {
         viewState == .loading
@@ -28,6 +32,14 @@ import SwiftUI
     
     var isFinished: Bool {
         viewState == .finished
+    }
+    
+    var isLoggedIn: Authenticated = .undefined
+    
+    init(){
+        Auth.auth().addStateDidChangeListener { auth, user in
+            self.isLoggedIn = user != nil ? .authenticated : .notAuthenticated
+        }
     }
 }
 
@@ -46,12 +58,12 @@ extension UserProfileHolder {
         case loading
         case finished
     }
-}
-
-@Observable class PrayerListHolder {
-    var userID: String = "" // unknown if needed anymore.
-    var prayerList: String = ""
-    var prayStartDate = Date()
+    
+    enum Authenticated {
+        case undefined
+        case authenticated
+        case notAuthenticated
+    }
 }
 
 @Observable class DateHolder {
