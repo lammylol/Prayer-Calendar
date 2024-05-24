@@ -16,7 +16,7 @@ struct PrayerRequest : Identifiable, Observable, Hashable {
     var status: String
     var firstName: String
     var lastName: String
-    var priority: String
+    var privacy: String
     var isPinned: Bool
     var prayerRequestTitle: String
     var latestUpdateText: String
@@ -35,7 +35,7 @@ extension PrayerRequest {
             status: "Current",
             firstName: "Matt",
             lastName: "Lam",
-            priority: "high",
+            privacy: "high",
             isPinned: true,
             prayerRequestTitle: "Test this is Title djaskldjklsajdklasjdklasjdklajsdlkasjdklajdklajdklajsdklasjdklasjdklasjdaklsdjaldjklad",
             latestUpdateText: "Test Latest Update.",
@@ -55,7 +55,7 @@ extension PrayerRequest {
             status: "",
             firstName: "",
             lastName: "",
-            priority: "",
+            privacy: "",
             isPinned: false,
             prayerRequestTitle: "",
             latestUpdateText: "",

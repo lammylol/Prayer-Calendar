@@ -18,7 +18,7 @@ struct TabBarButton: View {
             VStack (alignment: .center) {
                 Text(type)
 //                    .font(.callout)
-//                    .bold()
+                    .bold()
                     .font(.system(size: 16))
                     .foregroundStyle(textColor())
                     .frame(width: geo.size.width, height: geo.size.height)

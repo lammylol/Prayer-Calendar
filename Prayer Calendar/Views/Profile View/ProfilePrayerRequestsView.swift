@@ -67,18 +67,6 @@ struct ProfilePrayerRequestsView: View {
                     StatusPicker(viewModel: viewModel)
                 }
                 .padding(.trailing, 20)
-//                    .padding(.leading, 20)
-                
-//                // Only show this if the account has been created under your userID. Aka, can be your profile or another that you have created for someone.
-//                if person.userID == userHolder.person.userID {
-//                    Button(action: { showSubmit.toggle()
-//                    }) {
-//                        Image(systemName: "plus.circle.fill")
-//                            .resizable()
-//                            .frame(width: 25.0, height: 25.0)
-//                    }
-//                    .padding(.trailing, 15)
-//                }
             }
             Divider()
             
@@ -109,8 +97,6 @@ struct ProfilePrayerRequestsView: View {
         .task {
             do {
                 print(viewModel.selectedStatus.rawValue)
-//                viewModel.selectedStatus = .current
-//                        await viewModel.getPrayerRequests(user: userHolder.person, person: person, profileOrFeed: "profile")
                 print("Success retrieving prayer requests for \(person.userID)")
             } catch {
                 print(error.localizedDescription)
@@ -167,23 +153,6 @@ struct StatusPicker: View {
                 .resizable()
                 .frame(width: 20.0, height: 20.0)
                 .foregroundStyle(colorScheme == .dark ? .white : .black)
-//            if viewModel.selectedStatus == .noLongerNeeded {
-//                Text("No Longer Needed")
-//                    .padding(.horizontal, 10)
-//                    .foregroundStyle(.white)
-//                    .background {
-//                        RoundedRectangle(cornerRadius: 10)
-//                            .fill(.blue)
-//                    }
-//            } else {
-//                Text(viewModel.selectedStatus.rawValue.capitalized)
-//                    .padding(.horizontal, 10)
-//                    .foregroundStyle(.white)
-//                    .background {
-//                        RoundedRectangle(cornerRadius: 10)
-//                            .fill(.blue)
-//                    }
-//            }
         }
     }
 }

@@ -41,9 +41,11 @@
 		7A77CD832AEF8F7900A19ACE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7A77CD822AEF8F7900A19ACE /* GoogleService-Info.plist */; };
 		7A77CD842AEF8F7900A19ACE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7A77CD822AEF8F7900A19ACE /* GoogleService-Info.plist */; };
 		7A77CD852AEF8F7900A19ACE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7A77CD822AEF8F7900A19ACE /* GoogleService-Info.plist */; };
+		7A7C84612BF4231F00E810B2 /* Privacy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7C84602BF4231E00E810B2 /* Privacy.swift */; };
 		7A7CA4752B771106001922AA /* ProfileSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A7CA4742B771106001922AA /* ProfileSettingsView.swift */; };
 		7A8D40B52B44A9CF00B029E6 /* PrayerFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8D40B42B44A9CF00B029E6 /* PrayerFeedView.swift */; };
 		7A92577C2B686BCF00D5EF35 /* ProfilePictureAvatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A92577B2B686BCF00D5EF35 /* ProfilePictureAvatar.swift */; };
+		7ACECCDD2C014CF900E61837 /* PrivacyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ACECCDC2C014CF900E61837 /* PrivacyView.swift */; };
 		7AD28BF42BDF49B000F982C0 /* FeedRequestsRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD28BF32BDF49B000F982C0 /* FeedRequestsRowView.swift */; };
 		7AD78FDA2AFB1A8800388663 /* PrayerCalendarViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD78FD92AFB1A8800388663 /* PrayerCalendarViewTests.swift */; };
 		7AD808D12AD6F9E000A0ECA6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AD808D02AD6F9E000A0ECA6 /* ContentView.swift */; };
@@ -107,9 +109,11 @@
 		7A5C72342AFF5E3100A75636 /* PrayerRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerRequest.swift; sourceTree = "<group>"; };
 		7A66A0C42B0B24BC000CA93E /* ProfilePrayerRequestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePrayerRequestHelper.swift; sourceTree = "<group>"; };
 		7A77CD822AEF8F7900A19ACE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		7A7C84602BF4231E00E810B2 /* Privacy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Privacy.swift; sourceTree = "<group>"; };
 		7A7CA4742B771106001922AA /* ProfileSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingsView.swift; sourceTree = "<group>"; };
 		7A8D40B42B44A9CF00B029E6 /* PrayerFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerFeedView.swift; sourceTree = "<group>"; };
 		7A92577B2B686BCF00D5EF35 /* ProfilePictureAvatar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePictureAvatar.swift; sourceTree = "<group>"; };
+		7ACECCDC2C014CF900E61837 /* PrivacyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyView.swift; sourceTree = "<group>"; };
 		7AD28BF32BDF49B000F982C0 /* FeedRequestsRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedRequestsRowView.swift; sourceTree = "<group>"; };
 		7AD78FD92AFB1A8800388663 /* PrayerCalendarViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerCalendarViewTests.swift; sourceTree = "<group>"; };
 		7AD808D02AD6F9E000A0ECA6 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -190,6 +194,7 @@
 				7A5C72342AFF5E3100A75636 /* PrayerRequest.swift */,
 				7A4986672BCE2AE200C0A936 /* PrayerRequestViewModel.swift */,
 				E0564A092BB379DE00D21DB3 /* Tab.swift */,
+				7A7C84602BF4231E00E810B2 /* Privacy.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -228,6 +233,7 @@
 				7ADE4C522B046CD400CE6B33 /* SubmitPrayerRequestForm.swift */,
 				7ADE4C542B0811AC00CE6B33 /* PrayerRequestFormView.swift */,
 				7A12A9CD2B87FA3B00707E3C /* PrayerUpdateView.swift */,
+				7ACECCDC2C014CF900E61837 /* PrivacyView.swift */,
 			);
 			path = "Prayer Feed View";
 			sourceTree = "<group>";
@@ -499,8 +505,10 @@
 				7A12A9CE2B87FA3B00707E3C /* PrayerUpdateView.swift in Sources */,
 				7AE46BD82B1010E80034DAD6 /* PrayerPersonHelper.swift in Sources */,
 				7A7CA4752B771106001922AA /* ProfileSettingsView.swift in Sources */,
+				7A7C84612BF4231F00E810B2 /* Privacy.swift in Sources */,
 				7A5C72332AFF5D9F00A75636 /* PrayerRequestRow.swift in Sources */,
 				7A4986682BCE2AE200C0A936 /* PrayerRequestViewModel.swift in Sources */,
+				7ACECCDD2C014CF900E61837 /* PrivacyView.swift in Sources */,
 				7A4F26302AD0D2B600FB086C /* DateScroller.swift in Sources */,
 				7A3158ED2AF357F5009B6E59 /* SignInView.swift in Sources */,
 				7AE46BD52B10100D0034DAD6 /* Person.swift in Sources */,

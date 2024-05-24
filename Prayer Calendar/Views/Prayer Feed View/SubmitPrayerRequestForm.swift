@@ -19,27 +19,23 @@ struct SubmitPrayerRequestForm: View {
     @State var prayerRequestText: String = ""
     @State var prayerRequestTitle: String = ""
     @State private var priority = "low"
+    @State private var privacy: String = "public"
     
     var body: some View {
         NavigationView{
             Form {
                 Section(header: Text("Share a Prayer Request")) {
-                    Picker("Priority", selection: $priority) {
-                        Text("low").tag("low")
-                        Text("med").tag("med")
-                        Text("high").tag("high")
-                    }
                     ZStack(alignment: .topLeading) {
                         if prayerRequestTitle.isEmpty {
                             Text("Title")
-                                .padding(.leading, 0)
-                                .padding(.top, 8)
+                                .offset(x: 0, y: 8)
                                 .foregroundStyle(Color.gray)
                         }
                         TextEditor(text: $prayerRequestTitle)
-                            .frame(minHeight: 35)
+                            .frame(minHeight: 38)
                             .offset(x: -5, y: -1)
                     }
+                    .padding(.bottom, -4)
                     ZStack(alignment: .topLeading) {
                         if prayerRequestText.isEmpty {
                             Text("Enter Text. Consider writing your request in the form of a prayer so that readers can join with you in prayer as they read it.")
@@ -52,6 +48,11 @@ struct SubmitPrayerRequestForm: View {
                             .frame(height: 300)
                             .offset(x: -5)
                     }
+                }
+                HStack {
+                    Text("Privacy")
+                    Spacer()
+                    PrivacyView(person: person, privacySetting: $privacy)
                 }
             }
             .toolbar {
@@ -80,7 +81,14 @@ struct SubmitPrayerRequestForm: View {
     }
         
     func submitList() {
-        ProfilePrayerRequestHelper().createPrayerRequest(userID: userHolder.person.userID, datePosted: Date(), person: person, prayerRequestText: prayerRequestText, prayerRequestTitle: prayerRequestTitle.capitalized, priority: priority, friendsList: userHolder.friendsList)
+        ProfilePrayerRequestHelper().createPrayerRequest(
+            userID: userHolder.person.userID,
+            datePosted: Date(),
+            person: person,
+            prayerRequestText: prayerRequestText,
+            prayerRequestTitle: prayerRequestTitle,
+            privacy: privacy,
+            friendsList: userHolder.friendsList)
         userHolder.refresh = true
         print("Saved")
         dismiss()

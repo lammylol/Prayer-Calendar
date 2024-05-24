@@ -21,11 +21,10 @@ struct PrayerRequestFormView: View {
         NavigationStack {
             Form {
                 if person.userID == userHolder.person.userID { // only if you are the 'owner' of the profile.
-                    Section(header: Text("Prayer Request title")) {
+                    Section(header: Text("Prayer Request Title")) {
                         ZStack(alignment: .topLeading) {
                             if prayerRequest.prayerRequestTitle.isEmpty {
                                 Text("Title")
-                                    .padding(.leading, 0)
                                     .padding(.top, 8)
                                     .foregroundStyle(Color.gray)
                             }
@@ -34,15 +33,16 @@ struct PrayerRequestFormView: View {
                                 .offset(x: -5, y: -1)
                             
                         }
-                        Picker("Priority", selection: $prayerRequest.priority) {
-                            Text("low").tag("low")
-                            Text("med").tag("med")
-                            Text("high").tag("high")
-                        }
+                        .padding(.bottom, -4)
                         Picker("Status", selection: $prayerRequest.status) {
                             Text("Current").tag("Current")
                             Text("Answered").tag("Answered")
                             Text("No Longer Needed").tag("No Longer Needed")
+                        }
+                        HStack {
+                            Text("Privacy")
+                            Spacer()
+                            PrivacyView(person: person, privacySetting: $prayerRequest.privacy)
                         }
                     }
                     Section(header: Text("Edit Prayer Request")) {
@@ -99,7 +99,6 @@ struct PrayerRequestFormView: View {
                         VStack(alignment: .leading){
                             Text(prayerRequest.prayerRequestText)
                         }
-                        Text("Priority: \(prayerRequest.priority)")
                         Text("Status: \(prayerRequest.status)")
                     }
                     if prayerRequestUpdates.count > 0 {
@@ -197,7 +196,6 @@ struct EditPrayerRequestTextView: View {
                     ZStack(alignment: .topLeading) {
                         if prayerRequest.prayerRequestText.isEmpty {
                             Text("Enter text")
-                                .padding(.leading, 0)
                                 .padding(.top, 8)
                                 .foregroundStyle(Color.gray)
                         }

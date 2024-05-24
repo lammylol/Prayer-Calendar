@@ -12,14 +12,10 @@ struct PrayerFeedView: View {
     @State private var showSubmit: Bool = false
     @State private var showEdit: Bool = false
     @State private var selectedPage: Int = 1
-    
-    //    @State private var selectedTab: Tab? = Tab.current
     @State private var selectedTab: Int = 1
     @State private var tabProgress: CGFloat = 0
     @State private var height: CGFloat = 0
     @State private var sizeArray: [CGFloat] = [.zero, .zero, .zero]
-    
-    //    @State var pinnedPrayerRequests: [PrayerRequest] = []
     @State var prayerRequestVar: PrayerRequest = PrayerRequest.blank
     
     @Environment(UserProfileHolder.self) var userHolder
@@ -41,8 +37,7 @@ struct PrayerFeedView: View {
 //                    Spacer()
                 }
                 .offset(y: 10)
-//                .padding(.top, 27)
-                
+
                 LazyVStack(alignment: .leading, pinnedViews: [.sectionHeaders]) {
                     // Pinned section
                     Section (
@@ -60,6 +55,7 @@ struct PrayerFeedView: View {
                                         .getSizeOfView(completion: {
                                             sizeArray[0] = $0
                                         })
+                                        .frame(maxHeight: .infinity)
                                         .containerRelativeFrame(.horizontal)
                                         .tag(0)
                                 }
@@ -67,12 +63,14 @@ struct PrayerFeedView: View {
                                     .getSizeOfView(completion: {
                                         sizeArray[1] = $0
                                     })
+                                    .frame(maxHeight: .infinity)
                                     .containerRelativeFrame(.horizontal)
                                     .tag(1)
                                 PrayerFeedAnsweredView(person: person, height: $height)
                                     .getSizeOfView(completion: {
                                         sizeArray[2] = $0
                                     })
+                                    .frame(maxHeight: .infinity)
                                     .containerRelativeFrame(.horizontal)
                                     .tag(2)
                             }
@@ -171,9 +169,7 @@ struct PrayerFeedView: View {
 struct PrayerFeedAnsweredView: View {
     // view to only see 'answered' prayers
     var person: Person
-//    @Binding var selectedPage: Int
     @Environment(UserProfileHolder.self) var userHolder
-//    @Environment(PrayerRequestViewModel.self) var viewModel
     @Binding var height: CGFloat
     @State var viewModel: PrayerRequestViewModel = PrayerRequestViewModel()
     

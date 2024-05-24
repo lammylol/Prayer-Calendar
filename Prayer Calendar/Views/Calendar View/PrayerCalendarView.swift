@@ -53,17 +53,7 @@ struct PrayerCalendarView: View {
                         .toolbarBackground(UIHelper().backgroundColor(colorScheme: colorScheme), for: .navigationBar)
                     }
                 }
-//        }
         }
-//        .task {
-//            userHolder.viewState = .loading
-//            defer { userHolder.viewState = .finished }
-//            
-//            dateHolder.date = Date() // Resets the view to current month
-//            let userID = Auth.auth().currentUser?.uid ?? ""
-//            await PrayerPersonHelper().getUserInfo(person: Person(userID: userID), userHolder: userHolder)
-//            await PrayerPersonHelper().getPrayerList(userHolder: userHolder)
-//        }
     }
     
     var dayOfWeekStack: some View {

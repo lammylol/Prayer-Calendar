@@ -52,7 +52,6 @@ struct ProfileSettingsView: View {
 
     func resetInfo() {
         userHolder.friendsList = []
-
         userHolder.person.userID = ""
         prayerListHolder.prayerList = ""
         prayerListHolder.prayStartDate = Date()

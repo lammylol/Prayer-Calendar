@@ -55,19 +55,10 @@ struct PrayerRequestRow: View {
                                         Label("Unpin prayer request", systemImage: "pin.slash")
                                     }
                                 }
-                                //            Button {pinPrayerRequest()
-                                //            } label: {
-                                //                Label("Remove from feed", systemImage: "pin.fill")
-                                //            }
                             } label: {
                                 Label("", systemImage: "ellipsis")
                             }
                             .highPriorityGesture(TapGesture())
-                            //                        .onDisappear(perform: {
-                            //
-                            //                        })
-                            //                        PrayerRequestMenu(prayerRequest: $prayerRequest)
-                            //                            .highPriorityGesture(TapGesture())
                         }
                         .font(.system(size: 12))
                         .padding(.bottom, 2)

@@ -74,15 +74,6 @@ struct ProfileView: View {
                     }
                 }
             }
-//            .task {
-//                if person.userID == "" {
-//                    do {
-//                        person = try await PrayerPersonHelper().retrieveUserInfoFromUsername(person: person, userHolder: userHolder)
-//                    } catch {
-//                        print(error.localizedDescription)
-//                    }
-//                }
-//            }
             .sheet(isPresented: $showSubmit, onDismiss: {
                 Task {
                     do {
