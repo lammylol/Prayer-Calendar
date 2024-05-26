@@ -23,20 +23,7 @@ struct ProfilePrayerRequestsView: View {
     
     var body: some View {
         LazyVStack {
-            HStack{
-//                if viewModel.selectedStatus == .noLongerNeeded {
-//                    Text("No Longer Needed Prayer Requests")
-//                        .font(.title3)
-//                        .bold()
-//                        .frame(maxWidth: .infinity, alignment: .leading)
-//                        .padding(.leading, 2)
-//                } else {
-//                    Text("\(viewModel.selectedStatus.rawValue.capitalized) Prayer Requests")
-//                        .font(.title3)
-//                        .bold()
-//                        .frame(maxWidth: .infinity, alignment: .leading)
-//                        .padding(.leading, 2)
-//                }      
+            HStack{    
                 // Only show this if you are the owner of profile.
                 if person.username == userHolder.person.username {
                     Text("My Prayer Requests")

@@ -16,6 +16,7 @@ struct PrayerRequestFormView: View {
     @Binding var prayerRequest: PrayerRequest
     @State var prayerRequestUpdates: [PrayerRequestUpdate] = []
     @State var showAddUpdateView: Bool = false
+    @State private var originalPrivacy: String = ""
     
     var body: some View {
         NavigationStack {
@@ -115,10 +116,11 @@ struct PrayerRequestFormView: View {
             .frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: .infinity)
             .task {
                 do {
-                    prayerRequest = try await ProfilePrayerRequestHelper().getPrayerRequest(prayerRequest: prayerRequest)
+                    prayerRequest = try await PrayerRequestHelper().getPrayerRequest(prayerRequest: prayerRequest)
                     prayerRequestUpdates = try await PrayerUpdateHelper().getPrayerRequestUpdates(prayerRequest: prayerRequest, person: person)
                     print(prayerRequestUpdates)
                     print("isPinned: " + prayerRequest.isPinned.description)
+                    originalPrivacy = prayerRequest.privacy // for catching public to private.
                 } catch PrayerRequestRetrievalError.noPrayerRequestID {
                     print("missing prayer request ID for update.")
                 } catch {
@@ -129,7 +131,7 @@ struct PrayerRequestFormView: View {
                 Task {
                     do {
                         prayerRequestUpdates = try await PrayerUpdateHelper().getPrayerRequestUpdates(prayerRequest: prayerRequest, person: person)
-                        prayerRequest = try await ProfilePrayerRequestHelper().getPrayerRequest(prayerRequest: prayerRequest)
+                        prayerRequest = try await PrayerRequestHelper().getPrayerRequest(prayerRequest: prayerRequest)
                     } catch {
                         print("error retrieving updates.")
                     }
@@ -165,7 +167,14 @@ struct PrayerRequestFormView: View {
     }
     
     func updatePrayerRequest(prayerRequest: PrayerRequest) {
-        ProfilePrayerRequestHelper().editPrayerRequest(prayerRequest: prayerRequest, person: person, friendsList: userHolder.friendsList)
+        
+        // Function to catch if privacy was changed from public to private.
+        let newPrivacy = prayerRequest.privacy
+        if originalPrivacy != "private" && newPrivacy == "private" {
+            PrayerRequestHelper().publicToPrivate(prayerRequest: prayerRequest, friendsList: userHolder.friendsList)
+        } // if the privacy has changed from public to private, delete it from friends' feeds.
+        
+        PrayerRequestHelper().editPrayerRequest(prayerRequest: prayerRequest, person: person, friendsList: userHolder.friendsList)
         self.prayerRequest = prayerRequest
         
         print("Saved")
@@ -173,7 +182,7 @@ struct PrayerRequestFormView: View {
     }
     
     func deletePrayerRequest() {
-        ProfilePrayerRequestHelper().deletePrayerRequest(prayerRequest: prayerRequest, person: person, friendsList: userHolder.friendsList)
+        PrayerRequestHelper().deletePrayerRequest(prayerRequest: prayerRequest, person: person, friendsList: userHolder.friendsList)
         userHolder.refresh = true
         
         print("Deleted")
@@ -231,7 +240,7 @@ struct EditPrayerRequestTextView: View {
     }
                 
     func updatePrayerRequest(prayerRequestVar: PrayerRequest) {
-        ProfilePrayerRequestHelper().editPrayerRequest(prayerRequest: prayerRequest, person: person, friendsList: userHolder.friendsList)
+        PrayerRequestHelper().editPrayerRequest(prayerRequest: prayerRequest, person: person, friendsList: userHolder.friendsList)
         print("Saved")
         dismiss()
     }

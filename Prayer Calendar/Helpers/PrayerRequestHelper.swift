@@ -17,7 +17,7 @@ enum PrayerRequestRetrievalError: Error {
     case errorRetrievingFromFirebase
 }
 
-class ProfilePrayerRequestHelper {
+class PrayerRequestHelper {
     let db = Firestore.firestore()
 
     //Retrieve prayer requests from Firestore
@@ -31,9 +31,9 @@ class ProfilePrayerRequestHelper {
         var profiles: Query
         
         do {
-            if status != nil {
-                profiles = db.collection("users").document(userID).collection("prayerList").document("\(person.firstName.lowercased())_\(person.lastName.lowercased())").collection("prayerRequests").whereField("status", isEqualTo: "Current").order(by: "latestUpdateDatePosted", descending: true)
-            } else {
+            if status != nil { // if a status is passed, retrieve prayer list with status filtered.
+                profiles = db.collection("users").document(userID).collection("prayerList").document("\(person.firstName.lowercased())_\(person.lastName.lowercased())").collection("prayerRequests").whereField("status", isEqualTo: status!).order(by: "latestUpdateDatePosted", descending: true)
+            } else { // if a status is not passed, retrieve all prayers.
                 profiles = db.collection("users").document(userID).collection("prayerList").document("\(person.firstName.lowercased())_\(person.lastName.lowercased())").collection("prayerRequests").order(by: "latestUpdateDatePosted", descending: true)
             }
             
@@ -122,7 +122,7 @@ class ProfilePrayerRequestHelper {
             isMyProfile = true
         } else {
             isMyProfile = false
-        }
+        } // this checks whether the prayer request is for yourself, or for a local person that you are praying for.
         
         // Create new PrayerRequestID to users/{userID}/prayerList/{person}/prayerRequests
         let ref = db.collection("users").document(userID).collection("prayerList").document("\(person.firstName.lowercased())_\(person.lastName.lowercased())").collection("prayerRequests").document()
@@ -145,26 +145,25 @@ class ProfilePrayerRequestHelper {
         let prayerRequestID = ref.documentID
         
         // Add PrayerRequestID to prayerFeed/{userID}
-        if isMyProfile == true {
-            if friendsList.isEmpty == false && privacy == "public" {
-                for friendID in friendsList {
-                    let ref2 = db.collection("prayerFeed").document(friendID).collection("prayerRequests").document(prayerRequestID)
-                    ref2.setData([
-                        "datePosted": datePosted,
-                        "firstName": person.firstName,
-                        "lastName": person.lastName,
-                        "status": "Current",
-                        "prayerRequestText": prayerRequestText,
-                        "userID": userID,
-                        "username": person.username,
-                        "privacy": privacy,
-                        "prayerRequestTitle": prayerRequestTitle,
-                        "latestUpdateText": "",
-                        "latestUpdateDatePosted": datePosted,
-                        "latestUpdateType": ""
-                    ])
-                }
-            }
+//        if isMyProfile == true { // removing this logic as of May 25, 2024. Now your prayer requests will update your feed as well.
+        if privacy == "public" && friendsList.isEmpty == false {
+            for friendID in friendsList {
+                let ref2 = db.collection("prayerFeed").document(friendID).collection("prayerRequests").document(prayerRequestID)
+                ref2.setData([
+                    "datePosted": datePosted,
+                    "firstName": person.firstName,
+                    "lastName": person.lastName,
+                    "status": "Current",
+                    "prayerRequestText": prayerRequestText,
+                    "userID": userID,
+                    "username": person.username,
+                    "privacy": privacy,
+                    "prayerRequestTitle": prayerRequestTitle,
+                    "latestUpdateText": "",
+                    "latestUpdateDatePosted": datePosted,
+                    "latestUpdateType": ""
+                ])
+            } // If you have friends and have set privacy to public, this will update all friends feeds.
         } else {
                 let ref2 = db.collection("prayerFeed").document(userID).collection("prayerRequests").document(prayerRequestID)
                 ref2.setData([
@@ -181,7 +180,7 @@ class ProfilePrayerRequestHelper {
                     "latestUpdateDatePosted": datePosted,
                     "latestUpdateType": ""
                 ])
-        }
+        } // if the prayer is for a local user, it will only update your own feed.
         
         // Add PrayerRequestID and Data to prayerRequests/{prayerRequestID}
         let ref3 =
@@ -205,12 +204,13 @@ class ProfilePrayerRequestHelper {
     
     // This function enables an edit to a prayer requests off of a selected prayer request.
     func editPrayerRequest(prayerRequest: PrayerRequest, person: Person, friendsList: [String]) {
+        
         var isMyProfile: Bool
         if person.username != "" && person.userID == prayerRequest.userID {
             isMyProfile = true
         } else {
             isMyProfile = false
-        }
+        } // this checks whether the prayer request is for yourself, or for a local person that you are praying for.
         
         let ref = db.collection("users").document(person.userID).collection("prayerList").document("\(prayerRequest.firstName.lowercased())_\(prayerRequest.lastName.lowercased())").collection("prayerRequests").document(prayerRequest.id)
         
@@ -226,11 +226,10 @@ class ProfilePrayerRequestHelper {
         if prayerRequest.status == "No Longer Needed" {
             deleteRequestFromFeed(prayerRequest: prayerRequest, person: person, friendsList: friendsList) // If it is no longer needed, remove from all feeds. If not, update all feeds.
         } else {
-            if isMyProfile == true {
-                if friendsList.isEmpty == false && prayerRequest.privacy == "public" {
-                    for friendID in friendsList {
-                        updatePrayerFeed(prayerRequest: prayerRequest, person: person, friendID: friendID, updateFriend: true)
-                    }
+//            if isMyProfile == true {
+            if prayerRequest.privacy == "public" && friendsList.isEmpty == false {
+                for friendID in friendsList {
+                    updatePrayerFeed(prayerRequest: prayerRequest, person: person, friendID: friendID, updateFriend: true)
                 }
             } else {
                 updatePrayerFeed(prayerRequest: prayerRequest, person: person, friendID: "", updateFriend: false)
@@ -334,18 +333,17 @@ class ProfilePrayerRequestHelper {
         }
     
         // Delete PrayerRequestID from prayerFeed/{userID}
-        if isMyProfile == true {
-            if friendsList.isEmpty == false {
-                for friendID in friendsList {
-                    let ref2 = db.collection("prayerFeed").document(friendID).collection("prayerRequests").document(prayerRequest.id)
-                    ref2.delete() { err in
-                        if let err = err {
-                            print("Error removing document: \(err)")
-                        } else {
-                            print("Document successfully deleted")
-                            print(prayerRequest.id)
-                            print(prayerRequest.prayerRequestText)
-                        }
+//        if isMyProfile == true {
+        if prayerRequest.privacy == "public" && friendsList.isEmpty == false {
+            for friendID in friendsList {
+                let ref2 = db.collection("prayerFeed").document(friendID).collection("prayerRequests").document(prayerRequest.id)
+                ref2.delete() { err in
+                    if let err = err {
+                        print("Error removing document: \(err)")
+                    } else {
+                        print("Document successfully deleted")
+                        print(prayerRequest.id)
+                        print(prayerRequest.prayerRequestText)
                     }
                 }
             }
@@ -369,4 +367,21 @@ class ProfilePrayerRequestHelper {
             "isPinned": toggle
         ])
     }
+    
+    func publicToPrivate(prayerRequest: PrayerRequest, friendsList: [String]) {
+        if friendsList.isEmpty == false {
+            for friendID in friendsList {
+                let ref2 = db.collection("prayerFeed").document(friendID).collection("prayerRequests").document(prayerRequest.id)
+                ref2.delete() { err in
+                    if let err = err {
+                        print("Error removing document: \(err)")
+                    } else {
+                        print("Document successfully deleted")
+                        print(prayerRequest.id)
+                        print(prayerRequest.prayerRequestText)
+                    }
+                }
+            }
+        }
+    } // This function allows you to pass in a prayer request and delete that from friends' feeds if you have changed it from public to private.
 }

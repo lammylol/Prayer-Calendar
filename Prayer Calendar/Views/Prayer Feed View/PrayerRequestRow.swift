@@ -40,11 +40,12 @@ struct PrayerRequestRow: View {
                     
                     VStack(alignment: .leading) {
                         HStack() {
-                            Text(prayerRequest.firstName + " " + prayerRequest.lastName).font(.system(size: 16)).bold()
+                            Text(prayerRequest.firstName + " " + prayerRequest.lastName).font(.system(size: 18)).bold()
                             Spacer()
                             if prayerRequest.isPinned == true {
                                 Image(systemName: "pin.fill")
                             }
+                            Privacy(rawValue: prayerRequest.privacy)?.systemImage
                             Menu {
                                 Button {
                                     self.pinPrayerRequest()
@@ -60,7 +61,7 @@ struct PrayerRequestRow: View {
                             }
                             .highPriorityGesture(TapGesture())
                         }
-                        .font(.system(size: 12))
+                        .font(.system(size: 13))
                         .padding(.bottom, 2)
                         HStack() {
                             Text("Prayer Status: ").font(.system(size: 12)).italic() + Text(prayerRequest.status.capitalized)
@@ -79,17 +80,23 @@ struct PrayerRequestRow: View {
                         
                         if prayerRequest.latestUpdateText != "" {
                             VStack (alignment: .leading) {
-                                Text("**\(prayerRequest.latestUpdateType)**: \(prayerRequest.latestUpdateDatePosted.formatted(date: .abbreviated, time: .omitted)), \(prayerRequest.latestUpdateText)")
-                                    .multilineTextAlignment(.leading)
-                                    .font(.system(size: 16))
-                                    .italic()
-                                    .padding(.bottom, 0)
-                                Text("\(prayerRequest.prayerRequestText)")
-                                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                                    .lineLimit(15)
-                                    .fixedSize(horizontal: false, vertical: true)
-                                    .font(.system(size: 16))
-                                    .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
+                                HStack {
+                                    Image(systemName: "arrow.turn.up.right")
+                                    Text("**Latest \(prayerRequest.latestUpdateType)**: \(prayerRequest.latestUpdateDatePosted.formatted(date: .abbreviated, time: .omitted)), \(prayerRequest.latestUpdateText)")
+                                        .multilineTextAlignment(.leading)
+                                        .font(.system(size: 16))
+//                                        .italic()
+                                        .padding(.bottom, 0)
+                                }
+                                
+                                HStack {
+                                    Text("\(prayerRequest.prayerRequestText)")
+                                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                                        .lineLimit(15)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                        .font(.system(size: 16))
+                                        .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
+                                }
                             }
                             .padding(.top, 7)
                         } else {
@@ -101,9 +108,11 @@ struct PrayerRequestRow: View {
                                     .padding(.top, 7)
                             }
                         }
-                        Text(prayerRequest.date, style: .date)
-                            .font(.system(size: 12))
-                            .padding(.top, 7)
+                        HStack {
+                            Text(prayerRequest.date, style: .date)
+                                .font(.system(size: 12))
+                                .padding(.top, 7)
+                        }
                     }
                     .foregroundStyle(Color.primary)
                 }
@@ -125,7 +134,7 @@ struct PrayerRequestRow: View {
             userHolder.pinnedPrayerRequests.removeAll(where: { $0.id == prayerRequest.id})
         }
         
-        ProfilePrayerRequestHelper().togglePinned(person: userHolder.person, prayerRequest: prayerRequest, toggle: isPinnedToggle)
+        PrayerRequestHelper().togglePinned(person: userHolder.person, prayerRequest: prayerRequest, toggle: isPinnedToggle)
 //        userHolder.refresh = true
     }
     
@@ -147,49 +156,6 @@ struct LatestUpdate: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
-
-//Viz for menu pop-up for prayer request functions.
-//struct PrayerRequestMenu: View {
-//    @Environment(UserProfileHolder.self) var userHolder
-//    @State var prayerRequest: PrayerRequest
-////    @State var isPinnedToggle: Bool
-//    
-//    var body: some View {
-//        Menu {
-//            Button {self.pinPrayerRequest()
-//            } label: {
-//                if prayerRequest.isPinned == false {
-//                    Label("Pin to feed", systemImage: "pin.fill")
-//                } else {
-//                    Label("Unpin prayer request", systemImage: "pin.slash")
-//                }
-//            }
-////            Button {pinPrayerRequest()
-////            } label: {
-////                Label("Remove from feed", systemImage: "pin.fill")
-////            }
-//        } label: {
-//            Label("", systemImage: "ellipsis")
-//        }
-//    }
-//    
-//    //pin to feed function. Only to user's feed.
-//    func pinPrayerRequest(){
-//        var isPinnedToggle = prayerRequest.isPinned
-//        if isPinnedToggle == false {
-//            userHolder.pinnedPrayerRequests.append(prayerRequest)
-//        } else {
-//            userHolder.pinnedPrayerRequests.removeAll(where: { $0.id == prayerRequest.id})
-//        }
-//        PrayerRequestHelper().togglePinned(person: userHolder.person, prayerRequest: prayerRequest)
-//        isPinnedToggle.toggle()
-//        prayerRequest.isPinned = isPinnedToggle
-//    }
-//    
-//    func removeFromFeed(){
-//        //removeFeed
-//    }
-//}
 
 extension Color {
     static var random: Color {
@@ -215,9 +181,11 @@ extension Color {
     }
 }
 
-//#Preview {
-//    PrayerRequestRow(prayerRequest: PrayerRequest(userID: "", username: "lammylol", date: Date(), prayerRequestText: "Prayers for this text to look beautiful. Prayers for this text to look beautiful.", status: "Current", firstName: "Matt", lastName: "Lam", priority: "high", isPinned: true, prayerRequestTitle: "Prayers for Text", latestUpdateText: "Test Latest update: Prayers for this text to look beautiful. Prayers for this text to look beautiful.", latestUpdateDatePosted: Date(), latestUpdateType: "Testimony"), profileOrPrayerFeed: "feed").frame(maxHeight: 200)
-//}
+#Preview {
+    PrayerRequestRow(prayerRequest: PrayerRequest(userID: "", username: "lammylol", date: Date(), prayerRequestText: "Prayers for this text to look beautiful. Prayers for this text to look beautiful.", status: "Current", firstName: "Matt", lastName: "Lam", privacy: "private", isPinned: true, prayerRequestTitle: "Prayers for Text", latestUpdateText: "Prayers for this text to look beautiful. Prayers for this text to look beautiful.", latestUpdateDatePosted: Date(), latestUpdateType: "Testimony"), profileOrPrayerFeed: "feed")
+        .frame(maxHeight: 300)
+        .environment(UserProfileHolder())
+}
 //
 //#Preview {
 //    LatestUpdate(prayerRequest: PrayerRequest(userID: "", username: "lammylol", date: Date(), prayerRequestText: "Prayers for this text to look beautiful. Prayers for this text to look beautiful.", status: "Current", firstName: "Matt", lastName: "Lam", priority: "high", isPinned: true, prayerRequestTitle: "Prayers for Text", latestUpdateText: "Test Latest update: Prayers for this text to look beautiful. Prayers for this text to look beautiful.", latestUpdateDatePosted: Date(), latestUpdateType: "Testimony"))

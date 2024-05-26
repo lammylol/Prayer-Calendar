@@ -212,7 +212,7 @@ struct PrayerNameInputView: View {
                 }
             }
             
-            PrayerPersonHelper().updateUserData(userID: userHolder.person.userID, prayStartDate: prayStartDate, prayerList: prayerList)
+            PrayerPersonHelper().updatePrayerListData(userID: userHolder.person.userID, prayStartDate: prayStartDate, prayerList: prayerList)
                     
             
             //reset local dataHolder

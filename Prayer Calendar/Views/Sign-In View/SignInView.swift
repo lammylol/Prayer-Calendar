@@ -206,53 +206,6 @@ struct SignInView: View {
             }
         }
     }
-    
-        //  This function retrieves Userinfo data from Firestore.
-//    func getUserInfo(person: Person, email: String) async {
-//        
-//        let db = Firestore.firestore()
-////        
-//        do {
-//            let ref = db.collection("users").document(person.userID)
-//            
-//            let document = try await ref.getDocument()
-//                    
-//            let dataDescription = document.data().map(String.init(describing:)) ?? "nil"
-//            print("Document data: " + dataDescription)
-//            
-//            let firstName = document.get("firstName") as! String
-//            let lastName = document.get("lastName") as! String
-//            let username = document.get("username") as! String
-//            let userID = document.get("userID") as! String
-//            
-//            let prayerPerson = Person(userID: userID, username: username, email: email, firstName: firstName, lastName: lastName)
-//            print("/username: " + prayerPerson.username)
-//            
-//            userHolder.person = prayerPerson
-//            
-//            let (pinnedPrayerRequests, lastDocument) = try await PrayerFeedHelper().getPrayerRequestFeed(user: userHolder.person, person: person, answeredFilter: "pinned", count: 5, lastDocument: nil, profileOrFeed: "feed")
-//            
-//            userHolder.pinnedPrayerRequests = pinnedPrayerRequests
-//            
-//            print("//username: " + userHolder.person.username)
-//        } catch {
-//            print("Error retrieving user info.")
-//        }
-//                
-//
-//        do {
-//            let friendsListRef = db.collection("users").document(person.userID).collection("friendsList")
-//            let querySnapshot = try await friendsListRef.getDocuments()
-//
-//            //append FriendsListArray in userHolder
-//            for document in querySnapshot.documents {
-//                print("\(document.documentID) => \(document.data())")
-//                userHolder.friendsList.append(document.documentID)
-//            }
-//        } catch {
-//          print("Error getting documents: \(error)")
-//        }
-//    }
 }
 
 

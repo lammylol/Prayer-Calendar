@@ -21,23 +21,25 @@ struct FeedRequestsRowView: View {
     
     var body: some View {
         ZStack {
-            if viewModel.isLoading || userHolder.refresh {
-                if userHolder.refresh == true { // only if refreshable is activated, then task must run, but progress is hidden
-                    Text("")
-                        .task {
-                            if userHolder.refresh == true {
-                                do {
-                                    self.person = try await PrayerPersonHelper().retrieveUserInfoFromUsername(person: person, userHolder: userHolder)
-                                    await viewModel.getPrayerRequests(user: userHolder.person, person: person, profileOrFeed: profileOrFeed) // activate on refreshable
-                                    userHolder.refresh = false
-                                } catch {
-                                    print(error.localizedDescription)
-                                }
-                            }
-                        }
-                } else {
-                    ProgressView()
-                }
+            if viewModel.isLoading && !userHolder.refresh {
+                ProgressView()
+//            if viewModel.isLoading || userHolder.refresh {
+//                if userHolder.refresh == true { // only if refreshable is activated, then task must run, but progress is hidden
+//                    Text("")
+//                        .task {
+//                            if userHolder.refresh == true {
+//                                do {
+//                                    self.person = try await PrayerPersonHelper().retrieveUserInfoFromUsername(person: person, userHolder: userHolder)
+//                                    await viewModel.getPrayerRequests(user: userHolder.person, person: person, profileOrFeed: profileOrFeed) // activate on refreshable
+//                                    userHolder.refresh = false
+//                                } catch {
+//                                    print(error.localizedDescription)
+//                                }
+//                            }
+//                        }
+//                } else {
+//                    ProgressView()
+//                }
             } else {
                 LazyVStack {
                     ForEach(viewModel.prayerRequests) { prayerRequest in
@@ -59,13 +61,15 @@ struct FeedRequestsRowView: View {
         .scrollDismissesKeyboard(.immediately)
         .scrollContentBackground(.hidden)
         .task {
-            if viewModel.prayerRequests.isEmpty {
+            if viewModel.prayerRequests.isEmpty || userHolder.refresh {
                 do {
                     viewModel.viewState = .loading
                     defer { viewModel.viewState = .finished }
                     
                     self.person = try await PrayerPersonHelper().retrieveUserInfoFromUsername(person: person, userHolder: userHolder)
                     await viewModel.getPrayerRequests(user: userHolder.person, person: person, profileOrFeed: profileOrFeed)
+                    userHolder.refresh = false // if this was activated due to userHolder.refresh == true, return to false.
+                    
                 } catch {
                     print(error.localizedDescription)
                 }
