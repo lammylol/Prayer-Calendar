@@ -1,6 +1,6 @@
-# Prayer Calendar App
+# Prayer App
 
->An application used to glorify God by encouraging the act of prayer across the globe. Our vision is to cultivate a culture of prayer across all communities, bring encouragement to all peoples by praying for one another, and see God’s captivating love for each person through his response to our prayers.
+>An application used to build community by encouraging the act of prayer across the globe. Our vision is to create a space for friends and family to share posts, pray for one another, encourage one another, and track life updates in the day-to-day.
 ###
 
 See [Notion](https://www.notion.so/7a20c472b3bc4b50b79d57fdfdf22f73?v=8703808a97b34242a8b2a00cb1456be9&pvs=4) for more information on the project.
