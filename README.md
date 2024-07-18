@@ -1,4 +1,4 @@
-# Prayer App
+# Prayer App \\ Obsolete (transitioned to new private repo)
 
 >An application used to build community by encouraging the act of prayer across the globe. Our vision is to create a space for friends and family to share posts, pray for one another, encourage one another, and track life updates in the day-to-day.
 ###
